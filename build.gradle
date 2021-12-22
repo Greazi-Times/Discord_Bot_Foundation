@@ -1,0 +1,73 @@
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'com.greazi'
+def ver = new Version(major: 1, minor: 0, revision: 0)
+version ver.toString()
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+
+assemble.dependsOn shadowJar
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    maven { url 'https://www.jitpack.io' }
+    maven { url 'https://m2.dv8tion.net/releases' }
+    maven { url 'https://repo.mattmalec.com/repository/releases' }
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        content { includeGroup 'org.bukkit' }
+    }
+}
+
+dependencies {
+    implementation ('net.dv8tion:JDA:4.3.0_331') { exclude module: 'opus-java' }
+    
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-text:1.9'
+
+    implementation "org.slf4j:slf4j-jdk14:2.0.0-alpha5"
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.kohsuke:github-api:1.133'
+    implementation 'com.mattmalec:Pterodactyl4J:2.BETA_78'
+    implementation 'mysql:mysql-connector-java:8.0.25'
+    implementation "com.googlecode.json-simple:json-simple:1.1.1"
+    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'com.google.guava:guava:31.0.1-jre'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+buildscript {
+    repositories {
+        maven {url "https://plugins.gradle.org/m2/"}
+    }
+    dependencies {classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'}
+}
+
+shadowJar {
+    archiveName = 'DiscordBotFoundation.jar'
+    destinationDir = file("build")
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.greazi.discordbotfoundation.SimpleBot'
+        )
+    }
+}
+
+class Version {
+    String major, minor, revision
+
+    String toString() {
+        "${major}.${minor}.${revision}"
+    }
+}
