@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation;
 
+import com.greazi.discordbotfoundation.settings.SimpleYaml;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -108,14 +109,22 @@ public abstract class SimpleBot {
 	 * The main start system of the bot
 	 * @param args
 	 */
-	public final void main(String[] args) {
+	public static void main(String[] args) {
 
-
-		// Check if the config file is configured correctly if not stop the startup
-		if (!SimpleSettings.getInstance().isConfigured()) {
-			log.error("Your settings file is not configured or misses some key values. Check the Settings.json");
-			return;
+		if (!SimpleYaml.settingsFileExists()) {
+			// TODO Make a proper default file maker
+			log.error("There was no settings file detected! Creating a new one....");
+			log.error("");
+			log.error("The Bot is shutting down due to not having a proper settings file.");
+			log.error("Please SimpleSettingsure the file before starting the bot again!");
 		}
+
+
+		/*// Check if the SimpleSettings file is SimpleSettingsured correctly if not stop the startup
+		if (!SimpleSettings.getInstance().isSimpleSettingsured()) {
+			log.error("Your settings file is not SimpleSettingsured or misses some key values. Check the Settings.json");
+			return;
+		}*/
 
 
 		onPreStart();
@@ -124,8 +133,8 @@ public abstract class SimpleBot {
 	/**
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
-	public final void onPreStart() {
-		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
+	public static final void onPreStart() {
+		/*registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());*/
 		onBotLoad();
 	}
 
@@ -145,7 +154,7 @@ public abstract class SimpleBot {
 	 * @param token = The token of the bot
 	 * @param activity = The activity status of the bot
 	 */
-	private final void registerJda(String token, String activity) {
+	private static final void registerJda(String token, String activity) {
 		try {
 			jda = JDABuilder.createDefault(token)
 					.setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
@@ -169,7 +178,7 @@ public abstract class SimpleBot {
 	/**
 	 * Called before the bot is started (Not recommended to use)
 	 */
-	protected void onBotLoad() {
+	protected static void onBotLoad() {
 	}
 
 	/**
