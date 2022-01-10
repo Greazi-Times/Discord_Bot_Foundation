@@ -1,17 +1,18 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.settings.SimpleYaml;
+import com.greazi.discordbotfoundation.module.ModulesManager;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.util.Objects;
@@ -35,6 +36,7 @@ import java.util.Objects;
 // TODO Reload handler --
 // TODO MySQL base --
 // TODO Common class
+// TODO Channel handler
 //      This will handle a basic logger and message sender as well as some basic stuff
 
 
@@ -48,10 +50,12 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 
 	private static volatile SimpleBot instance;
-
 	public static JDA jda;
 
-	private static final Logger log = LoggerFactory.getLogger(SimpleBot.class);
+	private static Guild guild;
+	private static Member self;
+
+	private static ModulesManager modulesManager;
 
 	/**
 	 * Returns the instance of {@link SimpleBot}.
@@ -97,9 +101,10 @@ public abstract class SimpleBot {
 
 	/** TODO check this part
 	 * An internal flag to indicate whether we are calling the {@link #onReloadablesStart()}
-	 * block. We register things using {@link #reloadables} during this block
+	 * block. We register things using {@link #} <-- reloadable during this block
 	 */
 	private boolean startingReloadables = false;
+
 
 	// ----------------------------------------------------------------------------------------
 	// Main methods
@@ -110,36 +115,28 @@ public abstract class SimpleBot {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
-		if (!SimpleYaml.settingsFileExists()) {
-			// TODO Make a proper default file maker
-			log.error("There was no settings file detected! Creating a new one....");
-			log.error("");
-			log.error("The Bot is shutting down due to not having a proper settings file.");
-			log.error("Please SimpleSettingsure the file before starting the bot again!");
-		}
-
-
-		/*// Check if the SimpleSettings file is SimpleSettingsured correctly if not stop the startup
-		if (!SimpleSettings.getInstance().isSimpleSettingsured()) {
-			log.error("Your settings file is not SimpleSettingsured or misses some key values. Check the Settings.json");
-			return;
-		}*/
-
-
-		onPreStart();
+		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
+		// TODO add methode to start the onPreStart() and on Startup()
 	}
 
 	/**
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
-	public static final void onPreStart() {
+	public final void onPreStart() {
 		/*registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());*/
-		onBotLoad();
+
+
+
+		onBotStart();
 	}
 
-	public final void onStartup() {
+	public  void onStartup() {
 		onReloadablesStart();
+
+		modulesManager = new ModulesManager();
+		Common.log.info("Loading modules..");
+		modulesManager.load();
+		jda.addEventListener(modulesManager);
 	}
 
 	public final void onReload() {
@@ -171,6 +168,22 @@ public abstract class SimpleBot {
 		}
 	}
 
+	public static JDA getJDA() {
+		return jda;
+	}
+
+	public static SimpleBot getBot() {
+		return instance;
+	}
+
+	public static Guild getGuild() {
+		return guild;
+	}
+
+	public static Member getSelf() {
+		return self;
+	}
+
 	// ----------------------------------------------------------------------------------------
 	// Delegate methods    <-- Methods that can be used to load your stuff
 	// ----------------------------------------------------------------------------------------
@@ -178,7 +191,8 @@ public abstract class SimpleBot {
 	/**
 	 * Called before the bot is started (Not recommended to use)
 	 */
-	protected static void onBotLoad() {
+	protected void onBotLoad() {
+
 	}
 
 	/**
@@ -216,4 +230,19 @@ public abstract class SimpleBot {
 	// Additional features
 	// ----------------------------------------------------------------------------------------
 
+	public String getName() {
+		return SimpleSettings.getInstance().getName();
+	}
+
+	public String getDeveloper() {
+		return "Greazi";
+	}
+
+	public String getEmbedAuthorImage() {
+		return "https://i.imgur.com/ddzfapZ.png";
+	}
+
+	public String getLink() {
+		return "https://greazi.com";
+	}
 }
