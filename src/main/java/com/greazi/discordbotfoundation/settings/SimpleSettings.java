@@ -18,7 +18,7 @@ public class SimpleSettings {
 
 	private static SimpleSettings instance;
 
-	public static SimpleSettings getInstance(){
+	public static SimpleSettings getInstance() {
 		if(instance == null){
 			instance = new SimpleSettings();
 		}
@@ -31,7 +31,7 @@ public class SimpleSettings {
 	private SimpleSettings() {
 		File file = new File("Settings.json");
 
-		if(!file.exists()){
+		if(!file.exists()) {
 			try {
 				InputStream src = Settings.class.getResourceAsStream(Constants.File.SETTINGS);
 				Files.copy(src, Paths.get(file.toURI()), StandardCopyOption.REPLACE_EXISTING);
@@ -50,16 +50,26 @@ public class SimpleSettings {
 		}
 	}
 
-	public String getToken(){
+	public boolean isSettingsConfigured() {
+		return getToken().equals("") ||
+				getName().equals("") ||
+				getActivity().equals("") ||
+				getMainGuild().equals("");
+	}
+
+	public String getToken() {
 		return root.get("token").getAsString();
 	}
 
-	public String getName(){
+	public String getName() {
 		return root.get("name").getAsString();
 	}
 
-	public String getActivity(){
+	public String getActivity() {
 		return root.get("activity").getAsString();
 	}
 
+	public String getMainGuild() {
+		return root.get("mainGuild").getAsString();
+	}
 }
