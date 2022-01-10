@@ -2,6 +2,7 @@ package com.greazi.discordbotfoundation.settings;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.greazi.discordbotfoundation.constants.Constants;
 import okhttp3.internal.http2.Settings;
 import org.apache.commons.io.FileUtils;
 
@@ -32,7 +33,7 @@ public class SimpleSettings {
 
 		if(!file.exists()){
 			try {
-				InputStream src = Settings.class.getResourceAsStream("/Settings.json");
+				InputStream src = Settings.class.getResourceAsStream(Constants.File.SETTINGS);
 				Files.copy(src, Paths.get(file.toURI()), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
