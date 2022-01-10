@@ -1,12 +1,13 @@
 ### Discord Bot Foundation is a library for bootstrapping Discord bots.
 
-This system is designed to make a simple tool to have a quick start on your discord bot. Import this project to your bot and you will be able to use the methodes.
+This libarry has been made to create an easy and fast way for creating a bot. This tool provides some easy to use tools for creating your bot.
+The development for the bot is still going and bugs are expected.
 
 ### Important Licencing Information
 
-2021 © Greazi.com
+Copyright 2021 - 2022 © Greazi | All rights reserved
 
-This libary can only be used for projects made or autherised by Greazi to use this libarry.
+This libary can only be used by projects made or autherized by **Greazi**
 
 You can only use this libarry for non-commercial ussage if authorisasion has been given.
 
