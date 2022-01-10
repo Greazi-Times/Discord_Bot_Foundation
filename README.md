@@ -9,6 +9,6 @@ Copyright 2021 - 2022 © Greazi | All rights reserved
 
 This libary can only be used by projects made or autherized by **Greazi**
 
-You can only use this libarry for non-commercial ussage if authorisasion has been given.
+You can only use this libarry for non-commercial usage if authorisasion has been given.
 
 For support contact me here: support@greazi.com
