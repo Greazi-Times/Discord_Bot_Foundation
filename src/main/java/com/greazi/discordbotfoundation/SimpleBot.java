@@ -35,7 +35,6 @@ import java.util.Objects;
 // TODO Button Util **
 // TODO Menu Util --
 // TODO Reload handler --
-// TODO MySQL base --
 // TODO Common class
 // TODO Channel handler
 //      This will handle a basic logger and message sender as well as some basic stuff
@@ -116,10 +115,15 @@ public class SimpleBot {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		if(SimpleSettings.getInstance().isSettingsConfigured()) {
+			Common.log.error("The settings file hasn't been configured. Stopping the bot now!");
+			return;
+		}
+
 		new SimpleBot();
 
 		// TODO add methode to start the onPreStart() and on Startup()
-		Common.log.info("Done loading!!!");
+		Common.log.info("bot is ready");
 
 	}
 
@@ -132,6 +136,9 @@ public class SimpleBot {
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
 	public final void onPreStart() {
+
+		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
+
 		onBotLoad();
 
 		onStartup();
