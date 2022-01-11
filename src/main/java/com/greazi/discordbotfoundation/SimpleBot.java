@@ -1,6 +1,10 @@
 package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.module.ModulesManager;
+import com.greazi.discordbotfoundation.mysql.MySQL;
+import com.greazi.discordbotfoundation.mysql.query.Create;
+import com.greazi.discordbotfoundation.mysql.query.Insert;
+import com.greazi.discordbotfoundation.mysql.table.ITable;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import net.dv8tion.jda.api.JDA;
@@ -8,6 +12,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -15,6 +20,8 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -54,6 +61,7 @@ public abstract class SimpleBot {
 
 	private static Guild guild;
 	private static Member self;
+	private static MySQL mySQL;
 
 	private static ModulesManager modulesManager;
 
@@ -105,7 +113,6 @@ public abstract class SimpleBot {
 	 */
 	private boolean startingReloadables = false;
 
-
 	// ----------------------------------------------------------------------------------------
 	// Main methods
 	// ----------------------------------------------------------------------------------------
@@ -125,8 +132,6 @@ public abstract class SimpleBot {
 	public final void onPreStart() {
 		/*registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());*/
 
-
-
 		onBotStart();
 	}
 
@@ -140,6 +145,8 @@ public abstract class SimpleBot {
 	}
 
 	public final void onReload() {
+
+
 
 		// disable modules and commands
 		// start modules and commands
@@ -182,6 +189,10 @@ public abstract class SimpleBot {
 
 	public static Member getSelf() {
 		return self;
+	}
+
+	public static MySQL getMySQL() {
+		return mySQL;
 	}
 
 	// ----------------------------------------------------------------------------------------

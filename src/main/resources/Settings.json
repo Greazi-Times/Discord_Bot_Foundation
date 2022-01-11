@@ -1,3 +1,10 @@
 {
-
+  "token": "",
+  "activity": "",
+  "mySQL_host": "",
+  "mySQL_port": "",
+  "mySQL_database": "",
+  "mySQL_username": "",
+  "mySQL_password": "",
+  "mySQL_storeMembers": false
 }

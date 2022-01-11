@@ -61,4 +61,36 @@ public class SimpleSettings {
 		return root.get("activity").getAsString();
 	}
 
+	public boolean isMysqlEnabled(){
+		return !getMySqlHost().equals("") ||
+				getMySqlPort() != 0 ||
+				!getMySqlDatabase().equals("") ||
+				!getMySqlUsername().equals("") ||
+				!getMySqlPassword().equals("");
+	}
+
+	public String getMySqlHost(){
+		return root.get("mySQL_host").getAsString();
+	}
+
+	public int getMySqlPort(){
+		return root.get("mySQL_port").getAsInt();
+	}
+
+	public String getMySqlDatabase(){
+		return root.get("mySQL_database").getAsString();
+	}
+
+	public String getMySqlUsername(){
+		return root.get("mySQL_username").getAsString();
+	}
+
+	public String getMySqlPassword(){
+		return root.get("mySQL_password").getAsString();
+	}
+
+	public Boolean isStoreMembersEnabled(){
+		return root.get("mySQL_storeMembers").getAsBoolean();
+	}
+
 }
