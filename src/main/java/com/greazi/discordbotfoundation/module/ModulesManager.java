@@ -6,10 +6,7 @@ import com.greazi.discordbotfoundation.objects.Cooldown;
 import com.greazi.discordbotfoundation.utils.ProjectUtil;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
@@ -28,7 +25,7 @@ public class ModulesManager {
         SimpleBot.getJDA().updateCommands().queue();
         CommandListUpdateAction commands = SimpleBot.getGuild().updateCommands();
 
-        for (Class<?> each : ProjectUtil.getClasses("com.greazi.SimpleBot.module")) {
+        for (Class<?> each : ProjectUtil.getClasses("")) {
             if (SimpleCommand.class.isAssignableFrom(each) && !Modifier.isAbstract(each.getModifiers())) {
                 try {
                     SimpleCommand module = (SimpleCommand)each.getConstructor(SimpleBot.class).newInstance(SimpleBot.getBot());
@@ -57,24 +54,7 @@ public class ModulesManager {
             }
         }
 
-        commands.addCommands(
-            new CommandData("ticket", "Manage tickets.")
-                .addSubcommands(
-                    new SubcommandData("add", "Add a member to a ticket.")
-                        .addOptions(
-                            new OptionData(OptionType.USER, "member", "Member to add.", true)
-                    ),
-                    new SubcommandData("remove", "Remove a member from a ticket.")
-                        .addOptions(
-                            new OptionData(OptionType.USER, "member", "Member to remove.", true)
-                    ),
-                    new SubcommandData("transcript", "Force make a ticket transcript."),
-                    new SubcommandData("close", "Close a ticket.")
-                        .addOptions(
-                            new OptionData(OptionType.STRING, "reason", "Reason to close the ticket. (Optional)")
-                    )
-                )
-        ).queue(cmds -> {
+        commands.addCommands().queue(cmds -> {
             cmds.forEach(command -> {
                 CommandPrivilege[] privilege = cmdModules.stream().filter(c -> c.setCommand().equals(command.getName())).map(SimpleCommand::setCommandPrivileges).findFirst().orElse(new CommandPrivilege[]{});
 

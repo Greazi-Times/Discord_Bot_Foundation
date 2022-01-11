@@ -66,7 +66,7 @@ public class SimpleYaml {
 		Map<String , Object> yamlMaps;
 
 		inputStream = getClass().getClassLoader().getResourceAsStream( Constants.File.SETTINGS );
-		
+
 		if (inputStream != null) {
 			yamlMaps = yaml.load(inputStream);
 

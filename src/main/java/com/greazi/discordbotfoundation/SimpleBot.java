@@ -7,6 +7,7 @@ import com.greazi.discordbotfoundation.mysql.query.Insert;
 import com.greazi.discordbotfoundation.mysql.table.ITable;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.runtime.AllocationStrategy;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -41,7 +42,6 @@ import java.util.Objects;
 // TODO Button Util **
 // TODO Menu Util --
 // TODO Reload handler --
-// TODO MySQL base --
 // TODO Common class
 // TODO Channel handler
 //      This will handle a basic logger and message sender as well as some basic stuff
@@ -50,7 +50,7 @@ import java.util.Objects;
 /**
  * A basic discord bot that represents the discord bot library
  */
-public abstract class SimpleBot {
+public class SimpleBot {
 
 	// ----------------------------------------------------------------------------------------
 	// Static
@@ -122,20 +122,38 @@ public abstract class SimpleBot {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
+		if(SimpleSettings.getInstance().isSettingsConfigured()) {
+			Common.log.error("The settings file hasn't been configured. Stopping the bot now!");
+			return;
+		}
+
+		new SimpleBot();
+
 		// TODO add methode to start the onPreStart() and on Startup()
+		Common.log.info("bot is ready");
+
+	}
+
+	public SimpleBot(){
+		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
+		onPreStart();
 	}
 
 	/**
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
 	public final void onPreStart() {
-		/*registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());*/
 
-		onBotStart();
+		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
+
+		onBotLoad();
+
+		onStartup();
 	}
 
 	public  void onStartup() {
+		onBotStart();
+
 		onReloadablesStart();
 
 		modulesManager = new ModulesManager();
@@ -209,7 +227,9 @@ public abstract class SimpleBot {
 	/**
 	 * The main loading method, called when we are ready to load
 	 */
-	protected abstract void onBotStart();
+	protected void onBotStart(){
+
+	}
 
 	/**
 	 * The main method called when we are about to shut down
