@@ -22,51 +22,7 @@ public class ModulesManager {
     private final List<SimpleModule> modules = new ArrayList<>();
 
     public void load() {
-        SimpleBot.getJDA().updateCommands().queue();
-        CommandListUpdateAction commands = SimpleBot.getGuild().updateCommands();
 
-        for (Class<?> each : ProjectUtil.getClasses("")) {
-            if (SimpleCommand.class.isAssignableFrom(each) && !Modifier.isAbstract(each.getModifiers())) {
-                try {
-                    SimpleCommand module = (SimpleCommand)each.getConstructor(SimpleBot.class).newInstance(SimpleBot.getBot());
-                    if(module.setCommand() == null)
-                        continue;
-
-                    cmdModules.add(module);
-
-                    CommandData cmdData = new CommandData(module.setCommand(), module.setDescription() == null ? "No description set." : module.setDescription())
-                            .addOptions(module.setOptions())
-                            .setDefaultEnabled(module.setCommandPrivileges().length == 0);
-
-                    commands.addCommands(cmdData);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            } else if (SimpleModule.class.isAssignableFrom(each) && !Modifier.isAbstract(each.getModifiers())) {
-                try {
-                    SimpleModule module = (SimpleModule) each.getConstructor(SimpleBot.class).newInstance(SimpleBot.getBot());
-                    module.enable();
-
-                    modules.add(module);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        commands.addCommands().queue(cmds -> {
-            cmds.forEach(command -> {
-                CommandPrivilege[] privilege = cmdModules.stream().filter(c -> c.setCommand().equals(command.getName())).map(SimpleCommand::setCommandPrivileges).findFirst().orElse(new CommandPrivilege[]{});
-
-                if (privilege.length > 0)
-                    SimpleBot.getGuild().updateCommandPrivilegesById(command.getId(), Arrays.asList(privilege)).queue();
-            });
-        });
-
-        SimpleBot.getJDA().addEventListener(modules.toArray());
-        SimpleBot.getJDA().addEventListener(cmdModules.toArray());
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> modules.forEach(SimpleModule::onDisable)));
     }
 
     public void logLoad() {

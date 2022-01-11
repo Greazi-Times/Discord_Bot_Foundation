@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation;
 
+import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.module.ModulesManager;
 import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.mysql.query.Create;
@@ -24,6 +25,7 @@ import javax.security.auth.login.LoginException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * To-Do-List for the whole project.
@@ -62,6 +64,7 @@ public class SimpleBot {
 	private static Guild guild;
 	private static Member self;
 	private static MySQL mySQL;
+	private static MemberStorage memberStorage;
 
 	private static ModulesManager modulesManager;
 
@@ -143,8 +146,32 @@ public class SimpleBot {
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
 	public final void onPreStart() {
-
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
+
+		SimpleSettings simpleSettings = SimpleSettings.getInstance();
+		if (simpleSettings.isMysqlEnabled()){
+			Common.log.info("Enabling Mysql");
+			try{
+				mySQL = new MySQL(
+						simpleSettings.getMySqlHost(),
+						simpleSettings.getMySqlPort(),
+						simpleSettings.getMySqlUsername(),
+						simpleSettings.getMySqlPassword(),
+						simpleSettings.getMySqlDatabase()
+				);
+				Common.log.info("Mysql Enabled");
+
+				if (mySQL.isConnected() && simpleSettings.isStoreMembersEnabled()){
+					Common.log.info("Enabling MemberStorage");
+					memberStorage = new MemberStorage();
+					Common.log.info("MemberStorage Enabled");
+				}
+
+			}catch (Exception e){
+				Common.log.error("Error enabling mysql: "+e.getMessage());
+				e.printStackTrace();
+			}
+		}
 
 		onBotLoad();
 
@@ -163,9 +190,6 @@ public class SimpleBot {
 	}
 
 	public final void onReload() {
-
-
-
 		// disable modules and commands
 		// start modules and commands
 	}
@@ -211,6 +235,13 @@ public class SimpleBot {
 
 	public static MySQL getMySQL() {
 		return mySQL;
+	}
+
+	public static MemberStorage getMemberStorage() {
+		if (!SimpleSettings.getInstance().isStoreMembersEnabled()){
+			Common.log.warn("Trying to get member storage while it is not enabled");
+		}
+		return memberStorage;
 	}
 
 	// ----------------------------------------------------------------------------------------
