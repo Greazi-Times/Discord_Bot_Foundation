@@ -1,20 +1,13 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.module.ModulesManager;
 import com.greazi.discordbotfoundation.mysql.MySQL;
-import com.greazi.discordbotfoundation.mysql.query.Create;
-import com.greazi.discordbotfoundation.mysql.query.Insert;
-import com.greazi.discordbotfoundation.mysql.table.ITable;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.runtime.AllocationStrategy;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -22,8 +15,6 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,7 +27,6 @@ import java.util.Set;
 // TODO Exception handler --
 // TODO Debug system --
 // TODO module system **
-// TODO command system **
 // TODO Proper settings system **
 // TODO Channel Util
 // TODO Roll Util
@@ -66,7 +56,7 @@ public class SimpleBot {
 	private static MySQL mySQL;
 	private static MemberStorage memberStorage;
 
-	private static ModulesManager modulesManager;
+	public CommandClientBuilder commandBuilder = new CommandClientBuilder();
 
 	/**
 	 * Returns the instance of {@link SimpleBot}.
@@ -156,42 +146,60 @@ public class SimpleBot {
 						simpleSettings.getMySqlHost(),
 						simpleSettings.getMySqlPort(),
 						simpleSettings.getMySqlUsername(),
+
+		onBotLoad();
+
+		}
+				Common.log.error("Error enabling mysql: "+e.getMessage());
+			}catch (Exception e){
+
 						simpleSettings.getMySqlPassword(),
 						simpleSettings.getMySqlDatabase()
 				);
 				Common.log.info("Mysql Enabled");
-
 				if (mySQL.isConnected() && simpleSettings.isStoreMembersEnabled()){
 					Common.log.info("Enabling MemberStorage");
 					memberStorage = new MemberStorage();
 					Common.log.info("MemberStorage Enabled");
 				}
 
-			}catch (Exception e){
-				Common.log.error("Error enabling mysql: "+e.getMessage());
-				e.printStackTrace();
 			}
-		}
-
-		onBotLoad();
+				e.printStackTrace();
+		Common.log.info("Running onPreStart()");
+		loadCommands();
 
 		onStartup();
 	}
 
-	public  void onStartup() {
+	public void onStartup() {
+		Common.log.info("Running onStartup()");
 		onBotStart();
 
-		onReloadablesStart();
 
-		modulesManager = new ModulesManager();
-		Common.log.info("Loading modules..");
-		modulesManager.load();
-		jda.addEventListener(modulesManager);
+		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
+
+		onReloadablesStart();
 	}
 
 	public final void onReload() {
 		// disable modules and commands
 		// start modules and commands
+	}
+
+
+	public void loadCommands() {
+		Common.log.info("Loading commands....");
+		addCommands();
+		Common.log.info("Added commands");
+		CommandClient commandClient = commandBuilder.build();
+		Common.log.info("Commands have been build");
+		jda.addEventListener(commandClient);
+		Common.log.info("JDA event listener has been added, DONE!");
+	}
+
+
+	public void loadModules() {
+
 	}
 
 	/**
@@ -205,8 +213,7 @@ public class SimpleBot {
 			jda = JDABuilder.createDefault(token)
 					.setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
 					.setDisabledIntents(GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.GUILD_MESSAGE_TYPING)
-					.enableCache(CacheFlag.ONLINE_STATUS)
-					.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE)
+					.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
 					.setMemberCachePolicy(MemberCachePolicy.ALL)
 					.setChunkingFilter(ChunkingFilter.ALL)
 					.setActivity(Activity.watching(activity))
@@ -258,7 +265,7 @@ public class SimpleBot {
 	/**
 	 * The main loading method, called when we are ready to load
 	 */
-	protected void onBotStart(){
+	protected void onBotStart() {
 
 	}
 
@@ -286,6 +293,36 @@ public class SimpleBot {
 	 * This is invoked when you do `/reload`  TODO add a reload command link
 	 */
 	protected void onReloadablesStart() {
+	}
+
+	protected void addCommands() {
+	}
+
+	protected void addModules() {
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// Main getters
+	// ----------------------------------------------------------------------------------------
+
+	public static JDA getJDA() {
+		return jda;
+	}
+
+	public static SimpleBot getBot() {
+		return instance;
+	}
+
+	public static Guild getGuild() {
+		return guild;
+	}
+
+	public static Member getSelf() {
+		return self;
+	}
+
+	public static MySQL getMySQL() {
+		return mySQL;
 	}
 
 	// ----------------------------------------------------------------------------------------
