@@ -39,6 +39,8 @@ public class MemberStorage {
                 }else{
                     Common.log.error("Members table created");
 
+                    SimpleBot.getMySQL().getConnection().prepareStatement("alter table "+membersTable.getName()+" add primary key(`discord_id`);");
+
                     Common.log.error("Adding all members");
                     Guild mainGuild = SimpleBot.getJDA().getGuildById(SimpleSettings.getInstance().getMainGuild());
                     mainGuild.getMembers().forEach(member -> {

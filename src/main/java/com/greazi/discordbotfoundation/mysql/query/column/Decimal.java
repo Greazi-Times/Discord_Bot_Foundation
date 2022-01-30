@@ -18,6 +18,6 @@ public class Decimal extends Numeric {
 
     @Override
     public java.lang.String toString() {
-        return this.action.getPrefix() + name + " DECIMAL(" + length + ", " + precision + ")" + (nullable ? " " : " NOT NULL ") + (primary ? " PRIMARY KEY" : "") + (increment ? " AUTO_INCREMENT" : "") + (defaultValue != null ? " DEFAULT " + (!nativeDefault ? "'" + defaultValue + "'" : defaultValue) : "");
+        return this.action.getPrefix() + name + " DECIMAL(" + length + ", " + precision + ")" + (nullable ? " " : " NOT NULL ") + (unique ? " UNIQUE" : "") + (primary ? " PRIMARY KEY" : "") + (increment ? " AUTO_INCREMENT" : "") + (defaultValue != null ? " DEFAULT " + (!nativeDefault ? "'" + defaultValue + "'" : defaultValue) : "");
     }
 }
