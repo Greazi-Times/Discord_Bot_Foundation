@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation.mysql.query;
 
+import com.greazi.discordbotfoundation.mysql.query.action.ForeignKey;
 import com.greazi.discordbotfoundation.mysql.query.action.Regular;
 import com.greazi.discordbotfoundation.mysql.query.column.Base;
 import com.greazi.discordbotfoundation.mysql.query.column.Boolean;
@@ -13,6 +14,8 @@ import com.greazi.discordbotfoundation.mysql.query.column.Float;
 
 import java.lang.Integer;
 import java.lang.String;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Create extends ExecuteStatement<Create> {
@@ -20,6 +23,8 @@ public class Create extends ExecuteStatement<Create> {
     private final Action action = new Regular();
 
     private boolean ifNotExists = false;
+
+    private final ArrayList<ForeignKey> foreignKeys = new ArrayList<>();
 
     public Create(ITable table) {
         super(table);
@@ -317,6 +322,10 @@ public class Create extends ExecuteStatement<Create> {
         return this.action.column(name, content);
     }
 
+    public void foreignKey(java.lang.String name, java.lang.String columnName, java.lang.String referenceTableName, java.lang.String  referenceColumnName){
+        foreignKeys.add(new ForeignKey(name, columnName, referenceTableName, referenceColumnName));
+    }
+
     /**
      * Create table if not exists.
      */
@@ -332,7 +341,17 @@ public class Create extends ExecuteStatement<Create> {
 
         List<IColumn> columns = this.action.getColumns();
 
-        for (int i = 0; i < columns.size(); i++) query.append(i != columns.size() - 1 ? columns.get(i).toString() + ", " : columns.get(i).toString() + " ");
+        for (int i = 0; i < columns.size(); i++) {
+            query.append( i != columns.size() - 1 ? columns.get(i).toString() + ", " : columns.get(i).toString() + " " );
+        }
+
+        if (!foreignKeys.isEmpty()){
+            query.append(", ");
+        }
+
+        for (int i = 0; i < foreignKeys.size(); i++) {
+            query.append( i != foreignKeys.size() - 1 ? foreignKeys.get(i).toQuery() + ", " : foreignKeys.get(i).toQuery() + " " );
+        }
 
         query.append(")");
 
