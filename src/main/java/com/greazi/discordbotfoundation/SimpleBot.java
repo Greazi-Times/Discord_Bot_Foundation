@@ -3,18 +3,12 @@ package com.greazi.discordbotfoundation;
 import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.module.ModulesManager;
 import com.greazi.discordbotfoundation.mysql.MySQL;
-import com.greazi.discordbotfoundation.mysql.query.Create;
-import com.greazi.discordbotfoundation.mysql.query.Insert;
-import com.greazi.discordbotfoundation.mysql.table.ITable;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.runtime.AllocationStrategy;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -22,10 +16,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * To-Do-List for the whole project.
@@ -134,7 +125,6 @@ public class SimpleBot {
 
 		// TODO add methode to start the onPreStart() and on Startup()
 		Common.log.info("bot is ready");
-
 	}
 
 	public SimpleBot(){
