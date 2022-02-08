@@ -544,8 +544,8 @@ public class CommandClientImpl implements CommandClient, EventListener
                     Map<String, Collection<? extends CommandPrivilege>> privileges = new HashMap<>();
                     for (net.dv8tion.jda.api.interactions.commands.Command command : commands)
                     {
-                        SimpleSlashCommand slashCommand = slashCommandMap.get(command.getName());
-                        privileges.put(command.getId(), slashCommand.buildPrivileges(this));
+                        SimpleSlashCommand simpleSlashCommand = slashCommandMap.get(command.getName());
+                        privileges.put(command.getId(), simpleSlashCommand.buildPrivileges(this));
                     }
                     server.updateCommandPrivileges(privileges)
                         .queue(priv -> LOG.debug("Successfully added" + commands.size() + "slash commands!"));

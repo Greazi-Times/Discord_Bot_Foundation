@@ -1,6 +1,9 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.module.ModulesManager;
+import com.greazi.discordbotfoundation.command.CommandClient;
+import com.greazi.discordbotfoundation.command.CommandClientBuilder;
+import com.greazi.discordbotfoundation.command.SimpleCommand;
+import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.JDA;
@@ -9,14 +12,15 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * To-Do-List for the whole project.
@@ -30,8 +34,7 @@ import java.util.Set;
 // TODO Proper settings system **
 // TODO Channel Util
 // TODO Roll Util
-// TODO Embed Util **
-// TODO Button Util **
+// TODO Button Util
 // TODO Menu Util --
 // TODO Reload handler --
 // TODO Common class
@@ -42,7 +45,7 @@ import java.util.Set;
 /**
  * A basic discord bot that represents the discord bot library
  */
-public class SimpleBot {
+public abstract class SimpleBot {
 
 	// ----------------------------------------------------------------------------------------
 	// Static
@@ -110,23 +113,6 @@ public class SimpleBot {
 	// Main methods
 	// ----------------------------------------------------------------------------------------
 
-	/**
-	 * The main start system of the bot
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		if(SimpleSettings.getInstance().isSettingsConfigured()) {
-			Common.log.error("The settings file hasn't been configured. Stopping the bot now!");
-			return;
-		}
-
-		new SimpleBot();
-
-		// TODO add methode to start the onPreStart() and on Startup()
-		Common.log.info("bot is ready");
-
-	}
-
 	public SimpleBot(){
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 		onPreStart();
@@ -146,27 +132,27 @@ public class SimpleBot {
 						simpleSettings.getMySqlHost(),
 						simpleSettings.getMySqlPort(),
 						simpleSettings.getMySqlUsername(),
-
-		onBotLoad();
-
-		}
-				Common.log.error("Error enabling mysql: "+e.getMessage());
-			}catch (Exception e){
-
 						simpleSettings.getMySqlPassword(),
 						simpleSettings.getMySqlDatabase()
 				);
-				Common.log.info("Mysql Enabled");
-				if (mySQL.isConnected() && simpleSettings.isStoreMembersEnabled()){
-					Common.log.info("Enabling MemberStorage");
-					memberStorage = new MemberStorage();
-					Common.log.info("MemberStorage Enabled");
-				}
 
-			}
+				onBotLoad();
+
+			}catch (Exception e){
+				Common.log.error("Error enabling mysql: "+e.getMessage());
 				e.printStackTrace();
+			}
+
+
+			Common.log.info("Mysql Enabled");
+			if (mySQL.isConnected() && simpleSettings.isStoreMembersEnabled()){
+				Common.log.info("Enabling MemberStorage");
+				memberStorage = new MemberStorage();
+				Common.log.info("MemberStorage Enabled");
+			}
+		}
+
 		Common.log.info("Running onPreStart()");
-		loadCommands();
 
 		onStartup();
 	}
@@ -174,7 +160,6 @@ public class SimpleBot {
 	public void onStartup() {
 		Common.log.info("Running onStartup()");
 		onBotStart();
-
 
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
 
@@ -186,7 +171,6 @@ public class SimpleBot {
 		// start modules and commands
 	}
 
-
 	public void loadCommands() {
 		Common.log.info("Loading commands....");
 		addCommands();
@@ -196,7 +180,6 @@ public class SimpleBot {
 		jda.addEventListener(commandClient);
 		Common.log.info("JDA event listener has been added, DONE!");
 	}
-
 
 	public void loadModules() {
 
@@ -208,7 +191,7 @@ public class SimpleBot {
 	 * @param token = The token of the bot
 	 * @param activity = The activity status of the bot
 	 */
-	private static final void registerJda(String token, String activity) {
+	private static void registerJda(String token, String activity) {
 		try {
 			jda = JDABuilder.createDefault(token)
 					.setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
@@ -224,32 +207,31 @@ public class SimpleBot {
 		}
 	}
 
-	public static JDA getJDA() {
-		return jda;
-	}
-
-	public static SimpleBot getBot() {
-		return instance;
-	}
-
-	public static Guild getGuild() {
-		return guild;
-	}
-
-	public static Member getSelf() {
-		return self;
-	}
-
-	public static MySQL getMySQL() {
-		return mySQL;
-	}
-
 	public static MemberStorage getMemberStorage() {
 		if (!SimpleSettings.getInstance().isStoreMembersEnabled()){
 			Common.log.warn("Trying to get member storage while it is not enabled");
 		}
 		return memberStorage;
 	}
+
+	/*protected void registerCommand(Class commandClass) {
+		Common.log.info("Running registerCommand(Class commandClass)");
+		try {
+			SimpleCommand createCommand = (SimpleCommand) commandClass.getDeclaredConstructor().newInstance();
+
+			Common.log.info(createCommand.getName() + "Name");
+			Common.log.info(createCommand.getHelp() + "Description");
+
+			CommandData cmdData = new CommandData(createCommand.getName(), createCommand.getHelp() == null ? "No description set." : createCommand.getHelp())
+					.addOptions(createCommand.getHelp())
+					.setDefaultEnabled(createCommand.getUserPermissions().length == 0);
+
+			getJDA().addEventListener(cmdData);
+		} catch(NoSuchMethodException | SecurityException | InvocationTargetException | InstantiationException | IllegalAccessException exception) {
+			exception.printStackTrace();
+		}
+
+	}*/
 
 	// ----------------------------------------------------------------------------------------
 	// Delegate methods    <-- Methods that can be used to load your stuff
@@ -265,9 +247,7 @@ public class SimpleBot {
 	/**
 	 * The main loading method, called when we are ready to load
 	 */
-	protected void onBotStart() {
-
-	}
+	protected abstract void onBotStart();
 
 	/**
 	 * The main method called when we are about to shut down

@@ -14,7 +14,7 @@ public class ChannelQuery extends Query<TextChannel> {
     }
 
     public ChannelQuery inCategory(String category) {
-        List<TextChannel> channels = all().stream().filter(textChannel -> Objects.requireNonNull(textChannel.getParent()).getName().equalsIgnoreCase(category)).collect(Collectors.toList());
+        List<TextChannel> channels = all().stream().filter(textChannel -> Objects.requireNonNull(textChannel.getParentCategory()).getName().equalsIgnoreCase(category)).collect(Collectors.toList());
         return new ChannelQuery(channels);
     }
 

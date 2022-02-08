@@ -110,25 +110,6 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
         return super.getDescriptionBuilder().toString();
     }
 
-    @Deprecated
-    // Try not to use this as it sleeps the bot basically.
-    public Message complete(TextChannel textChannel) {
-        return textChannel.sendMessage(build()).complete();
-    }
-
-    @Deprecated
-    // Try not to use this as it sleeps the bot basically.
-    public Message complete(Member member) {
-        return complete(member.getUser());
-    }
-
-    public Message complete(User user) {
-        try {
-            return user.openPrivateChannel().complete().sendMessage(build()).complete();
-        } catch (ErrorResponseException ignore) { }
-        return null;
-    }
-
     public void queue(TextChannel textChannel) {
         textChannel.sendMessageEmbeds(build()).queue();
     }
@@ -182,7 +163,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
     }
 
     public Message reply(Message message, boolean mention) {
-        return message.reply(build()).mentionRepliedUser(mention).complete();
+        return message.reply(message).mentionRepliedUser(mention).complete();
     }
 
     public void replyTemporary(Message message, int duration, TimeUnit timeUnit) {

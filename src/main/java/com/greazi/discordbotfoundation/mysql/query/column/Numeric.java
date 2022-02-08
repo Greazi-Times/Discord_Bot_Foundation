@@ -10,6 +10,8 @@ public abstract class Numeric extends Column {
 
     protected java.lang.Boolean primary = false;
 
+    protected java.lang.Boolean unique = false;
+
     protected java.lang.Boolean increment = false;
 
     protected java.lang.Integer defaultValue;
@@ -38,6 +40,16 @@ public abstract class Numeric extends Column {
      */
     public Numeric primary() {
         this.primary = true;
+
+        return this;
+    }
+
+    /**
+     * Enable UNIQUE KEY.
+     * @return Column object.
+     */
+    public Numeric unique() {
+        this.unique = true;
 
         return this;
     }
