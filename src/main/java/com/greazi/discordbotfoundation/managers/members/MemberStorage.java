@@ -24,7 +24,7 @@ public class MemberStorage {
                 Create create = membersTable.create().ifNotExists();
 
                 create.id().increment().primary();
-                create.string("discord_id", 50);
+                create.integer("discord_id").unique();
                 create.string("nickname", 50).nullable();
                 create.string("username", 50);
                 create.integer("discriminator", 5);
@@ -38,6 +38,8 @@ public class MemberStorage {
                     Common.log.error("There was an error creating the members table");
                 }else{
                     Common.log.error("Members table created");
+
+                    SimpleBot.getMySQL().getConnection().prepareStatement("alter table "+membersTable.getName()+" add primary key(`discord_id`);");
 
                     Common.log.error("Adding all members");
                     Guild mainGuild = SimpleBot.getJDA().getGuildById(SimpleSettings.getInstance().getMainGuild());
@@ -61,6 +63,7 @@ public class MemberStorage {
                     });
                     Common.log.error("All members added");
                 }
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

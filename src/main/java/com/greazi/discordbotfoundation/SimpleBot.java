@@ -19,7 +19,8 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -112,6 +113,23 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 	// Main methods
 	// ----------------------------------------------------------------------------------------
+
+	/**
+	 * The main start system of the bot
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		if(SimpleSettings.getInstance().isSettingsConfigured()) {
+			Common.log.error("The settings file hasn't been configured. Stopping the bot now!");
+			return;
+		}
+
+		new SimpleBot();
+
+		// TODO add methode to start the onPreStart() and on Startup()
+		Common.log.info("bot is ready");
+
+	}
 
 	public SimpleBot(){
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
