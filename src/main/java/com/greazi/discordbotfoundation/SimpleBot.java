@@ -114,23 +114,6 @@ public abstract class SimpleBot {
 	// Main methods
 	// ----------------------------------------------------------------------------------------
 
-	/**
-	 * The main start system of the bot
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		if(SimpleSettings.getInstance().isSettingsConfigured()) {
-			Common.log.error("The settings file hasn't been configured. Stopping the bot now!");
-			return;
-		}
-
-		new SimpleBot();
-
-		// TODO add methode to start the onPreStart() and on Startup()
-		Common.log.info("bot is ready");
-
-	}
-
 	public SimpleBot(){
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 		onPreStart();
@@ -184,7 +167,7 @@ public abstract class SimpleBot {
 		onReloadablesStart();
 	}
 
-	public final void onReload() {
+	public void onReload() {
 		// disable modules and commands
 		// start modules and commands
 	}
