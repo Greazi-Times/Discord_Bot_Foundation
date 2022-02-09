@@ -1,4 +1,8 @@
-package com.greazi.discordbotfoundation;
+/*
+ * Copyright (c) 2022. Greazi All rights reservered
+ */
+
+package com.greazi.discordbotfoundation.utils.color;
 
 public class Color {
 

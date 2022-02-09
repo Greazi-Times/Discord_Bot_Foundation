@@ -44,7 +44,7 @@ public class SimpleYaml {
 	}
 
 	public void displayError0(String File) {
-		Common.log.error(
+		Common.log(
 			"&4    ___                  _ ",
 			"&4   / _ \\  ___  _ __  ___| |",
 			"&4  | | | |/ _ \\| '_ \\/ __| |",

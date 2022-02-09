@@ -25,18 +25,18 @@ public class MemberStorageEvents extends ListenerAdapter {
 
     @Override
     public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event) {
-        Common.log.info("member updated nickname");
+        Common.log("member updated nickname");
         SimpleBot.getMemberStorage().updateMember(event.getMember());
     }
 
     @Override
     public void onGuildMemberUpdate(GuildMemberUpdateEvent event) {
-        Common.log.info("member updated");
+        Common.log("member updated");
         SimpleBot.getMemberStorage().updateMember(event.getMember());
     }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        Common.log.info(event.getMessage().getContentRaw());
+        Common.log(event.getMessage().getContentRaw());
     }
 }

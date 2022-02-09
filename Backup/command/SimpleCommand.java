@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.entities.*;
  * a low level of development.
  * <br>All Commands extending this class can define any number of these fields in a object constructor and then
  * create the command action/response in the abstract
- * {@link SimpleCommand#execute(com.greazi.discordbotfoundation.command.CommandEvent) #execute(CommandEvent)} body:
+ * {@link SimpleCommand#execute(com.greazi.discordbotfoundation.module.CommandEvent) #execute(CommandEvent)} body:
  *
  * <pre><code> public class ExampleCmd extends Command {
  *
@@ -52,7 +52,7 @@ import net.dv8tion.jda.api.entities.*;
  * }</code></pre>
  *
  * Execution is with the provision of a MessageReceivedEvent-CommandClient wrapper called a
- * {@link com.greazi.discordbotfoundation.command.CommandEvent CommandEvent} and is performed in two steps:
+ * {@link com.greazi.discordbotfoundation.module.CommandEvent CommandEvent} and is performed in two steps:
  * <ul>
  *     <li>{@link SimpleCommand#run(CommandEvent) run} - The command runs
  *     through a series of conditionals, automatically terminating the command instance if one is not met,
@@ -152,14 +152,14 @@ public abstract class SimpleCommand extends Interaction
      * {@link SimpleCommand#run(CommandEvent) #run(CommandEvent)}.
      *
      * @param  event
-     *         The {@link com.greazi.discordbotfoundation.command.CommandEvent CommandEvent} that
+     *         The {@link com.greazi.discordbotfoundation.module.CommandEvent CommandEvent} that
      *         triggered this Command
      */
     protected abstract void execute(CommandEvent event);
 
     /**
      * Runs checks for the {@link SimpleCommand Command} with the
-     * given {@link com.greazi.discordbotfoundation.command.CommandEvent CommandEvent} that called it.
+     * given {@link com.greazi.discordbotfoundation.module.CommandEvent CommandEvent} that called it.
      * <br>Will terminate, and possibly respond with a failure message, if any checks fail.
      *
      * @param  event
@@ -486,7 +486,7 @@ public abstract class SimpleCommand extends Interaction
 
     /**
      * Gets the proper cooldown key for this Command under the provided
-     * {@link com.greazi.discordbotfoundation.command.CommandEvent CommandEvent}.
+     * {@link com.greazi.discordbotfoundation.module.CommandEvent CommandEvent}.
      *
      * @param  event
      *         The CommandEvent to generate the cooldown for.
@@ -515,7 +515,7 @@ public abstract class SimpleCommand extends Interaction
 
     /**
      * Gets an error message for this Command under the provided
-     * {@link com.greazi.discordbotfoundation.command.CommandEvent CommanEvent}.
+     * {@link com.greazi.discordbotfoundation.module.CommandEvent CommanEvent}.
      *
      * @param  event
      *         The CommandEvent to generate the error message for.
@@ -543,7 +543,7 @@ public abstract class SimpleCommand extends Interaction
     /**
      * To be used in {@link SimpleCommand Command}s as a means of
      * organizing commands into "Categories" as well as terminate command usage when the calling
-     * {@link com.greazi.discordbotfoundation.command.CommandEvent CommandEvent} doesn't meet
+     * {@link com.greazi.discordbotfoundation.module.CommandEvent CommandEvent} doesn't meet
      * certain requirements.
      *
      * @author John Grosh (jagrosh)
@@ -571,7 +571,7 @@ public abstract class SimpleCommand extends Interaction
          * A Command Category containing a name and a {@link java.util.function.Predicate}.
          *
          * <p>The command will be terminated if
-         * {@link SimpleCommand.Category#test(com.greazi.discordbotfoundation.command.CommandEvent)}
+         * {@link SimpleCommand.Category#test(com.greazi.discordbotfoundation.module.CommandEvent)}
          * returns {@code false}.
          *
          * @param  name
@@ -591,7 +591,7 @@ public abstract class SimpleCommand extends Interaction
          * and a failure response.
          *
          * <p>The command will be terminated if
-         * {@link SimpleCommand.Category#test(com.greazi.discordbotfoundation.command.CommandEvent)}
+         * {@link SimpleCommand.Category#test(com.greazi.discordbotfoundation.module.CommandEvent)}
          * returns {@code false}, and the failure response will be sent.
          *
          * @param  name
@@ -633,7 +633,7 @@ public abstract class SimpleCommand extends Interaction
          * Does not support SlashCommands.
          *
          * @param  event
-         *         The {@link com.greazi.discordbotfoundation.command.CommandEvent CommandEvent}
+         *         The {@link com.greazi.discordbotfoundation.module.CommandEvent CommandEvent}
          *         that was called when this method is invoked
          *
          * @return {@code true} if the Predicate was not set, was set as null, or was

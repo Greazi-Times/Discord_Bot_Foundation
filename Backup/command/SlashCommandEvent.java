@@ -1,4 +1,4 @@
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.GuildChannel;

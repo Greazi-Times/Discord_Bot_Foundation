@@ -35,13 +35,13 @@ public class MemberStorage {
 
                 Boolean result = create.execute();
                 if (result){
-                    Common.log.error("There was an error creating the members table");
+                    Common.warning("There was an error creating the members table");
                 }else{
-                    Common.log.error("Members table created");
+                    Common.warning("Members table created");
 
                     SimpleBot.getMySQL().getConnection().prepareStatement("alter table "+membersTable.getName()+" add primary key(`discord_id`);");
 
-                    Common.log.error("Adding all members");
+                    Common.warning("Adding all members");
                     Guild mainGuild = SimpleBot.getJDA().getGuildById(SimpleSettings.getInstance().getMainGuild());
                     mainGuild.getMembers().forEach(member -> {
                         Insert query = membersTable.insert();
@@ -57,11 +57,11 @@ public class MemberStorage {
                         try{
                             query.execute();
                         }catch (Exception e){
-                            Common.log.error("Error while inserting member: "+e.getMessage());
+                            Common.warning("Error while inserting member: "+e.getMessage());
                             e.printStackTrace();
                         }
                     });
-                    Common.log.error("All members added");
+                    Common.warning("All members added");
                 }
 
             }
@@ -70,11 +70,11 @@ public class MemberStorage {
         }
 
         SimpleBot.getJDA().addEventListener(new MemberStorageEvents());
-        Common.log.error("Events registered");
+        Common.warning("Events registered");
 
         MysqlMember member = this.getMember("240439907833741322");
         if (member != null){
-            Common.log.info(member.getDiscriminator()+"");
+            Common.log(member.getDiscriminator()+"");
         }
     }
 
@@ -107,7 +107,7 @@ public class MemberStorage {
             Select query = membersTable.select().where("id = ?", member.getId()).limit(1);
             Map<String, Object> fetch = query.fetch();
 
-            Common.log.info(fetch.toString());
+            Common.log(fetch.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -141,7 +141,7 @@ public class MemberStorage {
         }
 
         if (member != null){
-            Common.log.info(member.getDiscriminator()+"");
+            Common.log(member.getDiscriminator()+"");
         }
         return member;
     }

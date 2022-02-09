@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;
 
-import com.greazi.discordbotfoundation.command.annotation.JDACommand;
+import com.greazi.discordbotfoundation.module.annotation.JDACommand;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ import java.util.List;
  * The primary issue that came with this was that Commands were restricted to that method of creation, offering
  * no support for popular means such as annotated commands.
  *
- * <p>Since 1.6 the introduction of {@link com.greazi.discordbotfoundation.command.CommandBuilder CommandBuilder}
+ * <p>Since 1.6 the introduction of {@link com.greazi.discordbotfoundation.module.CommandBuilder CommandBuilder}
  * has allowed the potential to create unique {@link SimpleCommand Command}
  * objects after compilation.
  * <br>The primary duty of this class is to provide a "in runtime" converter for generics that are annotated with
@@ -43,7 +43,7 @@ public interface AnnotatedModuleCompiler
      * Object}.
      *
      * <p><b>This Object must be annotated with {@link
-     * com.greazi.discordbotfoundation.command.annotation.JDACommand.Module @JDACommand.Module}!</b>
+     * com.greazi.discordbotfoundation.module.annotation.JDACommand.Module @JDACommand.Module}!</b>
      *
      * @param  o
      *         The Object, annotated with {@code @JDACommand.Module}.

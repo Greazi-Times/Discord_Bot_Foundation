@@ -13,33 +13,70 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.context.UserContextInteraction;
+import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.context.MessageContextInteraction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import net.dv8tion.jda.api.utils.AttachmentOption;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class UserContextMenuEvent extends UserContextInteractionEvent
+/**
+ * <h2><b>Message Context Menus In JDA-Chewtils</b></h2>
+ *
+ * <p>The internal inheritance for Message Context Menus used in JDA-Chewtils is that of the object.
+ *
+ * <p>Classes created inheriting this class gain the unique traits of commands operated using the menu Extension.
+ * <br>Using several fields, a command can define properties that make it unique and complex while maintaining
+ * a low level of development.
+ * <br>All classes extending this class can define any number of these fields in a object constructor and then
+ * create the menu action/response in the abstract {@link MessageContextMenu#execute(MessageContextMenuEvent)} body:
+ *
+ * <pre><code> public class ExampleCmd extends MessageContextMenu {
+ *
+ *      public ExampleCmd() {
+ *          this.name = "Example";
+ *      }
+ *
+ *      {@literal @Override}
+ *      protected void execute(MessageContextMenuEvent event) {
+ *          event.reply("Hey look! This would be the bot's reply if this was a command!");
+ *      }
+ *
+ * }</code></pre>
+ *
+ * Execution is with the provision of a MessageContextInteractionEvent-CommandClient wrapper called a
+ * {@link MessageContextMenu} and is performed in two steps:
+ * <ul>
+ *     <li>{@link MessageContextMenu#run(MessageContextMenuEvent) run} - The menu runs
+ *     through a series of conditionals, automatically terminating the command instance if one is not met,
+ *     and possibly providing an error response.</li>
+ *
+ *     <li>{@link MessageContextMenu#execute(MessageContextMenuEvent) execute} - The menu,
+ *     now being cleared to run, executes and performs whatever lies in the abstract body method.</li>
+ * </ul>
+ *
+ * @author Olivia (Chew)
+ */
+public class MessageContextMenuEvent extends MessageContextInteractionEvent
 {
     private final CommandClient client;
 
-    public UserContextMenuEvent(@NotNull JDA api, long responseNumber, @NotNull UserContextInteraction interaction, CommandClient client)
+    public MessageContextMenuEvent(@NotNull JDA api, long responseNumber, @NotNull MessageContextInteraction interaction, CommandClient client)
     {
         super(api, responseNumber, interaction);
         this.client = client;
     }
 
     /**
-     * Returns the {@link CommandClient} that triggered this event.
+     * Returns the {@link CommandClient} that initiated this event.
      *
      * @return The initiating CommandClient
      */
@@ -75,7 +112,7 @@ public class UserContextMenuEvent extends UserContextInteractionEvent
     }
 
     /**
-     * Responds with a {@link Message}.
+     * Replies with a {@link Message}.
      *
      * <p>The {@link ReplyCallbackAction} returned by sending the response as a {@link Message} automatically does
      * {@link ReplyCallbackAction#queue() RestAction#queue()}.
@@ -88,12 +125,12 @@ public class UserContextMenuEvent extends UserContextInteractionEvent
     }
 
     /**
-     * Responds with a {@link File} with the provided name, or a default name if left null.
+     * Replies with a {@link File} with the provided name, or a default name if left null.
      *
      * <p>The {@link ReplyCallbackAction} returned by sending the response as a {@link Message} automatically does
      * {@link ReplyCallbackAction#queue() RestAction#queue()}.
      *
-     * <p>This method uses {@link GenericCommandInteractionEvent#replyFile(File, String, AttachmentOption...)}
+     * <p>This method uses {@link GenericCommandInteractionEvent#replyFile(File, String, net.dv8tion.jda.api.utils.AttachmentOption...)}
      * to send the File. For more information on what a bot may send using this, you may find the info in that method.
      *
      * @param file The File to reply with

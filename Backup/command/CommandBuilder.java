@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;
 
-import com.greazi.discordbotfoundation.command.SimpleCommand.*;
+import com.greazi.discordbotfoundation.module.SimpleCommand.*;
 
 import net.dv8tion.jda.api.Permission;
 
@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  *
  * <p>This is more useful for creation of commands "mid-runtime".
  * <br>A good usage would be to create a Command via eval and register it via
- * {@link com.greazi.discordbotfoundation.command.CommandClient#addCommand(SimpleCommand)
+ * {@link com.greazi.discordbotfoundation.module.CommandClient#addCommand(SimpleCommand)
  * CommandClient#addCommand(Command)}.
  * 
  * <p>While useful during runtime, this is completely inferior to extending Command as a superclass
@@ -454,12 +454,12 @@ public class CommandBuilder
      * Builds the {@link SimpleCommand Command}
      * using the previously provided information.
      *
-     * <p>This uses the only the {@link com.greazi.discordbotfoundation.command.CommandEvent
+     * <p>This uses the only the {@link com.greazi.discordbotfoundation.module.CommandEvent
      * CommandEvent} parameter that would be provided during
      * {@link SimpleCommand#execute(CommandEvent) #execute(CommandEvent)},
      * and no information about the Command can be retrieved using this.
      *
-     * <p>An alternate method {@link com.greazi.discordbotfoundation.command.CommandBuilder#build(java.util.function.BiConsumer)} exists if you wish to retrieve information
+     * <p>An alternate method {@link com.greazi.discordbotfoundation.module.CommandBuilder#build(java.util.function.BiConsumer)} exists if you wish to retrieve information
      * about the Command built during execution.
      *
      * @param  execution
@@ -476,7 +476,7 @@ public class CommandBuilder
      * Builds the {@link SimpleCommand Command}
      * using the previously provided information.
      *
-     * <p>This uses the both the {@link com.greazi.discordbotfoundation.command.CommandEvent
+     * <p>This uses the both the {@link com.greazi.discordbotfoundation.module.CommandEvent
      * CommandEvent} parameter that would be provided during
      * {@link SimpleCommand#execute(CommandEvent) #execute(CommandEvent)},
      * and the Command built when, allowing info on the Command to be retrieved during execution.

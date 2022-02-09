@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command.annotation;
+package com.greazi.discordbotfoundation.module.annotation;
 
-import com.greazi.discordbotfoundation.command.SimpleCommand;
-import com.greazi.discordbotfoundation.command.CooldownScope;
+import com.greazi.discordbotfoundation.module.SimpleCommand;
+import com.greazi.discordbotfoundation.module.CooldownScope;
 import net.dv8tion.jda.api.Permission;
 
 import java.lang.annotation.*;
@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * An Annotation applicable to {@link java.lang.reflect.Method Method}s that will act as
  * {@link SimpleCommand Command}s when added to a Client
- * using {@link com.greazi.discordbotfoundation.command.CommandClientBuilder#addAnnotatedModule(Object)
+ * using {@link com.greazi.discordbotfoundation.module.CommandClientBuilder#addAnnotatedModule(Object)
  * CommandClientBuilder#addAnnotatedModule()} serving as metadata "constructors" for what
  * would be a class extending Command of the same functionality and settings.
  *
@@ -33,22 +33,22 @@ import java.lang.annotation.*;
  * than most other types systems.
  *
  * To circumvent this, classes annotated with this are put through an {@link
- * com.greazi.discordbotfoundation.command.AnnotatedModuleCompiler AnnotatedModuleCompiler}.
- * where they will be converted to Commands using {@link com.greazi.discordbotfoundation.command.CommandBuilder
+ * com.greazi.discordbotfoundation.module.AnnotatedModuleCompiler AnnotatedModuleCompiler}.
+ * where they will be converted to Commands using {@link com.greazi.discordbotfoundation.module.CommandBuilder
  * CommandBuilder}.
  *
  * <p>Classes that wish to be contain methods to be used as commands must be annotated with
- * {@link com.greazi.discordbotfoundation.command.annotation.JDACommand.Module @Module}.
+ * {@link com.greazi.discordbotfoundation.module.annotation.JDACommand.Module @Module}.
  * <br>Following that, any methods of said class annotated with this annotation (whose names
  * are also given as parameters of the {@code @Module} annotation) will be registered to the
  * module and "compiled" through the AnnotatedModuleCompiler provided in CommandClientBuilder.
  *
- * <pre><code>   {@link com.greazi.discordbotfoundation.command.annotation.JDACommand.Module @JDACommand.Module}({@link com.greazi.discordbotfoundation.command.annotation.JDACommand.Module#value() value} = "example")
+ * <pre><code>   {@link com.greazi.discordbotfoundation.module.annotation.JDACommand.Module @JDACommand.Module}({@link com.greazi.discordbotfoundation.module.annotation.JDACommand.Module#value() value} = "example")
  * public class AnnotatedModuleCmd {
  *
  *     {@literal @JDACommand(}
- *          {@link com.greazi.discordbotfoundation.command.annotation.JDACommand#name() name} = {"example", "test", "demo"},
- *          {@link com.greazi.discordbotfoundation.command.annotation.JDACommand#help() help} = "gives an example of what commands do"
+ *          {@link com.greazi.discordbotfoundation.module.annotation.JDACommand#name() name} = {"example", "test", "demo"},
+ *          {@link com.greazi.discordbotfoundation.module.annotation.JDACommand#help() help} = "gives an example of what commands do"
  *      )
  *      public void example(CommandEvent) {
  *          event.reply("Hey look! This would be the bot's reply if this was a command!");
@@ -56,7 +56,7 @@ import java.lang.annotation.*;
  *
  * }</code></pre>
  *
- * @see    com.greazi.discordbotfoundation.command.annotation.JDACommand.Module
+ * @see    com.greazi.discordbotfoundation.module.annotation.JDACommand.Module
  *
  * @since  1.7
  * @author Kaidan Gustave
@@ -181,7 +181,7 @@ public @interface JDACommand
      * into {@link SimpleCommand Command}s.
      *
      * <p>Method names provided to this annotation must have one or two parameters.
-     * Either a single parameter {@link com.greazi.discordbotfoundation.command.CommandEvent
+     * Either a single parameter {@link com.greazi.discordbotfoundation.module.CommandEvent
      * CommandEvent}, or a double parameter {@code CommandEvent} and {@code Command}.
      * <br>The arrangement of the double parameters is not important, so methods
      * may do it as {@code (CommandEvent, Command)} or {@code (Command, CommandEvent)}.
@@ -194,7 +194,7 @@ public @interface JDACommand
     {
         /**
          * The names of any methods that will be targeted when compiling this object
-         * using the {@link com.greazi.discordbotfoundation.command.AnnotatedModuleCompiler
+         * using the {@link com.greazi.discordbotfoundation.module.AnnotatedModuleCompiler
          * AnnotatedModuleCompiler}.
          *
          * <p><b>This is not the same thing as the name of the commands!</b> These are
@@ -240,21 +240,21 @@ public @interface JDACommand
      * A helper annotation to assist in location of Category instance.
      *
      * <p>This will target a <b>static field</b> in the specified class
-     * {@link com.greazi.discordbotfoundation.command.annotation.JDACommand.Category#location() location} using reflections, with a
-     * matching {@link com.greazi.discordbotfoundation.command.annotation.JDACommand.Category#name() name}.
+     * {@link com.greazi.discordbotfoundation.module.annotation.JDACommand.Category#location() location} using reflections, with a
+     * matching {@link com.greazi.discordbotfoundation.module.annotation.JDACommand.Category#name() name}.
      *
      * <p>It is important to remember the target must be a <b>static field</b>
      * and any other attempted inputs will result in errors from the
-     * {@link com.greazi.discordbotfoundation.command.AnnotatedModuleCompiler compiler}.
+     * {@link com.greazi.discordbotfoundation.module.AnnotatedModuleCompiler compiler}.
      *
-     * @see    com.greazi.discordbotfoundation.command.annotation.JDACommand#category()
+     * @see    com.greazi.discordbotfoundation.module.annotation.JDACommand#category()
      */
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
     @interface Category
     {
         /**
-         * The name of the <b>static field</b> in the {@link com.greazi.discordbotfoundation.command.annotation.JDACommand.Category#location()
+         * The name of the <b>static field</b> in the {@link com.greazi.discordbotfoundation.module.annotation.JDACommand.Category#location()
          * target class} that will be the category for the annotated command.
          *
          * @return The name of the <b>static field</b> in the target class.

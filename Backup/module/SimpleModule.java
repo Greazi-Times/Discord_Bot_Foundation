@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022. Greazi All rights reservered
+ */
+
 package com.greazi.discordbotfoundation.module;
 
 import com.greazi.discordbotfoundation.Common;
@@ -21,12 +25,12 @@ public abstract class SimpleModule {
     public void enable() {
         Set<Requirement> failedRequirements = Arrays.stream(setRequirements()).filter(requirement -> !requirement.check()).collect(Collectors.toSet());
         if(failedRequirements.isEmpty()) {
-            //Common.log.info("Enabling Module " + getName() + "..");
+            //Common.log("Enabling Module " + getName() + "..");
             onEnable();
             enabled = true;
         } else {
-            Common.log.error("Failed Enabling Module " + setName() + " because:");
-            failedRequirements.forEach(requirement -> Common.log.info("- " + requirement.getUnmatchMessage()));
+            Common.warning("Failed Enabling Module " + setName() + " because:");
+            failedRequirements.forEach(requirement -> Common.log("- " + requirement.getUnmatchMessage()));
         }
     }
 

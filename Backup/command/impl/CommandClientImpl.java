@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command.impl;
+package com.greazi.discordbotfoundation.module.impl;
 
-import com.greazi.discordbotfoundation.command.*;
-import com.greazi.discordbotfoundation.command.SimpleCommand.Category;
-import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
+import com.greazi.discordbotfoundation.module.*;
+import com.greazi.discordbotfoundation.module.SimpleCommand.Category;
+import com.greazi.discordbotfoundation.module.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.commons.utils.FixedSizeCache;
 import com.greazi.discordbotfoundation.commons.utils.SafeIdUtil;
 import net.dv8tion.jda.api.JDA;
@@ -81,7 +81,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * An implementation of {@link com.greazi.discordbotfoundation.command.CommandClient CommandClient} to be used by a bot.
+ * An implementation of {@link com.greazi.discordbotfoundation.module.CommandClient CommandClient} to be used by a bot.
  *
  * <p>This is a listener usable with {@link net.dv8tion.jda.api.JDA JDA}, as it implements
  * {@link net.dv8tion.jda.api.hooks.EventListener EventListener} in order to catch and use different kinds of

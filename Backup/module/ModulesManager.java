@@ -1,19 +1,15 @@
+/*
+ * Copyright (c) 2022. Greazi All rights reservered
+ */
+
 package com.greazi.discordbotfoundation.module;
 
 import com.greazi.discordbotfoundation.Common;
-import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.objects.Cooldown;
-import com.greazi.discordbotfoundation.utils.ProjectUtil;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ModulesManager {
@@ -28,15 +24,15 @@ public class ModulesManager {
     public void logLoad() {
         int successfulAmountModules = (int)modules.stream().filter(SimpleModule::isEnabled).count();
 
-        Common.log.info("Modules:");
-        Common.log.info("  » All: " + (modules.size() + cmdModules.size()));
-        Common.log.info("  » Modules: " + modules.size());
-        Common.log.info("  » Command: " + cmdModules.size());
-        Common.log.info("  » Success: " + successfulAmountModules);
+        Common.log("Modules:");
+        Common.log("  » All: " + (modules.size() + cmdModules.size()));
+        Common.log("  » Modules: " + modules.size());
+        Common.log("  » Command: " + cmdModules.size());
+        Common.log("  » Success: " + successfulAmountModules);
     }
 
     @SubscribeEvent
-    public void onSlashCommand(SlashCommandEvent e) {
+    public void onSlashCommand(SlashCommandInteractionEvent e) {
         SimpleCommand cmd = cmdModules.stream().filter(c -> c.setCommand().equalsIgnoreCase(e.getName())).findFirst().orElse(null);
         if(cmd == null || e.getMember() == null || e.getUser().isBot())
             return;

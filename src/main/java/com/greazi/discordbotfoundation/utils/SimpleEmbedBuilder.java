@@ -128,7 +128,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
                     .thenCompose(channel -> channel.sendMessageEmbeds(build()).submit())
                     .whenComplete((message, error) -> {
                         if (error != null){
-                            Common.log.error("Could not send pm to "+user.getName());
+                            Common.warning("Could not send pm to "+user.getName());
                         }
                     });
         } catch (Exception ignore) { }

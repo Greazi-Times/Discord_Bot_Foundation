@@ -1,10 +1,14 @@
+/*
+ * Copyright (c) 2022. Greazi All rights reservered
+ */
+
 package com.greazi.discordbotfoundation.module;
 
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.objects.Cooldown;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
@@ -33,6 +37,6 @@ public abstract class SimpleCommand {
         return cooldowns;
     }
 
-    public abstract void onCommand(TextChannel channel, Member m, SlashCommandEvent e);
+    public abstract void onCommand(TextChannel channel, Member member, SlashCommandInteractionEvent slashCommandEvent);
 
 }

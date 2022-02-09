@@ -15,43 +15,43 @@
  */
 
 /**
- * Items in this package pertain to the {@link com.greazi.discordbotfoundation.command.CommandClient CommandClient} and
- * {@link com.greazi.discordbotfoundation.command.SimpleCommand Commands}.
+ * Items in this package pertain to the {@link com.greazi.discordbotfoundation.module.CommandClient CommandClient} and
+ * {@link com.greazi.discordbotfoundation.module.SimpleCommand Commands}.
  * 
- * <p>All of the contents are used heavily in the {@link com.greazi.discordbotfoundation.command.impl.CommandClientImpl CommandClientImpl},
+ * <p>All of the contents are used heavily in the {@link com.greazi.discordbotfoundation.module.impl.CommandClientImpl CommandClientImpl},
  * and are summarized as follows:
  * <ul>
- *     <li>{@link com.greazi.discordbotfoundation.command.AnnotatedModuleCompiler AnnotatedModuleCompiler}
+ *     <li>{@link com.greazi.discordbotfoundation.module.AnnotatedModuleCompiler AnnotatedModuleCompiler}
  *     <br>An interface to create Commands from annotated objects (More info on annotated commands can be found in the
- *     {@link com.greazi.discordbotfoundation.command.annotation.JDACommand JDACommand} documentation).</li>
+ *     {@link com.greazi.discordbotfoundation.module.annotation.JDACommand JDACommand} documentation).</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.CommandBuilder CommandBuilder}
+ *     <li>{@link com.greazi.discordbotfoundation.module.CommandBuilder CommandBuilder}
  *     <br>An chain builder for Commands.</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.SimpleCommand Command}
+ *     <li>{@link com.greazi.discordbotfoundation.module.SimpleCommand Command}
  *     <br>An abstract class that can be inherited by classes to create Commands compatible with the
  *     {@code CommandClientImpl}.</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.CommandClient CommandClient}
+ *     <li>{@link com.greazi.discordbotfoundation.module.CommandClient CommandClient}
  *     <br>An interface used for getting info set when building a {@code CommandClientImpl}.</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.CommandClientBuilder CommandClientBuilder}
+ *     <li>{@link com.greazi.discordbotfoundation.module.CommandClientBuilder CommandClientBuilder}
  *     <br>A builder system used to create a {@code CommandClientImpl} across several optional chained methods.</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.CommandEvent CommandEvent}
+ *     <li>{@link com.greazi.discordbotfoundation.module.CommandEvent CommandEvent}
  *     <br>A wrapper for a {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent MessageReceivedEvent},
  *     {@code CommandClient}, and String arguments. The main basis for carrying information to be used in Commands.</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.CommandListener CommandListener}
+ *     <li>{@link com.greazi.discordbotfoundation.module.CommandListener CommandListener}
  *     <br>An interface to be provided to a {@code CommandClientImpl} that can provide Command operations depending
  *     on the outcome of the call.</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.GuildSettingsManager GuildSettingsManager}
+ *     <li>{@link com.greazi.discordbotfoundation.module.GuildSettingsManager GuildSettingsManager}
  *     <br>An abstract object used to store and handle {@code GuildSettingsProvider} implementations.</li>
  *
- *     <li>{@link com.greazi.discordbotfoundation.command.GuildSettingsProvider GuildSettingsProvider}
+ *     <li>{@link com.greazi.discordbotfoundation.module.GuildSettingsProvider GuildSettingsProvider}
  *     <br>An implementable interface used to supply default methods for handling guild specific settings
  *     via a {@code GuildSettingsManager}.</li>
  * </ul>
  */
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;

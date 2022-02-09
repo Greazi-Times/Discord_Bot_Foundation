@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -26,7 +26,7 @@ import java.util.function.Function;
 /**
  * A Bot Client interface implemented on objects used to hold bot data.
  *
- * <p>This is implemented in {@link com.greazi.discordbotfoundation.command.impl.CommandClientImpl CommandClientImpl}
+ * <p>This is implemented in {@link com.greazi.discordbotfoundation.module.impl.CommandClientImpl CommandClientImpl}
  * alongside implementation of {@link net.dv8tion.jda.api.hooks.EventListener EventListener} to create a
  * compounded "Client Listener" which catches specific kinds of events thrown by JDA and processes them
  * automatically to handle and execute {@link SimpleCommand Command}s.
@@ -38,7 +38,7 @@ import java.util.function.Function;
  * <p>For the CommandClientImpl, once initialized, only the following can be modified:
  * <ul>
  *     <li>{@link SimpleCommand Command}s may be added or removed.</li>
- *     <li>The {@link com.greazi.discordbotfoundation.command.CommandListener CommandListener} may be set.</li>
+ *     <li>The {@link com.greazi.discordbotfoundation.module.CommandListener CommandListener} may be set.</li>
  * </ul>
  *
  * @author John Grosh (jagrosh)
@@ -60,12 +60,12 @@ import java.util.function.Function;
  *                      if you provide {@code null} for the Owner ID, that'll just flat out throw an {@link
  *                      java.lang.IllegalArgumentException IllegalArgumentException}).
  *
- *         <p><b>4)</b> Do not provide strings when using {@link com.greazi.discordbotfoundation.command.CommandClientBuilder#setEmojis(String, String, String)
+ *         <p><b>4)</b> Do not provide strings when using {@link com.greazi.discordbotfoundation.module.CommandClientBuilder#setEmojis(String, String, String)
  *                      CommandClientBuilder#setEmojis(String, String, String)} that are not unicode emojis or that do
  *                      not match the custom emote format specified in {@link net.dv8tion.jda.api.entities.Emote#getAsMention()
  *                      Emote#getAsMention()} (IE: {@code <:EmoteName:EmoteID>}).
  *
- *         <p><b>5)</b> Avoid using {@link com.greazi.discordbotfoundation.command.impl.CommandClientImpl#linkIds(long,
+ *         <p><b>5)</b> Avoid using {@link com.greazi.discordbotfoundation.module.impl.CommandClientImpl#linkIds(long,
  *                      net.dv8tion.jda.api.entities.Message)}. This will create errors and has no real purpose outside
  *                      of it's current usage.
  */
@@ -102,7 +102,7 @@ public interface CommandClient
     /**
      * Returns the visual representation of the bot's prefix.
      *
-     * <p>This is the same as {@link com.greazi.discordbotfoundation.command.CommandClient#getPrefix() } unless the prefix is the default,
+     * <p>This is the same as {@link com.greazi.discordbotfoundation.module.CommandClient#getPrefix() } unless the prefix is the default,
      * in which case it appears as {@literal @Botname}.
      *
      * @return A never-null prefix
@@ -278,7 +278,7 @@ public interface CommandClient
 
     /**
      * Compiles the provided {@link java.lang.Object Object} annotated with {@link
-     * com.greazi.discordbotfoundation.command.annotation.JDACommand.Module JDACommand.Module} into a {@link java.util.List
+     * com.greazi.discordbotfoundation.module.annotation.JDACommand.Module JDACommand.Module} into a {@link java.util.List
      * List} of {@link SimpleCommand Command}s and adds them to this CommandClient in
      * the order they are listed.
      *
@@ -295,7 +295,7 @@ public interface CommandClient
 
     /**
      * Compiles the provided {@link java.lang.Object Object} annotated with {@link
-     * com.greazi.discordbotfoundation.command.annotation.JDACommand.Module JDACommand.Module} into a {@link java.util.List
+     * com.greazi.discordbotfoundation.module.annotation.JDACommand.Module JDACommand.Module} into a {@link java.util.List
      * List} of {@link SimpleCommand Command}s and adds them to this CommandClient via
      * the {@link java.util.function.Function Function} provided.
      *
@@ -320,8 +320,8 @@ public interface CommandClient
     void addAnnotatedModule(Object module, Function<SimpleCommand, Integer> mapFunction);
 
     /**
-     * Sets the {@link com.greazi.discordbotfoundation.command.CommandListener CommandListener} to catch
-     * command-related events thrown by this {@link com.greazi.discordbotfoundation.command.CommandClient CommandClient}.
+     * Sets the {@link com.greazi.discordbotfoundation.module.CommandListener CommandListener} to catch
+     * command-related events thrown by this {@link com.greazi.discordbotfoundation.module.CommandClient CommandClient}.
      *
      * @param  listener
      *         The CommandListener
@@ -329,7 +329,7 @@ public interface CommandClient
     void setListener(CommandListener listener);
 
     /**
-     * Returns the current {@link com.greazi.discordbotfoundation.command.CommandListener CommandListener}.
+     * Returns the current {@link com.greazi.discordbotfoundation.module.CommandListener CommandListener}.
      *
      * @return A possibly-null CommandListener
      */
@@ -373,7 +373,7 @@ public interface CommandClient
     String forcedGuildId();
 
     /**
-     * Gets the time this {@link com.greazi.discordbotfoundation.command.CommandClient CommandClient}
+     * Gets the time this {@link com.greazi.discordbotfoundation.module.CommandClient CommandClient}
      * implementation was created.
      *
      * @return The start time of this CommandClient implementation
@@ -495,7 +495,7 @@ public interface CommandClient
     /**
      * Gets the {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} held by this client.
      *
-     * <p>This is used for methods such as {@link com.greazi.discordbotfoundation.command.CommandEvent#async(Runnable)
+     * <p>This is used for methods such as {@link com.greazi.discordbotfoundation.module.CommandEvent#async(Runnable)
      * CommandEvent#async(Runnable)} run code asynchronously.
      *
      * @return The ScheduledExecutorService held by this client.
@@ -552,7 +552,7 @@ public interface CommandClient
      *
      * @return {@code true} if the bot uses linked deletion, {@code false} otherwise.
      *
-     * @see    com.greazi.discordbotfoundation.command.CommandClientBuilder#setLinkedCacheSize(int)
+     * @see    com.greazi.discordbotfoundation.module.CommandClientBuilder#setLinkedCacheSize(int)
      *         CommandClientBuilder#setLinkedCacheSize(int)
      */
     boolean usesLinkedDeletion();
@@ -562,8 +562,8 @@ public interface CommandClient
      * {@link net.dv8tion.jda.api.entities.Guild Guild}.
      *
      * <p>The returning object for this is specified via provision of a
-     * {@link com.greazi.discordbotfoundation.command.GuildSettingsManager GuildSettingsManager} to
-     * {@link com.greazi.discordbotfoundation.command.CommandClientBuilder#setGuildSettingsManager(com.greazi.discordbotfoundation.command.GuildSettingsManager)
+     * {@link com.greazi.discordbotfoundation.module.GuildSettingsManager GuildSettingsManager} to
+     * {@link com.greazi.discordbotfoundation.module.CommandClientBuilder#setGuildSettingsManager(com.greazi.discordbotfoundation.module.GuildSettingsManager)
      * CommandClientBuilder#setGuildSettingsManager(GuildSettingsManager)}, more specifically
      * {@link GuildSettingsManager#getSettings(net.dv8tion.jda.api.entities.Guild)
      * GuildSettingsManager#getSettings(Guild)}.
@@ -574,14 +574,14 @@ public interface CommandClient
      *         The Guild to get Settings for
      *
      * @return The settings object for the Guild, specified in
-     *         {@link com.greazi.discordbotfoundation.command.GuildSettingsManager#getSettings(Guild)
+     *         {@link com.greazi.discordbotfoundation.module.GuildSettingsManager#getSettings(Guild)
      *         GuildSettingsManager#getSettings(Guild)}, can be {@code null} if the implementation
      *         allows it.
      */
     <S> S getSettingsFor(Guild guild);
 
     /**
-     * Returns the type of {@link com.greazi.discordbotfoundation.command.GuildSettingsManager GuildSettingsManager},
+     * Returns the type of {@link com.greazi.discordbotfoundation.module.GuildSettingsManager GuildSettingsManager},
      * the same type of one provided when building this CommandClient, or {@code null} if one was not provided there.
      *
      * <p>This is good if you want to use non-abstract methods specific to your implementation.

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.module;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import com.greazi.discordbotfoundation.command.impl.CommandClientImpl;
+import com.greazi.discordbotfoundation.module.impl.CommandClientImpl;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -28,7 +28,7 @@ import net.dv8tion.jda.internal.utils.Checks;
 
 /**
  * A wrapper class for a {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent MessageReceivedEvent},
- * {@link com.greazi.discordbotfoundation.command.CommandClient CommandClient}, and String user arguments
+ * {@link com.greazi.discordbotfoundation.module.CommandClient CommandClient}, and String user arguments
  * compatible with all {@link SimpleCommand Command}s.
  * 
  * <p>From here, developers can invoke several useful and specialized methods to assist in Command function and
@@ -64,7 +64,7 @@ public class CommandEvent
      * @param  args
      *         The String arguments after the command call
      * @param  client
-     *         The {@link com.greazi.discordbotfoundation.command.CommandClient CommandClient}
+     *         The {@link com.greazi.discordbotfoundation.module.CommandClient CommandClient}
      */
     public CommandEvent(MessageReceivedEvent event, String prefix, String args, CommandClient client)
     {
@@ -111,7 +111,7 @@ public class CommandEvent
     }
     
     /**
-     * Returns the {@link com.greazi.discordbotfoundation.command.CommandClient CommandClient}
+     * Returns the {@link com.greazi.discordbotfoundation.module.CommandClient CommandClient}
      * that initiated this CommandEvent.
      * 
      * @return The initiating CommandClient
@@ -445,8 +445,8 @@ public class CommandEvent
      * <p><b>NOTE:</b> This alternate String message can exceed the 2000 character cap, and will 
      * be sent in two split Messages.
      * 
-     * <p>It is also worth noting that unlike {@link com.greazi.discordbotfoundation.command.CommandEvent#reply(File,String) CommandEvent#reply(File, String)}
-     * and {@link com.greazi.discordbotfoundation.command.CommandEvent#reply(String,File,String) CommandEvent#reply(String, File, String)},
+     * <p>It is also worth noting that unlike {@link com.greazi.discordbotfoundation.module.CommandEvent#reply(File,String) CommandEvent#reply(File, String)}
+     * and {@link com.greazi.discordbotfoundation.module.CommandEvent#reply(String,File,String) CommandEvent#reply(String, File, String)},
      * this method does not throw a {@link java.io.IOException}. This is because the cause of the alternate String message being sent comes directly from a 
      * thrown {@link java.lang.Exception}, and thus a thrown IOException is grounds for the sending of the alternate message.
      * 
@@ -894,7 +894,7 @@ public class CommandEvent
     }
     
     /**
-     * Uses the {@link com.greazi.discordbotfoundation.command.CommandClient#getScheduleExecutor() client's executor}
+     * Uses the {@link com.greazi.discordbotfoundation.module.CommandClient#getScheduleExecutor() client's executor}
      * to run the provided {@link java.lang.Runnable Runnable} asynchronously without blocking the thread this
      * is called in.
      *

@@ -1,8 +1,6 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.command.CommandClient;
-import com.greazi.discordbotfoundation.command.CommandClientBuilder;
-import com.greazi.discordbotfoundation.command.SimpleCommand;
+import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
@@ -12,16 +10,22 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.sql.SQLException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * To-Do-List for the whole project.
@@ -60,8 +64,6 @@ public abstract class SimpleBot {
 	private static MySQL mySQL;
 	private static MemberStorage memberStorage;
 
-	public CommandClientBuilder commandBuilder = new CommandClientBuilder();
-
 	/**
 	 * Returns the instance of {@link SimpleBot}.
 	 * <p>
@@ -71,16 +73,6 @@ public abstract class SimpleBot {
 	 * @return this instance
 	 */
 	public static SimpleBot getInstance() {
-		if (instance == null) {
-			try {
-				instance = SimpleBot.getInstance();
-
-			} catch (final IllegalStateException ex) {
-				ex.printStackTrace();
-			}
-			Objects.requireNonNull(instance, "Cannot get a new instance! Have you reloaded?");
-		}
-
 		return instance;
 	}
 
@@ -115,6 +107,7 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 
 	public SimpleBot(){
+		instance = this;
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 		onPreStart();
 	}
@@ -127,7 +120,7 @@ public abstract class SimpleBot {
 
 		SimpleSettings simpleSettings = SimpleSettings.getInstance();
 		if (simpleSettings.isMysqlEnabled()){
-			Common.log.info("Enabling Mysql");
+			Common.log("Enabling Mysql");
 			try{
 				mySQL = new MySQL(
 						simpleSettings.getMySqlHost(),
@@ -140,26 +133,26 @@ public abstract class SimpleBot {
 				onBotLoad();
 
 			}catch (Exception e){
-				Common.log.error("Error enabling mysql: "+e.getMessage());
+				Common.log("Error enabling mysql: "+e.getMessage());
 				e.printStackTrace();
 			}
 
 
-			Common.log.info("Mysql Enabled");
+			Common.log("Mysql Enabled");
 			if (mySQL.isConnected() && simpleSettings.isStoreMembersEnabled()){
-				Common.log.info("Enabling MemberStorage");
+				Common.log("Enabling MemberStorage");
 				memberStorage = new MemberStorage();
-				Common.log.info("MemberStorage Enabled");
+				Common.log("MemberStorage Enabled");
 			}
 		}
 
-		Common.log.info("Running onPreStart()");
+		Common.log("Running onPreStart()");
 
 		onStartup();
 	}
 
 	public void onStartup() {
-		Common.log.info("Running onStartup()");
+		Common.log("Running onStartup()");
 		onBotStart();
 
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
@@ -172,14 +165,8 @@ public abstract class SimpleBot {
 		// start modules and commands
 	}
 
-	public void loadCommands() {
-		Common.log.info("Loading commands....");
-		addCommands();
-		Common.log.info("Added commands");
-		CommandClient commandClient = commandBuilder.build();
-		Common.log.info("Commands have been build");
-		jda.addEventListener(commandClient);
-		Common.log.info("JDA event listener has been added, DONE!");
+	public void addCommand() {
+		
 	}
 
 	public void loadModules() {
@@ -210,29 +197,35 @@ public abstract class SimpleBot {
 
 	public static MemberStorage getMemberStorage() {
 		if (!SimpleSettings.getInstance().isStoreMembersEnabled()){
-			Common.log.warn("Trying to get member storage while it is not enabled");
+			Common.warning("Trying to get member storage while it is not enabled");
 		}
 		return memberStorage;
 	}
 
-	/*protected void registerCommand(Class commandClass) {
-		Common.log.info("Running registerCommand(Class commandClass)");
+	private final List<SimpleSlashCommand> cmdList = new ArrayList<>();
+
+	protected void registerCommand(Class<SimpleSlashCommand> commandClass) {
+		SimpleBot.getJDA().updateCommands().queue();
+		CommandListUpdateAction commands = SimpleBot.getGuild().updateCommands();
+
+		SimpleSlashCommand.class.isAssignableFrom(commandClass);
 		try {
-			SimpleCommand createCommand = (SimpleCommand) commandClass.getDeclaredConstructor().newInstance();
+			SimpleSlashCommand module = commandClass.getConstructor(SimpleBot.class).newInstance(SimpleBot.getBot());
 
-			Common.log.info(createCommand.getName() + "Name");
-			Common.log.info(createCommand.getHelp() + "Description");
+			if(module.getCommand() == null) return;
 
-			CommandData cmdData = new CommandData(createCommand.getName(), createCommand.getHelp() == null ? "No description set." : createCommand.getHelp())
-					.addOptions(createCommand.getHelp())
-					.setDefaultEnabled(createCommand.getUserPermissions().length == 0);
+			cmdList.add(module);
 
-			getJDA().addEventListener(cmdData);
-		} catch(NoSuchMethodException | SecurityException | InvocationTargetException | InstantiationException | IllegalAccessException exception) {
-			exception.printStackTrace();
+			SlashCommandData cmd = Commands.slash("test", "desc");
+
+			cmd.addOptions(module.getOptions());
+			cmd.setDefaultEnabled(module.getDefaultEnabled());
+
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			e.printStackTrace();
 		}
 
-	}*/
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// Delegate methods    <-- Methods that can be used to load your stuff
@@ -244,7 +237,7 @@ public abstract class SimpleBot {
 	protected void onBotLoad() {
 
 	}
-
+	//Copyright
 	/**
 	 * The main loading method, called when we are ready to load
 	 */
@@ -283,6 +276,20 @@ public abstract class SimpleBot {
 	}
 
 	// ----------------------------------------------------------------------------------------
+	// Foundation handle settings
+	// ----------------------------------------------------------------------------------------
+
+	/**
+	 * Should every message be divided by \n by an own method (tends to work more
+	 * then split("\n"))
+	 *
+	 * @return
+	 */
+	public boolean enforeNewLine() {
+		return false;
+	}
+
+	// ----------------------------------------------------------------------------------------
 	// Main getters
 	// ----------------------------------------------------------------------------------------
 
@@ -310,7 +317,7 @@ public abstract class SimpleBot {
 	// Additional features
 	// ----------------------------------------------------------------------------------------
 
-	public String getName() {
+	public static String getName() {
 		return SimpleSettings.getInstance().getName();
 	}
 

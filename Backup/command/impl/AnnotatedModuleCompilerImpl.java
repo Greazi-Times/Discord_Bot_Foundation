@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greazi.discordbotfoundation.command.impl;
+package com.greazi.discordbotfoundation.module.impl;
 
-import com.greazi.discordbotfoundation.command.AnnotatedModuleCompiler;
-import com.greazi.discordbotfoundation.command.SimpleCommand;
-import com.greazi.discordbotfoundation.command.CommandBuilder;
-import com.greazi.discordbotfoundation.command.CommandEvent;
-import com.greazi.discordbotfoundation.command.annotation.JDACommand;
+import com.greazi.discordbotfoundation.module.AnnotatedModuleCompiler;
+import com.greazi.discordbotfoundation.module.SimpleCommand;
+import com.greazi.discordbotfoundation.module.CommandBuilder;
+import com.greazi.discordbotfoundation.module.CommandEvent;
+import com.greazi.discordbotfoundation.module.annotation.JDACommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * Default implementation for {@link com.greazi.discordbotfoundation.command.AnnotatedModuleCompiler
+ * Default implementation for {@link com.greazi.discordbotfoundation.module.AnnotatedModuleCompiler
  * AnnotatedModuleCompiler}.
  *
  * @since  1.8
