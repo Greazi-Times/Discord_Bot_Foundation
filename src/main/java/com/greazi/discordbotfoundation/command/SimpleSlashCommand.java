@@ -14,6 +14,9 @@ import java.util.List;
 
 public abstract class SimpleSlashCommand {
 
+    /**
+     * Create the slash command
+     */
     public SimpleSlashCommand(){
         SimpleBot.getSlashCommandHandler().addCommand(this);
     }
@@ -90,6 +93,11 @@ public abstract class SimpleSlashCommand {
     // Main methods
     // ----------------------------------------------------------------------------------------
 
+    /**
+     * Run the command logic
+     *
+     * @param event SlashCommandInteractionEvent
+     */
     protected abstract void execute(SlashCommandInteractionEvent event);
 
     // ----------------------------------------------------------------------------------------
@@ -231,10 +239,9 @@ public abstract class SimpleSlashCommand {
     public void setCategory(String category) {
         this.category = category;
     }
-
     // ----------------------------------------------------------------------------------------
-    // Getters
-    // ----------------------------------------------------------------------------------------
+	// Getters
+	// ----------------------------------------------------------------------------------------
 
     /**
      * Returns the command
@@ -333,6 +340,8 @@ public abstract class SimpleSlashCommand {
     /**
      * Get the options of the command
      * !! This can not be used alongside subCommand or subCommandGroup !!
+     *
+     * @return the options
      */
     public List<OptionData> getOptions() {
         return options;

@@ -32,6 +32,7 @@ public class SlashCommandHandler extends ListenerAdapter {
             module.getOptions().forEach(command::addOptions);
         }
         command.setDefaultEnabled(module.getDefaultEnabled());
+        command.setDescription(module.getDescription());
 
         slashCommands.add(command);
         cmdList.put(module.getCommand(), module);
@@ -52,13 +53,14 @@ public class SlashCommandHandler extends ListenerAdapter {
                         module.getEnabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.enableRole(role.getId())));
                         module.getEnabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.enableUser(user.getId())));
 
-                        // TODO - Add Command Privileges
+                        SimpleBot.getGuild().updateCommandPrivilegesById(cmd.getId(), commandPrivileges);
                     });
                 });
     }
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        // Retrieve the command class from the command that has been run
         SimpleSlashCommand module = cmdList.get(event.getName());
 
         if (module.getGuildOnly() && !Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.getInstance().getMainGuild())){
