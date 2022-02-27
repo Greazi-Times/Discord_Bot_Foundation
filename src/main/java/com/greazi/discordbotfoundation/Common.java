@@ -205,15 +205,10 @@ public final class Common {
 	 * Saves the error, prints the stack trace and logs it in frame.
 	 * Possible to use %error variable
 	 *
-	 * @param t
 	 * @param messages
 	 */
-	public static void error(final Throwable t, final String... messages) {
-		if (!(t instanceof FoException))
-			//Debugger.saveError(t, messages);
-
-		Debugger.printStackTrace(t);
-		logFramed(replaceErrorVariable(t, ConsoleColor.ANSI_RED + messages));
+	public static void error(final String... messages) {
+		logFramed(ConsoleColor.ANSI_RED + messages);
 	}
 
 	/**
