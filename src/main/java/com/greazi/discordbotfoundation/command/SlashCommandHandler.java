@@ -41,7 +41,7 @@ public class SlashCommandHandler extends ListenerAdapter {
     public void registerCommands() {
         if (slashCommands.isEmpty()) return;
 
-        SimpleBot.getJDA().updateCommands()
+        SimpleBot.getGuild().updateCommands()
                 .addCommands(slashCommands)
                 .queue(commands -> {
                     commands.forEach(cmd -> {

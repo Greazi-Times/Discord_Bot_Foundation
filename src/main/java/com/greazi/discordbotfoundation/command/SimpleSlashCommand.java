@@ -33,7 +33,7 @@ public abstract class SimpleSlashCommand {
     /**
      * Set the help description fo the slash command
      */
-    private String description = null;
+    private String description = "No Description";
 
     /**
      * Is the command bound to only the main guild of the bot
