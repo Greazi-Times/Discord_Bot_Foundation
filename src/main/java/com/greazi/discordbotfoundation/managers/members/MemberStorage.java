@@ -123,7 +123,7 @@ public class MemberStorage {
             Select query = membersTable.select().where("id = ?", dbId);
             Map<String, Object> fetch = query.fetch();
 
-            if (!fetch.isEmpty()){
+            if (fetch.size() != 0){
                 int id = (int) fetch.get("id");
                 String discord_id = (String) fetch.get("discord_id");
                 String nickname = (String) fetch.get("nickname");
@@ -154,7 +154,7 @@ public class MemberStorage {
             Select query = membersTable.select().where("discord_id = ?", discordId);
             Map<String, Object> fetch = query.fetch();
 
-            if (!fetch.isEmpty()){
+            if (fetch.size() != 0){
                 int id = (int) fetch.get("id");
                 String discord_id = (String) fetch.get("discord_id");
                 String nickname = (String) fetch.get("nickname");

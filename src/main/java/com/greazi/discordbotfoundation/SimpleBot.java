@@ -1,6 +1,6 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
+import com.greazi.discordbotfoundation.command.SlashCommandHandler;
 import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
@@ -10,22 +10,12 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
-import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * To-Do-List for the whole project.
@@ -63,6 +53,7 @@ public abstract class SimpleBot {
 	private static Member self;
 	private static MySQL mySQL;
 	private static MemberStorage memberStorage;
+	private static SlashCommandHandler slashCommandHandler;
 
 	/**
 	 * Returns the instance of {@link SimpleBot}.
@@ -97,7 +88,7 @@ public abstract class SimpleBot {
 	/*private final Reloadables reloadables = new Reloadables();*/
 
 	/** TODO check this part
-	 * An internal flag to indicate whether we are calling the {@link #onReloadablesStart()}
+	 * An internal flag to indicate whether we are calling the {@link #onReloadableStart()}
 	 * block. We register things using {@link #} <-- reloadable during this block
 	 */
 	private boolean startingReloadables = false;
@@ -157,19 +148,12 @@ public abstract class SimpleBot {
 
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
 
-		onReloadablesStart();
+		slashCommandHandler = new SlashCommandHandler();
+
+		onReloadableStart();
 	}
 
 	public void onReload() {
-		// disable modules and commands
-		// start modules and commands
-	}
-
-	public void addCommand() {
-		
-	}
-
-	public void loadModules() {
 
 	}
 
@@ -202,31 +186,6 @@ public abstract class SimpleBot {
 		return memberStorage;
 	}
 
-	private final List<SimpleSlashCommand> cmdList = new ArrayList<>();
-
-	protected void registerCommand(Class<SimpleSlashCommand> commandClass) {
-		SimpleBot.getJDA().updateCommands().queue();
-		CommandListUpdateAction commands = SimpleBot.getGuild().updateCommands();
-
-		SimpleSlashCommand.class.isAssignableFrom(commandClass);
-		try {
-			SimpleSlashCommand module = commandClass.getConstructor(SimpleBot.class).newInstance(SimpleBot.getBot());
-
-			if(module.getCommand() == null) return;
-
-			cmdList.add(module);
-
-			SlashCommandData cmd = Commands.slash("test", "desc");
-
-			cmd.addOptions(module.getOptions());
-			cmd.setDefaultEnabled(module.getDefaultEnabled());
-
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	// ----------------------------------------------------------------------------------------
 	// Delegate methods    <-- Methods that can be used to load your stuff
 	// ----------------------------------------------------------------------------------------
@@ -235,8 +194,8 @@ public abstract class SimpleBot {
 	 * Called before the bot is started (Not recommended to use)
 	 */
 	protected void onBotLoad() {
-
 	}
+
 	//Copyright
 	/**
 	 * The main loading method, called when we are ready to load
@@ -266,13 +225,7 @@ public abstract class SimpleBot {
 	 * <p>
 	 * This is invoked when you do `/reload`  TODO add a reload command link
 	 */
-	protected void onReloadablesStart() {
-	}
-
-	protected void addCommands() {
-	}
-
-	protected void addModules() {
+	protected void onReloadableStart() {
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -311,6 +264,10 @@ public abstract class SimpleBot {
 
 	public static MySQL getMySQL() {
 		return mySQL;
+	}
+
+	public static SlashCommandHandler getSlashCommandHandler() {
+		return slashCommandHandler;
 	}
 
 	// ----------------------------------------------------------------------------------------
