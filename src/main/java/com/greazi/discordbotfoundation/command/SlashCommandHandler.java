@@ -24,14 +24,14 @@ public class SlashCommandHandler extends ListenerAdapter {
     }
 
     public void addCommand(SimpleSlashCommand module) {
-        SlashCommandData command = Commands.slash(module.getCommand(), module.description);
+        SlashCommandData command = Commands.slash(module.getCommand(), module.getDescription());
 
-        module.getOptions().forEach(command::addOptions);
         module.getSubCommands().forEach(command::addSubcommands);
         module.getSubcommandGroup().forEach(command::addSubcommandGroups);
         command.setDefaultEnabled(module.getDefaultEnabled());
 
         slashCommands.add(command);
+        cmdList.put(module.getCommand(), module);
     }
 
     public void registerCommands() {
@@ -44,10 +44,10 @@ public class SlashCommandHandler extends ListenerAdapter {
                         SimpleSlashCommand module = cmdList.get(cmd.getName());
 
                         List<CommandPrivilege> commandPrivileges = new ArrayList<>();
-                        module.getDisabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.disableRole(role)));
-                        module.getDisabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.disableUser(user)));
-                        module.getEnabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.enableRole(role)));
-                        module.getEnabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.enableUser(user)));
+                        module.getDisabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.disableRole(role.getId())));
+                        module.getDisabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.disableUser(user.getId())));
+                        module.getEnabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.enableRole(role.getId())));
+                        module.getEnabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.enableUser(user.getId())));
 
                         // TODO - Add Command Privileges
                     });

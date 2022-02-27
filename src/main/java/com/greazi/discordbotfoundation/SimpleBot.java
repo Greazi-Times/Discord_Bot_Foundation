@@ -226,6 +226,7 @@ public abstract class SimpleBot {
 	 * This is invoked when you do `/reload`  TODO add a reload command link
 	 */
 	protected void onReloadableStart() {
+		slashCommandHandler.registerCommands();
 	}
 
 	// ----------------------------------------------------------------------------------------
