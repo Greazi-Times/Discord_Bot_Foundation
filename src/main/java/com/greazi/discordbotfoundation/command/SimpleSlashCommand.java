@@ -1,12 +1,15 @@
 package com.greazi.discordbotfoundation.command;
 
 import com.greazi.discordbotfoundation.SimpleBot;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class SimpleSlashCommand {
@@ -22,70 +25,212 @@ public abstract class SimpleSlashCommand {
     /**
      * Set the command like "/command"
      */
-    protected String command = "example";
+    private String command = "example";
 
     /**
      * Set the help description fo the slash command
      */
-    protected String description = null;
+    private String description = null;
 
     /**
      * Is the command bound to only the main guild of the bot
      */
-    protected boolean guildOnly = false;
+    private boolean guildOnly = false;
 
     /**
      * Is the command bound to a NSFW channel
      * (This means if it can only be used in a NSFW channel)
      */
-    protected boolean nsfwOnly = false;
+    private boolean nsfwOnly = false;
 
     /**
      * Set the roles that can use this command
      */
-    protected List<String> enabledRoles = new ArrayList<>();
+    private List<Role> enabledRoles = new ArrayList<>();
 
     /**
      * Set the users that can use this command
      */
-    protected List<String> enabledUsers = new ArrayList<>();
+    private List<User> enabledUsers = new ArrayList<>();
 
     /**
      * Set the roles that can not use this command
      */
-    protected List<String> disabledRoles = new ArrayList<>();
+    private List<Role> disabledRoles = new ArrayList<>();
 
     /**
      * Set the users that can not use this command
      */
-    protected List<String> disabledUsers = new ArrayList<>();
+    private List<User> disabledUsers = new ArrayList<>();
 
     /**
      * Is the command enabled by default
      */
-    protected boolean defaultEnabled = true;
+    private boolean defaultEnabled = true;
 
     /**
      * Set the subcommands
      */
-    protected List<SubcommandData> subCommands = new ArrayList<>();
+    private List<SubcommandData> subCommands = new ArrayList<>();
 
     /**
      * Set the subcommand groups
      */
-    protected List<SubcommandGroupData> subcommandGroup = new ArrayList<>();
+    private List<SubcommandGroupData> subcommandGroup = new ArrayList<>();
 
     /**
      * Set the options of the command
      * !! This can not be used alongside subCommand or subCommandGroup !!
      */
-    protected List<OptionData> options = new ArrayList<>();
+    private List<OptionData> options = new ArrayList<>();
+
+    private String category = null;
 
     // ----------------------------------------------------------------------------------------
     // Main methods
     // ----------------------------------------------------------------------------------------
 
     protected abstract void execute(SlashCommandInteractionEvent event);
+
+    // ----------------------------------------------------------------------------------------
+    // Setters
+    // ----------------------------------------------------------------------------------------
+
+    /**
+     * Set the command
+     */
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    /**
+     * Set the description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Set this command as main guild only
+     */
+    public void setMainGuildOnly() {
+        this.guildOnly = true;
+    }
+
+    /**
+     * Set whether the command can only be used inside a NSFW channel
+     */
+    public void setNsfwOnly() {
+        this.nsfwOnly = true;
+    }
+
+    /**
+     * Set the list of roles that can use this command
+     */
+    public void setEnabledRoles(List<Role> roles) {
+        this.enabledRoles = roles;
+    }
+
+    /**
+     * Set the list of roles that can use this command
+     */
+    public void setEnabledRoles(Role... roles) {
+        this.enabledRoles = Arrays.asList(roles);
+    }
+
+    public void setEnabledUsers(List<User> users) {
+        this.enabledUsers = users;
+    }
+
+    /**
+     * Set the list users that can use this command
+     */
+    public void setEnabledUsers(User... users) {
+        this.enabledUsers = Arrays.asList(users);
+    }
+
+    /**
+     * Set the list of roles that can not use the command
+     */
+    public void setDisabledRoles(Role... roles) {
+        this.disabledRoles = Arrays.asList(roles);
+    }
+
+    /**
+     * Set the list of roles that can not use the command
+     */
+    public void setDisabledRoles(List<Role> roles) {
+        this.disabledRoles = roles;
+    }
+
+    /**
+     * Set the list of users that can not use the command
+     */
+    public void setDisabledUsers(User... users) {
+        this.disabledUsers = Arrays.asList(users);
+    }
+
+    /**
+     * Set the list of users that can not use the command
+     */
+    public void setDisabledUsers(List<User> users) {
+        this.disabledUsers = users;
+    }
+
+    /**
+     * Set whether the command is enabled by default
+     */
+    public void setDefaultEnabled() {
+        this.defaultEnabled = true;
+    }
+
+    /**
+     * Set the subcommands
+     */
+    public void setSubCommands(List<SubcommandData> subCommands) {
+        this.subCommands = subCommands;
+    }
+
+    /**
+     * Set the subcommands
+     */
+    public void setSubCommands(SubcommandData... subCommands) {
+        this.subCommands = Arrays.asList(subCommands);
+    }
+
+    /**
+     * Set the subcommand group
+     */
+    public void setSubcommandGroup(List<SubcommandGroupData> subcommandGroupDataList) {
+        this.subcommandGroup = subcommandGroupDataList;
+    }
+
+    /**
+     * Set the subcommand group
+     */
+    public void setSubcommandGroup(SubcommandGroupData... subcommandGroupDataList) {
+        this.subcommandGroup = Arrays.asList(subcommandGroupDataList);
+    }
+
+    /**
+     * Set the options of the command
+     * !! This can not be used alongside subCommand or subCommandGroup !!
+     */
+    public void setOptions(List<OptionData> optionDataList) {
+        this.options = optionDataList;
+    }
+
+    /**
+     * Set the options of the command
+     * !! This can not be used alongside subCommand or subCommandGroup !!
+     */
+    public void setOptions(OptionData... optionDataList) {
+        this.options = Arrays.asList(optionDataList);
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     // ----------------------------------------------------------------------------------------
     // Getters
@@ -98,6 +243,10 @@ public abstract class SimpleSlashCommand {
      */
     public String getCommand() {
         return command;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     /**
@@ -123,7 +272,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the allowed roles
      */
-    public List<String> getEnabledRoles() {
+    public List<Role> getEnabledRoles() {
         return enabledRoles;
     }
 
@@ -132,7 +281,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the allowed users
      */
-    public List<String> getEnabledUsers() {
+    public List<User> getEnabledUsers() {
         return enabledUsers;
     }
 
@@ -141,7 +290,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the disallowed roles
      */
-    public List<String> getDisabledRoles() {
+    public List<Role> getDisabledRoles() {
         return disabledRoles;
     }
 
@@ -150,7 +299,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the disallowed users
      */
-    public List<String> getDisabledUsers() {
+    public List<User> getDisabledUsers() {
         return disabledUsers;
     }
 
@@ -182,11 +331,15 @@ public abstract class SimpleSlashCommand {
     }
 
     /**
-     * Set the options of the command
+     * Get the options of the command
      * !! This can not be used alongside subCommand or subCommandGroup !!
      */
     public List<OptionData> getOptions() {
         return options;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
 }

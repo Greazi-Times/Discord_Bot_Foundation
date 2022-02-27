@@ -28,6 +28,9 @@ public class SlashCommandHandler extends ListenerAdapter {
 
         module.getSubCommands().forEach(command::addSubcommands);
         module.getSubcommandGroup().forEach(command::addSubcommandGroups);
+        if (!module.getSubCommands().isEmpty() || !module.getSubcommandGroup().isEmpty()){
+            module.getOptions().forEach(command::addOptions);
+        }
         command.setDefaultEnabled(module.getDefaultEnabled());
 
         slashCommands.add(command);
