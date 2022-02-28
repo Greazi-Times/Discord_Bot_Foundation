@@ -1,12 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-group 'com.greazi'
-def ver = new Version(major: 1, minor: 0, revision: 0)
-version ver.toString()
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 
 assemble.dependsOn shadowJar
@@ -57,18 +51,10 @@ shadowJar {
     destinationDir = file("build")
 }
 
-jar {
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
     manifest {
-        attributes(
-                'Main-Class': 'com.greazi.discordbotfoundation.SimpleBot'
-        )
-    }
-}
-
-class Version {
-    String major, minor, revision
-
-    String toString() {
-        "${major}.${minor}.${revision}"
+        attributes 'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+        attributes 'Main-Class': 'me.TechsCode.TechDiscordBot.TechDiscordBot'
     }
 }
