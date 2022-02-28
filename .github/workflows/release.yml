@@ -40,9 +40,7 @@ jobs:
 
       # Build the gradle project
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
-        with:
-          arguments: build
+        run: ./gradlew build
       
       # Check the commit and see what version needs to be changed
       - name: conventional Changelog Action
