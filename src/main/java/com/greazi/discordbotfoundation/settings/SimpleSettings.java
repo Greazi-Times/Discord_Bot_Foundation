@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 public class SimpleSettings {
 
@@ -103,5 +104,9 @@ public class SimpleSettings {
 
 	public String getMainGuild() {
 		return root.get("mainGuild").getAsString();
+	}
+
+	public String getDebug() {
+		return root.get("debug").getAsString();
 	}
 }

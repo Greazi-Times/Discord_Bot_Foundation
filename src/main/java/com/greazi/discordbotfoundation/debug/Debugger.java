@@ -32,9 +32,9 @@ public final class Debugger {
 	 * @param section
 	 * @return
 	 */
-	/*public static boolean isDebugged(String section) {
-		return SimpleSettings.DEBUG_SECTIONS.contains(section) || SimpleSettings.DEBUG_SECTIONS.contains("*");
-	}*/
+	public static boolean isDebugged(String section) {
+		return SimpleSettings.getInstance().getDebug().contains(section) || SimpleSettings.getInstance().getDebug().contains("*");
+	}
 
 	/**
 	 * Prints a debug messages to the console if the given section is being debugged
@@ -45,15 +45,15 @@ public final class Debugger {
 	 * @param section
 	 * @param messages
 	 */
-	/*public static void debug(String section, String... messages) {
+	public static void debug(String section, String... messages) {
 		if (isDebugged(section)) {
 			for (final String message : messages)
-				if (SimplePlugin.hasInstance())
+				if (SimpleBot.hasInstance())
 					Common.log("[" + section + "] " + message);
 				else
 					System.out.println("[" + section + "] " + message);
 		}
-	}*/
+	}
 
 	/**
 	 * Prints stack trace until we reach the native MC/Bukkit with a custom message

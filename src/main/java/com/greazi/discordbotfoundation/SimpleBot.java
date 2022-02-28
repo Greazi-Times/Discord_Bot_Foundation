@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation;
 
+import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.command.SlashCommandHandler;
 import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.mysql.MySQL;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -98,6 +100,12 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 
 	public SimpleBot(){
+		// Check if the settings file is configured
+		if(SimpleSettings.getInstance().isSettingsConfigured()) {
+			Common.warning("The settings file hasn't been configured. Stopping the bot now!");
+			return;
+		}
+
 		instance = this;
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 		onPreStart();
@@ -137,6 +145,13 @@ public abstract class SimpleBot {
 			}
 		}
 
+		/*new SimpleSlashCommand() {
+			@Override
+			protected void execute(SlashCommandInteractionEvent event) {
+
+			}
+		};*/
+
 		Common.log("Running onPreStart()");
 
 		onStartup();
@@ -151,10 +166,13 @@ public abstract class SimpleBot {
 		slashCommandHandler = new SlashCommandHandler();
 
 		onReloadableStart();
+		onReload();
 	}
 
 	public void onReload() {
+		onReloadableStart();
 
+		//slashCommandHandler.registerCommands();
 	}
 
 	/**
@@ -226,7 +244,7 @@ public abstract class SimpleBot {
 	 * This is invoked when you do `/reload`  TODO add a reload command link
 	 */
 	protected void onReloadableStart() {
-		slashCommandHandler.registerCommands();
+
 	}
 
 	// ----------------------------------------------------------------------------------------

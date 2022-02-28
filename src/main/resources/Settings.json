@@ -6,5 +6,6 @@
   "mySQL_database": "",
   "mySQL_username": "",
   "mySQL_password": "",
-  "mySQL_storeMembers": false
+  "mySQL_storeMembers": false,
+  "debug": ""
 }
