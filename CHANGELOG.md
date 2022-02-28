@@ -1,3 +1,12 @@
+## [0.1.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.1.1...v0.1.2) (2022-02-28)
+
+
+### Bug Fixes
+
+* atempted fix on release workflow ([0dcd980](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/0dcd980dd89189ffd2a583ff6168ff8de2208841))
+
+
+
 ## [0.1.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.1.0...v0.1.1) (2022-02-28)
 
 
