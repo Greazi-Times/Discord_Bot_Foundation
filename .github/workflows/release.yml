@@ -27,13 +27,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v3.7.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version-file: './src/main/resources/version.yml'
-
       # Setup JDK 11 to build the project
       - name: Set up JDK 11
         uses: actions/setup-java@v2
@@ -50,7 +43,15 @@ jobs:
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: build
-        
+      
+      # Check the commit and see what version needs to be changed
+      - name: conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3.7.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version-file: './src/main/resources/version.yml'
+      
       # Creat a release
       - name: Create Release
         id: create_release
