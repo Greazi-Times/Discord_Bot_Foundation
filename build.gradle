@@ -54,7 +54,6 @@ shadowJar {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
     manifest {
-        attributes 'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
-        attributes 'Main-Class': 'me.TechsCode.TechDiscordBot.TechDiscordBot'
+        attributes 'Main-Class': 'com.greazi.discordbotfoundation.SimpleBot'
     }
 }
