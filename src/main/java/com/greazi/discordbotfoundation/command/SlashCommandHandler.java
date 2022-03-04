@@ -30,14 +30,14 @@ public class SlashCommandHandler extends ListenerAdapter {
         Debugger.debug("SlashCommandHandler", "Getting SlashCommandData");
         SlashCommandData command = Commands.slash(module.getCommand(), module.getDescription());
 
-        Debugger.debug("SlashCommandHandler", "Retrieving sub commands");
+        Debugger.debug("SlashCommandHandler", "Retrieving sub commands " + module.getCommand());
         module.getSubCommands().forEach(command::addSubcommands);
         module.getSubcommandGroup().forEach(command::addSubcommandGroups);
         if (!module.getSubCommands().isEmpty() || !module.getSubcommandGroup().isEmpty()){
-            Debugger.debug("SlashCommandHandler", "No subcommands getting options");
+            Debugger.debug("SlashCommandHandler", "No subcommands getting options " + module.getCommand());
             module.getOptions().forEach(command::addOptions);
         }
-        Debugger.debug("SlashCommandHandler", " Settings default enabled and description");
+        Debugger.debug("SlashCommandHandler", " Settings default enabled and description " + module.getCommand() + " " + module.getDescription());
         command.setDefaultEnabled(module.getDefaultEnabled());
         command.setDescription(module.getDescription());
 
