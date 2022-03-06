@@ -107,6 +107,13 @@ public abstract class SimpleBot {
 		}
 
 		instance = this;
+
+		// Creating cool startup box
+		Common.log(Common.consoleLine(),
+				ConsoleColor.ANSI_CYAN + "              Starting the bot " + SimpleBot.getName(),
+				ConsoleColor.ANSI_CYAN + " Version: 1.0.0-BETA - Foundation Version: 1.0.0-BETA",
+				Common.consoleLine());
+
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 		onPreStart();
 	}
