@@ -2,9 +2,11 @@ package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.command.SlashCommandHandler;
+import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
+import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -100,6 +102,9 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 
 	public SimpleBot(){
+		Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
+
+
 		// Check if the settings file is configured
 		if(SimpleSettings.getInstance().isSettingsConfigured()) {
 			Common.warning("The settings file hasn't been configured. Stopping the bot now!");
@@ -122,6 +127,7 @@ public abstract class SimpleBot {
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
 	public final void onPreStart() {
+		Debugger.debug("Startup", "Starting the bot! onPreStart();120");
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
 
 		SimpleSettings simpleSettings = SimpleSettings.getInstance();
@@ -152,34 +158,27 @@ public abstract class SimpleBot {
 			}
 		}
 
-		/*new SimpleSlashCommand() {
-			@Override
-			protected void execute(SlashCommandInteractionEvent event) {
-
-			}
-		};*/
-
-		Common.log("Running onPreStart()");
+		slashCommandHandler = new SlashCommandHandler();
 
 		onStartup();
 	}
 
 	public void onStartup() {
-		Common.log("Running onStartup()");
+		Debugger.debug("Startup", "Starting the bot! onStartup();157");
 		onBotStart();
 
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
 
-		slashCommandHandler = new SlashCommandHandler();
-
-		onReloadableStart();
 		onReload();
 	}
 
 	public void onReload() {
+		Debugger.debug("Startup", "Starting the bot! onReload();167");
 		onReloadableStart();
 
-		//slashCommandHandler.registerCommands();
+		slashCommandHandler.registerCommands();
+
+		Common.success("bot is ready");
 	}
 
 	/**
@@ -189,6 +188,7 @@ public abstract class SimpleBot {
 	 * @param activity = The activity status of the bot
 	 */
 	private static void registerJda(String token, String activity) {
+		Debugger.debug("Startup", "Registring JDA! registerJda();180");
 		try {
 			jda = JDABuilder.createDefault(token)
 					.setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
@@ -205,6 +205,7 @@ public abstract class SimpleBot {
 	}
 
 	public static MemberStorage getMemberStorage() {
+		Debugger.debug("Startup", "Getting memberStorage option! getMemberStorage();197");
 		if (!SimpleSettings.getInstance().isStoreMembersEnabled()){
 			Common.warning("Trying to get member storage while it is not enabled");
 		}
@@ -251,6 +252,7 @@ public abstract class SimpleBot {
 	 * This is invoked when you do `/reload`  TODO add a reload command link
 	 */
 	protected void onReloadableStart() {
+		Debugger.debug("Startup", "Running onReloadableStart();246");
 
 	}
 

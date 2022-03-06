@@ -14,13 +14,6 @@ import java.util.List;
 
 public abstract class SimpleSlashCommand {
 
-    /**
-     * Create the slash command
-     */
-    public SimpleSlashCommand(){
-        SimpleBot.getSlashCommandHandler().addCommand(this);
-    }
-
     // ----------------------------------------------------------------------------------------
     // Main options
     // ----------------------------------------------------------------------------------------

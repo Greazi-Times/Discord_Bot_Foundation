@@ -5,8 +5,8 @@ import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.hooks.SubscribeEvent;
+import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,33 +21,53 @@ public class SlashCommandHandler extends ListenerAdapter {
     private final List<SlashCommandData> slashCommands = new ArrayList<>();
 
     public SlashCommandHandler(){
-        Debugger.debug("SlashCommandHandler", "adding SlashCommandHandler event listener");
+        Debugger.debug("SlashCommandHandler", "SlashCommandHandler main method");
         SimpleBot.getJDA().addEventListener(this);
     }
 
-    public void addCommand(SimpleSlashCommand module) {
-        Debugger.debug("SlashCommandHandler", "Adding commands...");
-        Debugger.debug("SlashCommandHandler", "Getting SlashCommandData");
+    public SlashCommandHandler addCommand(SimpleSlashCommand module) {
+        Debugger.debug("SlashCommandHandler", "Start of addCommand(...);27");
         SlashCommandData command = Commands.slash(module.getCommand(), module.getDescription());
+        Debugger.debug("SlashCommandHandler", "Retrieved SlashCommandData; " + command);
 
-        Debugger.debug("SlashCommandHandler", "Retrieving sub commands " + module.getCommand());
-        module.getSubCommands().forEach(command::addSubcommands);
-        module.getSubcommandGroup().forEach(command::addSubcommandGroups);
-        if (!module.getSubCommands().isEmpty() || !module.getSubcommandGroup().isEmpty()){
-            Debugger.debug("SlashCommandHandler", "No subcommands getting options " + module.getCommand());
-            module.getOptions().forEach(command::addOptions);
+        Debugger.debug("SlashCommandHandler", "Retrieving subcommands for; " + module.getCommand());
+        List<SubcommandData> moduleSubcommands = module.getSubCommands();
+        for (SubcommandData var : moduleSubcommands) {
+            command.addSubcommands(var);
+            Debugger.debug("SlashCommandHandler", "  - " + var);
         }
-        Debugger.debug("SlashCommandHandler", " Settings default enabled and description " + module.getCommand() + " " + module.getDescription());
+
+        Debugger.debug("SlashCommandHandler", "Retrieving subcommand groups for; " + module.getCommand());
+        List<SubcommandGroupData> moduleSubcommandGroup = module.getSubcommandGroup();
+        for (SubcommandGroupData var : moduleSubcommandGroup) {
+            command.addSubcommandGroups(var);
+            Debugger.debug("SlashCommandHandler", "  - " + var);
+        }
+
+        Debugger.debug("SlashCommandHandler", "Checking if subcommands exists for; " + module.getCommand());
+        if (!module.getSubCommands().isEmpty() || !module.getSubcommandGroup().isEmpty()){
+            Debugger.debug("SlashCommandHandler", "  No subcommands getting options;");
+            List<OptionData> moduleOptions = module.getOptions();
+            for (OptionData var : moduleOptions) {
+                command.addOptions(var);
+                Debugger.debug("SlashCommandHandler", "    - " + var);
+            }
+        }
+        Debugger.debug("SlashCommandHandler", "Setting other info;",
+                "  Default enabled; " + module.getDefaultEnabled(),
+                "  Description; " + module.getDescription());
         command.setDefaultEnabled(module.getDefaultEnabled());
         command.setDescription(module.getDescription());
 
-        Debugger.debug("SlashCommandHandler", "Adding slash commands " + command.getName());
+        Debugger.debug("SlashCommandHandler", "Adding the whole command; " + command.getName());
         slashCommands.add(command);
         cmdList.put(module.getCommand(), module);
+
+        return this;
     }
 
     public void registerCommands() {
-        Debugger.debug("SlashCommandHandler", "Registering command");
+        Debugger.debug("SlashCommandHandler", "Start of registerCommands()");
         if (slashCommands.isEmpty()) return;
 
         SimpleBot.getGuild().updateCommands()
@@ -71,7 +91,9 @@ public class SlashCommandHandler extends ListenerAdapter {
     }
 
     @Override
+    @SubscribeEvent
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        Debugger.debug("SlashCommandHandler", "A slash command event has been triggered onSlashCommandInteraction(...);96");
         // Retrieve the command class from the command that has been run
         SimpleSlashCommand module = cmdList.get(event.getName());
 
