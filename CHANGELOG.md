@@ -1,3 +1,17 @@
+# [0.4.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.3.0...v0.4.0) (2022-03-06)
+
+
+### Bug Fixes
+
+* Fixed command registration issue ([e669647](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e669647bd937ef74d700b4c41ed64b5db77b5fd2))
+
+
+### Features
+
+* Added a simple startup box ([c4293f3](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/c4293f3c278f1013c201ad6cca3b269dae810529))
+
+
+
 # [0.3.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.1.2...v0.3.0) (2022-02-28)
 
 
