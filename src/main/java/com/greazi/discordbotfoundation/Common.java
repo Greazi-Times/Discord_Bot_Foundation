@@ -359,7 +359,7 @@ public final class Common {
 	}
 
 	/**
-	 * Attempts to split the message using the \n character. This is used in some plugins
+	 * Attempts to split the message using the \n character. This is used in some bots
 	 * since some OS's have a different method for splitting so we just go letter by letter
 	 * there and match \ and n and then split it.
 	 *
