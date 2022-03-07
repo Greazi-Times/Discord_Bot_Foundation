@@ -28,38 +28,38 @@ public class SlashCommandHandler extends ListenerAdapter {
     public SlashCommandHandler addCommand(SimpleSlashCommand module) {
         Debugger.debug("SlashCommandHandler", "Start of addCommand(...);27");
         SlashCommandData command = Commands.slash(module.getCommand(), module.getDescription());
-        Debugger.debug("SlashCommandHandler", "Retrieved SlashCommandData; " + command);
+        Debugger.debug("SlashCommandHandler", "Retrieved SlashCommandData; " + module.getCommand() + ", " + module.getDescription());
 
-        Debugger.debug("SlashCommandHandler", "Retrieving subcommands for; " + module.getCommand());
+        Debugger.debug("SlashCommandHandler", "  Retrieving subcommands for; " + module.getCommand());
         List<SubcommandData> moduleSubcommands = module.getSubCommands();
         for (SubcommandData var : moduleSubcommands) {
             command.addSubcommands(var);
-            Debugger.debug("SlashCommandHandler", "  - " + var);
+            Debugger.debug("SlashCommandHandler", "    - " + var);
         }
 
-        Debugger.debug("SlashCommandHandler", "Retrieving subcommand groups for; " + module.getCommand());
+        Debugger.debug("SlashCommandHandler", "  Retrieving subcommand groups for; " + module.getCommand());
         List<SubcommandGroupData> moduleSubcommandGroup = module.getSubcommandGroup();
         for (SubcommandGroupData var : moduleSubcommandGroup) {
             command.addSubcommandGroups(var);
-            Debugger.debug("SlashCommandHandler", "  - " + var);
+            Debugger.debug("SlashCommandHandler", "    - " + var);
         }
 
-        Debugger.debug("SlashCommandHandler", "Checking if subcommands exists for; " + module.getCommand());
+        Debugger.debug("SlashCommandHandler", "  Checking if subcommands exists for; " + module.getCommand());
         if (!module.getSubCommands().isEmpty() || !module.getSubcommandGroup().isEmpty()){
-            Debugger.debug("SlashCommandHandler", "  No subcommands getting options;");
+            Debugger.debug("SlashCommandHandler", "    No subcommands getting options;");
             List<OptionData> moduleOptions = module.getOptions();
             for (OptionData var : moduleOptions) {
                 command.addOptions(var);
-                Debugger.debug("SlashCommandHandler", "    - " + var);
+                Debugger.debug("SlashCommandHandler", "      - " + var);
             }
         }
-        Debugger.debug("SlashCommandHandler", "Setting other info;",
-                "  Default enabled; " + module.getDefaultEnabled(),
-                "  Description; " + module.getDescription());
+        Debugger.debug("SlashCommandHandler", "  Setting other info;",
+                "    Default enabled; " + module.getDefaultEnabled(),
+                "    Description; " + module.getDescription());
         command.setDefaultEnabled(module.getDefaultEnabled());
         command.setDescription(module.getDescription());
 
-        Debugger.debug("SlashCommandHandler", "Adding the whole command; " + command.getName());
+        Debugger.debug("SlashCommandHandler", "  Adding the whole command; " + command.getName());
         slashCommands.add(command);
         cmdList.put(module.getCommand(), module);
 
@@ -74,17 +74,17 @@ public class SlashCommandHandler extends ListenerAdapter {
                 .addCommands(slashCommands)
                 .queue(commands -> {
                     commands.forEach(cmd -> {
-                        Debugger.debug("SlashCommandHandler", "Getting command from cmdList " + cmd.getName());
+                        Debugger.debug("SlashCommandHandler", "  Getting command from cmdList " + cmd.getName());
                         SimpleSlashCommand module = cmdList.get(cmd.getName());
 
-                        Debugger.debug("SlashCommandHandler", "Adding privilages to " + cmd.getName());
+                        Debugger.debug("SlashCommandHandler", "  Adding privilages to " + cmd.getName());
                         List<CommandPrivilege> commandPrivileges = new ArrayList<>();
                         module.getDisabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.disableRole(role.getId())));
                         module.getDisabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.disableUser(user.getId())));
                         module.getEnabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.enableRole(role.getId())));
                         module.getEnabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.enableUser(user.getId())));
 
-                        Debugger.debug("SlashCommandHandler", "Updating the command " + cmd.getName());
+                        Debugger.debug("SlashCommandHandler", "  Updating the command " + cmd.getName());
                         SimpleBot.getGuild().updateCommandPrivilegesById(cmd.getId(), commandPrivileges);
                     });
                 });
@@ -97,6 +97,8 @@ public class SlashCommandHandler extends ListenerAdapter {
         // Retrieve the command class from the command that has been run
         SimpleSlashCommand module = cmdList.get(event.getName());
 
+        Debugger.debug("SlashCommandHandler", "  Found event; " + module);
+
         if (module.getGuildOnly() && !Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.getInstance().getMainGuild())){
             return;
         }
@@ -105,6 +107,7 @@ public class SlashCommandHandler extends ListenerAdapter {
             return;
         }
 
+        Debugger.debug("SlashCommandHandler", "  Executing command logic");
         module.execute(event);
     }
 }
