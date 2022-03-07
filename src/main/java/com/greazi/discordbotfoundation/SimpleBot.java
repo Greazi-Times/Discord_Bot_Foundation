@@ -158,6 +158,12 @@ public abstract class SimpleBot {
 			}
 		}
 
+		jda.addEventListener(new SimpleSlashCommand() {
+			@Override
+			protected void execute(SlashCommandInteractionEvent event) {
+
+			}
+		});
 		slashCommandHandler = new SlashCommandHandler();
 
 		onStartup();
