@@ -1,3 +1,12 @@
+## [0.4.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.0...v0.4.1) (2022-03-07)
+
+
+### Bug Fixes
+
+* Added command listener event for main cmd module ([0bd4f66](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/0bd4f668338bfc499fe75591d6344ccf33c569f1))
+
+
+
 # [0.4.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.3.0...v0.4.0) (2022-03-06)
 
 
@@ -43,15 +52,6 @@
 ### Bug Fixes
 
 * realse workflow ([2824495](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/2824495a1bcee51f353e48f7dd8ec70cec62c9bb))
-
-
-
-# [0.1.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/f060b765a60d294673cd3d4a089276dda427ebb4...v0.1.0) (2022-02-28)
-
-
-### Features
-
-* Added release workflow ([f060b76](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/f060b765a60d294673cd3d4a089276dda427ebb4))
 
 
 
