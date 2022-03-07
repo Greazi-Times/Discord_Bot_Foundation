@@ -3,6 +3,7 @@ package com.greazi.discordbotfoundation.command;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
+import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -96,6 +97,16 @@ public class SlashCommandHandler extends ListenerAdapter {
         Debugger.debug("SlashCommandHandler", "A slash command event has been triggered onSlashCommandInteraction(...);96");
         // Retrieve the command class from the command that has been run
         SimpleSlashCommand module = cmdList.get(event.getName());
+
+        if (module == null) {
+            event.replyEmbeds(new SimpleEmbedBuilder("ERROR - command not found")
+                    .text("The command that you have used does not exist or hasn't been activated!",
+                            "Please contact an admin and report this error!")
+                    .error()
+                    .setFooter("")
+                    .build()).setEphemeral(true).queue();
+            return;
+        }
 
         Debugger.debug("SlashCommandHandler", "  Found event; " + module);
 
