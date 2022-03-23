@@ -1,3 +1,21 @@
+# [0.5.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.1...v0.5.0) (2022-03-23)
+
+
+### Bug Fixes
+
+* Changed common file to better colors ([7f38774](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/7f387745e59b8be59aa2db84a71f10177f668a7f))
+* Changed to a better color ([d04b57f](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d04b57f0d73c1b8ea32017e385c0bbb052e47845))
+* Fixed MySQL settings ([2f2e7b0](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/2f2e7b05e93dcaa5ae72d3ea47e01e69034202c3))
+* Fixed some issues in the main file ([63033aa](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/63033aa06a20001b306aaf59e311a676d534bef2))
+* Updated SlashCommand handler ([14a93c4](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/14a93c43cdd1802e0c4b208af0db2984a59225c3))
+
+
+### Features
+
+* Added ping command ([6276bc0](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/6276bc0ca67850d49e0bd9443d78442800945560))
+
+
+
 ## [0.4.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.0...v0.4.1) (2022-03-07)
 
 
@@ -43,15 +61,6 @@
 ### Bug Fixes
 
 * atempted fix on release workflow ([0dcd980](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/0dcd980dd89189ffd2a583ff6168ff8de2208841))
-
-
-
-## [0.1.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.1.0...v0.1.1) (2022-02-28)
-
-
-### Bug Fixes
-
-* realse workflow ([2824495](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/2824495a1bcee51f353e48f7dd8ec70cec62c9bb))
 
 
 
