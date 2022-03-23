@@ -1,9 +1,8 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.debug.FoException;
-import com.greazi.discordbotfoundation.utils.TimeUtil;
-import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
+import com.greazi.discordbotfoundation.utils.time.TimeUtil;
+import com.greazi.discordbotfoundation.utils.color.Color;
 import lombok.Getter;
 
 import java.util.*;
@@ -113,7 +112,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void success(String message) {
-		log(ConsoleColor.ANSI_GREEN + "Success: " + message);
+		log(Color.GREEN + "Success: " + message);
 	}
 
 	/**
@@ -123,7 +122,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void warning(String message) {
-		log(ConsoleColor.ANSI_YELLOW + "Warning: " + message);
+		log(Color.YELLOW + "Warning: " + message);
 	}
 
 	/**
@@ -208,7 +207,7 @@ public final class Common {
 	 * @param messages
 	 */
 	public static void error(final String... messages) {
-		logFramed(ConsoleColor.ANSI_RED + messages);
+		logFramed(Color.RED + messages);
 	}
 
 	/**
@@ -369,7 +368,7 @@ public final class Common {
 	 */
 	@Deprecated
 	public static String[] splitNewline(final String message) {
-		if (!SimpleBot.getInstance().enforeNewLine())
+		if (!SimpleBot.getInstance().enforceNewLine())
 			return message.split("\n");
 
 		final String delimiter = "GREAZIWASHERE";
