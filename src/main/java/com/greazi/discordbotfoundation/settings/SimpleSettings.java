@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021 - 2022. Greazi - All rights reservered
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
 package com.greazi.discordbotfoundation.settings;
 
 import com.google.gson.JsonObject;
@@ -13,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 public class SimpleSettings {
 
@@ -71,34 +77,34 @@ public class SimpleSettings {
 	}
 	
 	public boolean isMysqlEnabled(){
-		return !getMySqlHost().equals("") ||
-				getMySqlPort() != 0 ||
-				!getMySqlDatabase().equals("") ||
-				!getMySqlUsername().equals("") ||
-				!getMySqlPassword().equals("");
+		return !getMysqlHost().equals("") ||
+				getMysqlPort() != 0 ||
+				!getMysqlDatabase().equals("") ||
+				!getMysqlUsername().equals("") ||
+				!getMysqlPassword().equals("");
 	}
 
-	public String getMySqlHost(){
+	public String getMysqlHost(){
 		return root.get("mySQL_host").getAsString();
 	}
 
-	public int getMySqlPort(){
+	public int getMysqlPort(){
 		return root.get("mySQL_port").getAsInt();
 	}
 
-	public String getMySqlDatabase(){
+	public String getMysqlDatabase(){
 		return root.get("mySQL_database").getAsString();
 	}
 
-	public String getMySqlUsername(){
+	public String getMysqlUsername(){
 		return root.get("mySQL_username").getAsString();
 	}
 
-	public String getMySqlPassword(){
+	public String getMysqlPassword(){
 		return root.get("mySQL_password").getAsString();
 	}
 
-	public Boolean isStoreMembersEnabled(){
+	public Boolean getStoreMembersEnabled(){
 		return root.get("mySQL_storeMembers").getAsBoolean();
 	}
 
