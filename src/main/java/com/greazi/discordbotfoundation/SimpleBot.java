@@ -2,11 +2,12 @@ package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.command.SlashCommandHandler;
+import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
+import com.greazi.discordbotfoundation.utils.color.Color;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -20,26 +21,6 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-
-/**
- * To-Do-List for the whole project.
- *
- * ** Priority
- * -- Can be done later
- */
-// TODO Exception handler --
-// TODO Debug system --
-// TODO module system **
-// TODO Proper settings system **
-// TODO Channel Util
-// TODO Roll Util
-// TODO Button Util
-// TODO Menu Util --
-// TODO Reload handler --
-// TODO Common class
-// TODO Channel handler
-//      This will handle a basic logger and message sender as well as some basic stuff
-
 
 /**
  * A basic discord bot that represents the discord bot library
@@ -58,6 +39,8 @@ public abstract class SimpleBot {
 	private static MySQL mySQL;
 	private static MemberStorage memberStorage;
 	private static SlashCommandHandler slashCommandHandler;
+
+	private boolean enabled;
 
 	/**
 	 * Returns the instance of {@link SimpleBot}.
@@ -104,19 +87,11 @@ public abstract class SimpleBot {
 	public SimpleBot(){
 		Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
 
-
-		// Check if the settings file is configured
-		if(SimpleSettings.getInstance().isSettingsConfigured()) {
-			Common.warning("The settings file hasn't been configured. Stopping the bot now!");
-			return;
-		}
-
 		instance = this;
 
 		// Creating cool startup box
 		Common.log(Common.consoleLine(),
-				ConsoleColor.ANSI_CYAN + "              Starting the bot " + SimpleBot.getName(),
-				ConsoleColor.ANSI_CYAN + " Version: 1.0.0-BETA - Foundation Version: 1.0.0-BETA",
+				Color.CYAN + "              Starting the bot " + SimpleBot.getName(),
 				Common.consoleLine());
 
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
@@ -135,11 +110,11 @@ public abstract class SimpleBot {
 			Common.log("Enabling Mysql");
 			try{
 				mySQL = new MySQL(
-						simpleSettings.getMySqlHost(),
-						simpleSettings.getMySqlPort(),
-						simpleSettings.getMySqlUsername(),
-						simpleSettings.getMySqlPassword(),
-						simpleSettings.getMySqlDatabase()
+						simpleSettings.getMysqlHost(),
+						simpleSettings.getMysqlPort(),
+						simpleSettings.getMysqlUsername(),
+						simpleSettings.getMysqlPassword(),
+						simpleSettings.getMysqlDatabase()
 				);
 
 				onBotLoad();
@@ -151,7 +126,7 @@ public abstract class SimpleBot {
 
 
 			Common.log("Mysql Enabled");
-			if (mySQL.isConnected() && simpleSettings.isStoreMembersEnabled()){
+			if (mySQL.isConnected() && simpleSettings.getStoreMembersEnabled()){
 				Common.log("Enabling MemberStorage");
 				memberStorage = new MemberStorage();
 				Common.log("MemberStorage Enabled");
@@ -184,7 +159,12 @@ public abstract class SimpleBot {
 
 		slashCommandHandler.registerCommands();
 
+		// Load the static commands
+		getSlashCommandHandler().addCommand(new PingCommand());
+
+
 		Common.success("bot is ready");
+		enabled = true;
 	}
 
 	/**
@@ -212,7 +192,7 @@ public abstract class SimpleBot {
 
 	public static MemberStorage getMemberStorage() {
 		Debugger.debug("Startup", "Getting memberStorage option! getMemberStorage();197");
-		if (!SimpleSettings.getInstance().isStoreMembersEnabled()){
+		if (!SimpleSettings.getInstance().getStoreMembersEnabled()){
 			Common.warning("Trying to get member storage while it is not enabled");
 		}
 		return memberStorage;
@@ -268,11 +248,11 @@ public abstract class SimpleBot {
 
 	/**
 	 * Should every message be divided by \n by an own method (tends to work more
-	 * then split("\n"))
+	 * than split("\n"))
 	 *
-	 * @return
+	 * @return If the system need to force a new line with \n
 	 */
-	public boolean enforeNewLine() {
+	public boolean enforceNewLine() {
 		return false;
 	}
 
@@ -322,5 +302,9 @@ public abstract class SimpleBot {
 
 	public String getLink() {
 		return "https://greazi.com";
+	}
+
+	public boolean isEnabled() {
+		return enabled;
 	}
 }
