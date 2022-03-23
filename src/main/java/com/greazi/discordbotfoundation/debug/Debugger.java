@@ -7,13 +7,13 @@ package com.greazi.discordbotfoundation.debug;
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
+import com.greazi.discordbotfoundation.utils.color.Color;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.apache.commons.collections4.Get;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -50,9 +50,9 @@ public final class Debugger {
 		if (isDebugged(section)) {
 			for (final String message : messages)
 				if (SimpleBot.hasInstance())
-					Common.log("[" + ConsoleColor.ANSI_YELLOW + section + ConsoleColor.ANSI_RESET + "] " + message);
+					Common.log("[" + Color.YELLOW + section + Color.RESET + "] " + message);
 				else
-					System.out.println("[" + ConsoleColor.ANSI_YELLOW + section + ConsoleColor.ANSI_RESET + "] " + message);
+					System.out.println("[" + Color.YELLOW + section + Color.RESET + "] " + message);
 		}
 	}
 
