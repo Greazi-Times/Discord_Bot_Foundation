@@ -24,7 +24,7 @@ public abstract class SimpleSlashCommand {
     private String command = "example";
 
     /**
-     * Set the help description fo the slash command
+     * Set the help description for the slash command
      */
     private String description = "No Description";
 

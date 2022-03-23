@@ -28,6 +28,7 @@ public class SlashCommandHandler extends ListenerAdapter {
 
     public SlashCommandHandler addCommand(SimpleSlashCommand module) {
         Debugger.debug("SlashCommandHandler", "Start of addCommand(...);27");
+
         SlashCommandData command = Commands.slash(module.getCommand(), module.getDescription());
         Debugger.debug("SlashCommandHandler", "Retrieved SlashCommandData; " + module.getCommand() + ", " + module.getDescription());
 
