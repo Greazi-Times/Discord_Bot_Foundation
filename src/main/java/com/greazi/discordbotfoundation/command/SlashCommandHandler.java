@@ -47,7 +47,7 @@ public class SlashCommandHandler extends ListenerAdapter {
         }
 
         Debugger.debug("SlashCommandHandler", "  Checking if subcommands exists for; " + module.getCommand());
-        if (!module.getSubCommands().isEmpty() || !module.getSubcommandGroup().isEmpty()){
+        if (module.getSubCommands().isEmpty() && module.getSubcommandGroup().isEmpty() && !module.getOptions().isEmpty()){
             Debugger.debug("SlashCommandHandler", "    No subcommands getting options;");
             List<OptionData> moduleOptions = module.getOptions();
             for (OptionData var : moduleOptions) {
