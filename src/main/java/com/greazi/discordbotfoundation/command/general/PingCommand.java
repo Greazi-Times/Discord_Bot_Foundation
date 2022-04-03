@@ -20,7 +20,6 @@ public class PingCommand extends SimpleSlashCommand {
         setCommand("ping");
         setDefaultEnabled();
         setDescription("Test the latency of the bot");
-        setMainGuildOnly();
     }
 
     @Override
