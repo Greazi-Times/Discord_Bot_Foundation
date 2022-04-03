@@ -4,7 +4,6 @@ import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.command.SlashCommandHandler;
 import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
-import com.greazi.discordbotfoundation.managers.members.MemberStorage;
 import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.color.Color;
@@ -37,7 +36,6 @@ public abstract class SimpleBot {
 	private static Guild guild;
 	private static Member self;
 	private static MySQL mySQL;
-	private static MemberStorage memberStorage;
 	private static SlashCommandHandler slashCommandHandler;
 
 	private boolean enabled;
@@ -94,6 +92,8 @@ public abstract class SimpleBot {
 				Color.CYAN + "              Starting the bot " + SimpleBot.getName(),
 				Common.consoleLine());
 
+		onBotLoad();
+
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 		onPreStart();
 	}
@@ -104,34 +104,6 @@ public abstract class SimpleBot {
 	public final void onPreStart() {
 		Debugger.debug("Startup", "Starting the bot! onPreStart();120");
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
-
-		SimpleSettings simpleSettings = SimpleSettings.getInstance();
-		if (simpleSettings.isMysqlEnabled()){
-			Common.log("Enabling Mysql");
-			try{
-				mySQL = new MySQL(
-						simpleSettings.getMysqlHost(),
-						simpleSettings.getMysqlPort(),
-						simpleSettings.getMysqlUsername(),
-						simpleSettings.getMysqlPassword(),
-						simpleSettings.getMysqlDatabase()
-				);
-
-				onBotLoad();
-
-			}catch (Exception e){
-				Common.log("Error enabling mysql: "+e.getMessage());
-				e.printStackTrace();
-			}
-
-
-			Common.log("Mysql Enabled");
-			if (mySQL.isConnected() && simpleSettings.getStoreMembersEnabled()){
-				Common.log("Enabling MemberStorage");
-				memberStorage = new MemberStorage();
-				Common.log("MemberStorage Enabled");
-			}
-		}
 
 		jda.addEventListener(new SimpleSlashCommand() {
 			@Override
@@ -188,14 +160,6 @@ public abstract class SimpleBot {
 		} catch(LoginException | InterruptedException ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	public static MemberStorage getMemberStorage() {
-		Debugger.debug("Startup", "Getting memberStorage option! getMemberStorage();197");
-		if (!SimpleSettings.getInstance().getStoreMembersEnabled()){
-			Common.warning("Trying to get member storage while it is not enabled");
-		}
-		return memberStorage;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -274,10 +238,6 @@ public abstract class SimpleBot {
 
 	public static Member getSelf() {
 		return self;
-	}
-
-	public static MySQL getMySQL() {
-		return mySQL;
 	}
 
 	public static SlashCommandHandler getSlashCommandHandler() {
