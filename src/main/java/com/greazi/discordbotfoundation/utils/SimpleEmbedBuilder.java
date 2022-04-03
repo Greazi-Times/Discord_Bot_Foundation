@@ -17,14 +17,14 @@ import java.util.function.Consumer;
 public class SimpleEmbedBuilder extends EmbedBuilder {
 
     public SimpleEmbedBuilder() {
-        color(new Color(81, 153, 226));
+        color(new Color(47, 49, 54));
     }
 
     public SimpleEmbedBuilder(String title) {
         if(title != null)
             setAuthor(title, SimpleBot.getBot().getLink(), SimpleBot.getBot().getEmbedAuthorImage());
 
-        color(new Color(81, 153, 226));
+        color(new Color(47, 49, 54));
         footer("Developed by " + SimpleBot.getBot().getDeveloper());
     }
 
@@ -34,14 +34,14 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
         if(footer)
             footer("Developed by " + SimpleBot.getBot().getDeveloper());
 
-        color(new Color(81, 153, 226));
+        color(new Color(47, 49, 54));
     }
 
     public SimpleEmbedBuilder(boolean footer) {
         if(footer)
             footer("Developed by " + SimpleBot.getBot().getDeveloper());
 
-        color(new Color(81, 153, 226));
+        color(new Color(47, 49, 54));
     }
 
     public SimpleEmbedBuilder footer(String text) {
