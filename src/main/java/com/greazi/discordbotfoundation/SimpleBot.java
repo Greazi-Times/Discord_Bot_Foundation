@@ -4,14 +4,13 @@ import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.command.SlashCommandHandler;
 import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
-import com.greazi.discordbotfoundation.mysql.MySQL;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.color.Color;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -34,8 +33,7 @@ public abstract class SimpleBot {
 	public static JDA jda;
 
 	private static Guild guild;
-	private static Member self;
-	private static MySQL mySQL;
+	private static SelfUser self;
 	private static SlashCommandHandler slashCommandHandler;
 
 	private boolean enabled;
@@ -89,7 +87,7 @@ public abstract class SimpleBot {
 
 		// Creating cool startup box
 		Common.log(Common.consoleLine(),
-				Color.CYAN + "              Starting the bot " + SimpleBot.getName(),
+				Color.CYAN + "              Starting the bot " + SimpleBot.getName() + "V" + SimpleBot.getVersion(),
 				Common.consoleLine());
 
 		onBotLoad();
@@ -102,7 +100,7 @@ public abstract class SimpleBot {
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
 	public final void onPreStart() {
-		Debugger.debug("Startup", "Starting the bot! onPreStart();120");
+		Debugger.debug("Startup", "Starting the bot! onPreStart();105");
 		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
 
 		jda.addEventListener(new SimpleSlashCommand() {
@@ -146,7 +144,7 @@ public abstract class SimpleBot {
 	 * @param activity = The activity status of the bot
 	 */
 	private static void registerJda(String token, String activity) {
-		Debugger.debug("Startup", "Registring JDA! registerJda();180");
+		Debugger.debug("Startup", "Registering JDA! registerJda();149");
 		try {
 			jda = JDABuilder.createDefault(token)
 					.setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
@@ -157,6 +155,8 @@ public abstract class SimpleBot {
 					.setActivity(Activity.watching(activity))
 					.setEventManager(new AnnotatedEventManager())
 					.build().awaitReady();
+
+			self = jda.getSelfUser();
 		} catch(LoginException | InterruptedException ex) {
 			ex.printStackTrace();
 		}
@@ -236,7 +236,7 @@ public abstract class SimpleBot {
 		return guild;
 	}
 
-	public static Member getSelf() {
+	public static SelfUser getSelf() {
 		return self;
 	}
 
@@ -247,6 +247,10 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 	// Additional features
 	// ----------------------------------------------------------------------------------------
+
+	public static String getVersion() {
+		return "1.0.0";
+	}
 
 	public static String getName() {
 		return SimpleSettings.getInstance().getName();
