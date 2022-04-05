@@ -96,10 +96,6 @@ public abstract class SimpleBot {
 		instance = this;
 
 		// Load methods that need to be loaded before the bot starts
-		Common.log(Common.consoleLine(),
-				Color.CYAN + "              Starting the bot " + SimpleBot.getName() + "V" + SimpleBot.getVersion(),
-				Common.consoleLine());
-
 		onBotLoad();
 
 		// Register the JDA
