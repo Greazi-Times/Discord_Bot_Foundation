@@ -83,19 +83,28 @@ public abstract class SimpleBot {
 	// Main methods
 	// ----------------------------------------------------------------------------------------
 
+	/**
+	 * The main method that is the beginning of the bot
+	 * <p>
+	 * By default, it will start the bot with the {@link #registerJda(String, String)} method
+	 */
 	public SimpleBot(){
+		// A debugger that is used to debug the startup of the bot
 		Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
 
+		// Set the instance of the bot
 		instance = this;
 
-		// Creating cool startup box
+		// Load methods that need to be loaded before the bot starts
 		Common.log(Common.consoleLine(),
 				Color.CYAN + "              Starting the bot " + SimpleBot.getName() + "V" + SimpleBot.getVersion(),
 				Common.consoleLine());
 
 		onBotLoad();
 
+		// Register the JDA
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
+
 		// TODO: Redesign everything from this part on
 		// Load methods that need to be loaded after the bot starts
 		onPreStart();
@@ -161,6 +170,7 @@ public abstract class SimpleBot {
 					.setEventManager(new AnnotatedEventManager())
 					.build().awaitReady();
 
+			// Set self to the bot
 			self = jda.getSelfUser();
 		} catch(LoginException | InterruptedException ex) {
 			ex.printStackTrace();
