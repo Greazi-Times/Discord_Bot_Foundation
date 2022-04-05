@@ -178,7 +178,14 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 
 	/**
-	 * Called before the bot is started (Not recommended to use)
+	 * Called way before everything starts (Not recommended to use)
+	 */
+	protected void onPreLoad() {
+	}
+
+
+	/**
+	 * Called just before the bot starts
 	 */
 	protected void onBotLoad() {
 	}
