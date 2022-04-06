@@ -20,8 +20,6 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
 
-// TODO Check if all comments are correct
-
 /**
  * A basic discord bot that represents the discord bot library
  */
@@ -34,7 +32,7 @@ public abstract class SimpleBot {
 	private static volatile SimpleBot instance;
 	public static JDA jda;
 
-	private static Guild guild;
+	private static Guild mainGuild;
 	private static SelfUser self;
 	private static SlashCommandHandler slashCommandHandler;
 
@@ -89,29 +87,46 @@ public abstract class SimpleBot {
 	 * By default, it will start the bot with the {@link #registerJda(String, String)} method
 	 */
 	public SimpleBot(){
-		// A debugger that is used to debug the startup of the bot
+		// A debugger that sends a message to the console when the bot is starting
 		Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
 
 		// Set the instance of the bot
 		instance = this;
 
-		// Load methods that need to be loaded before the bot starts
-		onBotLoad();
+		// Load way before the bot starts to avoid any issues
+		onPreLoad();
 
-		// Register the JDA
+		// Initialize the bot
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 
-		// TODO Redesign everything from this part on
-		// Load methods that need to be loaded after the bot starts
-		onPreStart();
+		// Set the main guild of the bot
+		if (SimpleSettings.getInstance().getMainGuild() != null) {
+			mainGuild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
+		} else {
+			Common.error("Main Guild not set in settings.yml");
+			mainGuild = jda.getGuilds().get(0);
+		}
+
+		// Load after the bot has been initialized
+		onBotLoad();
+
+		// Set up the command manager that handles slash commands
+		setupCommandManager();
+
+		// A that can be used to load stuff that can be load after the bot has been initialized
+		onBotStart();
+
+		// This is a method that will be ren everytime the bot is reloaded
+		// In here you add all the commands and events
+		/** @link {@link #onReloadableStart()} */
+		onReload();
 	}
 
 	/**
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
-	public final void onPreStart() {
+	public final void setupCommandManager() {
 		Debugger.debug("Startup", "Starting the bot! onPreStart();105");
-		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
 
 		jda.addEventListener(new SimpleSlashCommand() {
 			@Override
@@ -120,30 +135,30 @@ public abstract class SimpleBot {
 			}
 		});
 		slashCommandHandler = new SlashCommandHandler();
-
-		onStartup();
 	}
 
-	public void onStartup() {
-		Debugger.debug("Startup", "Starting the bot! onStartup();157");
-		onBotStart();
-
-		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
-
-		onReload();
-	}
-
+	/**
+	 * A method that is called when the bot is reloaded
+	 */
 	public void onReload() {
 		Debugger.debug("Startup", "Starting the bot! onReload();167");
+
+		// Check if the bot is enabled before doing anything
+		if(enabled) {
+			Common.error("The bot is already enabled!");
+			return;
+		}
+
+		// Run the onReloadableStart() method
 		onReloadableStart();
 
+		// Register all the commands
 		slashCommandHandler.registerCommands();
 
 		// Load the static commands
 		getSlashCommandHandler().addCommand(new PingCommand());
 
-
-		Common.success("bot is ready");
+		// A boolean that says the bot is loaded and enabled
 		enabled = true;
 	}
 
@@ -217,11 +232,9 @@ public abstract class SimpleBot {
 	/**
 	 * Register your commands, events, tasks and files here.
 	 * <p>
-	 * This is invoked when you do `/reload`  TODO add a reload command link that runs all reload methods
+	 * This is invoked when you do `/reload`
 	 */
 	protected void onReloadableStart() {
-		Debugger.debug("Startup", "Running onReloadableStart();246");
-
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -242,22 +255,42 @@ public abstract class SimpleBot {
 	// Main getters
 	// ----------------------------------------------------------------------------------------
 
+	/**
+	 * Retrieve the JDA instance
+	 * @return JDA instance
+	 */
 	public static JDA getJDA() {
 		return jda;
 	}
 
+	/**
+	 * Retrieve the bot instance
+	 * @return Bot instance
+	 */
 	public static SimpleBot getBot() {
 		return instance;
 	}
 
+	/**
+	 * Retrieve the bots main guild
+	 * @return Main guild
+	 */
 	public static Guild getGuild() {
-		return guild;
+		return mainGuild;
 	}
 
+	/**
+	 * Retrieve the bot members self
+	 * @return Self
+	 */
 	public static SelfUser getSelf() {
 		return self;
 	}
 
+	/**
+	 * Retrieve the slash command handler
+	 * @return Slash command handler
+	 */
 	public static SlashCommandHandler getSlashCommandHandler() {
 		return slashCommandHandler;
 	}
@@ -266,26 +299,52 @@ public abstract class SimpleBot {
 	// Additional features
 	// ----------------------------------------------------------------------------------------
 
+	/**
+	 * Retrieve the version of the bot
+	 * @return Version
+	 */
 	public static String getVersion() {
 		return "1.0.0";
 	}
 
+	/**
+	 * Retrieve the name of the bot
+	 * @return Name
+	 */
 	public static String getName() {
 		return SimpleSettings.getInstance().getName();
 	}
 
+	/**
+	 * Retrieve the developer of the bot
+	 * @return Developer
+	 */
 	public String getDeveloper() {
 		return "Greazi";
 	}
 
+	/**
+	 * !!! THIS WILL BE MOVED WITH THE NEW SETTINGS SYSTEM !!!
+	 *
+	 * Retrieve the main embed image of the bot
+	 * @return Embed image
+	 */
 	public String getEmbedAuthorImage() {
 		return "https://i.imgur.com/ddzfapZ.png";
 	}
 
+	/**
+	 * Get the embed author link
+	 * @return Author link
+	 */
 	public String getLink() {
 		return "https://greazi.com";
 	}
 
+	/**
+	 *  Check if the bot is enabled
+	 * @return Bot enabled
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
