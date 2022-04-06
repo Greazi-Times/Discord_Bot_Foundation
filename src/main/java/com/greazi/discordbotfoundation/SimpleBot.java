@@ -20,7 +20,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
 
-// TODO: Check if all comments are correct
+// TODO Check if all comments are correct
 
 /**
  * A basic discord bot that represents the discord bot library
@@ -66,7 +66,7 @@ public abstract class SimpleBot {
 	// Instance specific
 	// ----------------------------------------------------------------------------------------
 
-	// TODO: Add this method for the reload of the bot
+	// TODO Add this method for the reload of the bot
 	/**
 	 * For your convenience, event listeners and timed tasks may be set here to stop/unregister
 	 * them automatically on reload
@@ -101,7 +101,7 @@ public abstract class SimpleBot {
 		// Register the JDA
 		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
 
-		// TODO: Redesign everything from this part on
+		// TODO Redesign everything from this part on
 		// Load methods that need to be loaded after the bot starts
 		onPreStart();
 	}
@@ -217,7 +217,7 @@ public abstract class SimpleBot {
 	/**
 	 * Register your commands, events, tasks and files here.
 	 * <p>
-	 * This is invoked when you do `/reload`  TODO add a reload command link
+	 * This is invoked when you do `/reload`  TODO add a reload command link that runs all reload methods
 	 */
 	protected void onReloadableStart() {
 		Debugger.debug("Startup", "Running onReloadableStart();246");
