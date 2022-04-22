@@ -1,0 +1,13 @@
+Name: "Foundation"
+Activity: "watching"
+Token: ""
+MainGuild: ""
+Debug: []
+Mysql:
+  Enabled: false
+  Host: "Foundation"
+  Port: 3306
+  Database: "Foundation"
+  Username: "Foundation_User"
+  Password: "Foundation_Password"
+  StoreMembers: false

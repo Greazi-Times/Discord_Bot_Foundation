@@ -32,6 +32,7 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 
 	private static volatile SimpleBot instance;
+
 	public static JDA jda;
 
 	private static Guild guild;
@@ -87,6 +88,8 @@ public abstract class SimpleBot {
 	public SimpleBot(){
 		Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
 
+		SimpleSettings.init();
+
 		instance = this;
 
 		// Creating cool startup box
@@ -94,7 +97,7 @@ public abstract class SimpleBot {
 				Color.CYAN + "              Starting the bot " + SimpleBot.getName(),
 				Common.consoleLine());
 
-		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
+		registerJda(SimpleSettings.getToken(), SimpleSettings.getActivity());
 		onPreStart();
 	}
 
@@ -103,18 +106,17 @@ public abstract class SimpleBot {
 	 */
 	public final void onPreStart() {
 		Debugger.debug("Startup", "Starting the bot! onPreStart();120");
-		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
+		guild = jda.getGuildById(SimpleSettings.getMainGuild());
 
-		SimpleSettings simpleSettings = SimpleSettings.getInstance();
-		if (simpleSettings.isMysqlEnabled()){
+		if (SimpleSettings.getMysqlStoreMembers()){
 			Common.log("Enabling Mysql");
 			try{
 				mySQL = new MySQL(
-						simpleSettings.getMysqlHost(),
-						simpleSettings.getMysqlPort(),
-						simpleSettings.getMysqlUsername(),
-						simpleSettings.getMysqlPassword(),
-						simpleSettings.getMysqlDatabase()
+						SimpleSettings.getMysqlHost(),
+						SimpleSettings.getMysqlPort(),
+						SimpleSettings.getMysqlUsername(),
+						SimpleSettings.getMysqlPassword(),
+						SimpleSettings.getMysqlDatabase()
 				);
 
 				onBotLoad();
@@ -126,7 +128,7 @@ public abstract class SimpleBot {
 
 
 			Common.log("Mysql Enabled");
-			if (mySQL.isConnected() && simpleSettings.getStoreMembersEnabled()){
+			if (mySQL.isConnected() && SimpleSettings.getMysqlStoreMembers()){
 				Common.log("Enabling MemberStorage");
 				memberStorage = new MemberStorage();
 				Common.log("MemberStorage Enabled");
@@ -148,7 +150,7 @@ public abstract class SimpleBot {
 		Debugger.debug("Startup", "Starting the bot! onStartup();157");
 		onBotStart();
 
-		guild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
+		guild = jda.getGuildById(SimpleSettings.getMainGuild());
 
 		onReload();
 	}
@@ -192,7 +194,7 @@ public abstract class SimpleBot {
 
 	public static MemberStorage getMemberStorage() {
 		Debugger.debug("Startup", "Getting memberStorage option! getMemberStorage();197");
-		if (!SimpleSettings.getInstance().getStoreMembersEnabled()){
+		if (false){
 			Common.warning("Trying to get member storage while it is not enabled");
 		}
 		return memberStorage;
@@ -239,7 +241,6 @@ public abstract class SimpleBot {
 	 */
 	protected void onReloadableStart() {
 		Debugger.debug("Startup", "Running onReloadableStart();246");
-
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -289,7 +290,7 @@ public abstract class SimpleBot {
 	// ----------------------------------------------------------------------------------------
 
 	public static String getName() {
-		return SimpleSettings.getInstance().getName();
+		return SimpleSettings.getName();
 	}
 
 	public String getDeveloper() {

@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public final class Debugger {
 	/**
 	 * Get if the given section is being debugged
 	 * <p>
-	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yml,
+	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yaml,
 	 * by default your class extending {@link SimpleSettings}
 	 * <p>
 	 * If you set Debug to ["*"] this will always return true
@@ -34,13 +33,13 @@ public final class Debugger {
 	 * @return
 	 */
 	public static boolean isDebugged(String section) {
-		return SimpleSettings.getInstance().getDebug().contains(section) || SimpleSettings.getInstance().getDebug().contains("*");
+		return SimpleSettings.getDebug().contains(section) || SimpleSettings.getDebug().contains("*");
 	}
 
 	/**
 	 * Prints a debug messages to the console if the given section is being debugged
 	 * <p>
-	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yml,
+	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yaml,
 	 * by default your class extending {@link SimpleSettings}
 	 *
 	 * @param section
