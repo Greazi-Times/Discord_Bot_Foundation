@@ -58,4 +58,7 @@ public class ProjectUtil {
     public static String removeBoth(String s, int am) {
         return s.substring(am, s.length() - am);
     }
+
+
+
 }

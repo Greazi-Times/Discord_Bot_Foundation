@@ -34,7 +34,7 @@ public final class Debugger {
 	 * @return
 	 */
 	public static boolean isDebugged(String section) {
-		return SimpleSettings.getInstance().getDebug().contains(section) || SimpleSettings.getInstance().getDebug().contains("*");
+		return SimpleSettings.getDebug().contains(section) || SimpleSettings.getDebug().contains("*");
 	}
 
 	/**

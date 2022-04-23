@@ -1,0 +1,13 @@
+Name: "TestBot"
+Activity: "watching"
+Token: "OTMwMTc3MzgyMjY5MjE4ODI2.YdyFMQ.aHxgAwncpO5-W_K701tko3ABtNI"
+MainGuild: "611555111441006633"
+Debug: ""
+Mysql:
+  Enabled: false
+  Host: "Foundation"
+  Port: 3306
+  Database: "Foundation"
+  Username: "Foundation_User"
+  Password: "Foundation_Password"
+  StoreMembers: false

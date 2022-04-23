@@ -111,7 +111,7 @@ public class SlashCommandHandler extends ListenerAdapter {
 
         Debugger.debug("SlashCommandHandler", "  Found event; " + module);
 
-        if (module.getGuildOnly() && !Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.getInstance().getMainGuild())){
+        if (module.getGuildOnly() && !Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.getMainGuild())){
             return;
         }
 

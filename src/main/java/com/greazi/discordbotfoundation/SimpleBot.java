@@ -25,327 +25,342 @@ import javax.security.auth.login.LoginException;
  */
 public abstract class SimpleBot {
 
-	// ----------------------------------------------------------------------------------------
-	// Static
-	// ----------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------
+    // Static
+    // ----------------------------------------------------------------------------------------
 
-	private static volatile SimpleBot instance;
-	public static JDA jda;
+    private static volatile SimpleBot instance;
+    public static JDA jda;
 
-	private static Guild mainGuild;
-	private static SelfUser self;
-	private static SlashCommandHandler slashCommandHandler;
+    private static Guild mainGuild;
+    private static SelfUser self;
+    private static SlashCommandHandler slashCommandHandler;
 
-	private boolean enabled;
+    private boolean enabled;
 
-	/**
-	 * Returns the instance of {@link SimpleBot}.
-	 * <p>
-	 * It is recommended to override this in your own {@link SimpleBot}
-	 * implementation so you will get the instance of that, directly.
-	 *
-	 * @return this instance
-	 */
-	public static SimpleBot getInstance() {
-		return instance;
-	}
+    /**
+     * Returns the instance of {@link SimpleBot}.
+     * <p>
+     * It is recommended to override this in your own {@link SimpleBot}
+     * implementation so you will get the instance of that, directly.
+     *
+     * @return this instance
+     */
+    public static SimpleBot getInstance() {
+        return instance;
+    }
 
-	/**
-	 * Get if the instance that is used across the library has been set. Normally it
-	 * is always set, except for testing.
-	 *
-	 * @return if the instance has been set.
-	 */
-	public static final boolean hasInstance() {
-		return instance != null;
-	}
+    /**
+     * Get if the instance that is used across the library has been set. Normally it
+     * is always set, except for testing.
+     *
+     * @return if the instance has been set.
+     */
+    public static final boolean hasInstance() {
+        return instance != null;
+    }
 
-	// ----------------------------------------------------------------------------------------
-	// Instance specific
-	// ----------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------
+    // Instance specific
+    // ----------------------------------------------------------------------------------------
 
-	// TODO Add this method for the reload of the bot
-	/**
-	 * For your convenience, event listeners and timed tasks may be set here to stop/unregister
-	 * them automatically on reload
-	 */
-	/*private final Reloadables reloadables = new Reloadables();*/
+    // TODO Add this method for the reload of the bot
+    /**
+     * For your convenience, event listeners and timed tasks may be set here to stop/unregister
+     * them automatically on reload
+     */
+    /*private final Reloadables reloadables = new Reloadables();*/
 
-	/**
-	 * An internal flag to indicate whether we are calling the {@link #onReloadableStart()}
-	 * block. We register things using {@link #} <-- reloadable during this block
-	 */
-	private boolean startingReloadables = false;
+    /**
+     * An internal flag to indicate whether we are calling the {@link #onReloadableStart()}
+     * block. We register things using {@link #} <-- reloadable during this block
+     */
+    private boolean startingReloadables = false;
 
-	// ----------------------------------------------------------------------------------------
-	// Main methods
-	// ----------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------
+    // Main methods
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * The main method that is the beginning of the bot
-	 * <p>
-	 * By default, it will start the bot with the {@link #registerJda(String, String)} method
-	 */
-	public SimpleBot(){
-		// A debugger that sends a message to the console when the bot is starting
-		Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
+    /**
+     * The main method that is the beginning of the bot
+     * <p>
+     * By default, it will start the bot with the {@link #registerJda(String, String)} method
+     */
+    public SimpleBot() {
+        // A debugger that sends a message to the console when the bot is starting
+        Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
 
-		// Set the instance of the bot
-		instance = this;
+        // Load the settings from the config file
+        SimpleSettings.init();
 
-		// Load way before the bot starts to avoid any issues
-		onPreLoad();
+        // Set the instance of the bot
+        instance = this;
 
-		// Initialize the bot
-		registerJda(SimpleSettings.getInstance().getToken(), SimpleSettings.getInstance().getActivity());
+        // Load way before the bot starts to avoid any issues
+        onPreLoad();
 
-		// Set the main guild of the bot
-		if (SimpleSettings.getInstance().getMainGuild() != null) {
-			mainGuild = jda.getGuildById(SimpleSettings.getInstance().getMainGuild());
-		} else {
-			Common.error("Main Guild not set in settings.yml");
-			mainGuild = jda.getGuilds().get(0);
-		}
+        // Initialize the bot
+        registerJda(SimpleSettings.getToken(), SimpleSettings.getActivity());
 
-		// Load after the bot has been initialized
-		onBotLoad();
+        // Set the main guild of the bot
+        if (SimpleSettings.getMainGuild() != null) {
+            mainGuild = jda.getGuildById(SimpleSettings.getMainGuild());
+        } else {
+            Common.error("Main Guild not set in settings.yml");
+            mainGuild = jda.getGuilds().get(0);
+        }
 
-		// Set up the command manager that handles slash commands
-		setupCommandManager();
+        // Load after the bot has been initialized
+        onBotLoad();
 
-		// A that can be used to load stuff that can be load after the bot has been initialized
-		onBotStart();
+        // Set up the command manager that handles slash commands
+        setupCommandManager();
 
-		// This is a method that will be ren everytime the bot is reloaded
-		// In here you add all the commands and events
-		/** @link {@link #onReloadableStart()} */
-		onReload();
-	}
+        // A that can be used to load stuff that can be load after the bot has been initialized
+        onBotStart();
 
-	/**
-	 * The pre start of the bot. Register the bot and do some simple checks
-	 */
-	public final void setupCommandManager() {
-		Debugger.debug("Startup", "Starting the bot! onPreStart();105");
+        // This is a method that will be ren everytime the bot is reloaded
+        // In here you add all the commands and events
+        /** @link {@link #onReloadableStart()} */
+        onReload();
+    }
 
-		jda.addEventListener(new SimpleSlashCommand() {
-			@Override
-			protected void execute(SlashCommandInteractionEvent event) {
+    /**
+     * The pre start of the bot. Register the bot and do some simple checks
+     */
+    public final void setupCommandManager() {
+        Debugger.debug("Startup", "Starting the bot! onPreStart();105");
 
-			}
-		});
-		slashCommandHandler = new SlashCommandHandler();
-	}
+        jda.addEventListener(new SimpleSlashCommand() {
+            @Override
+            protected void execute(SlashCommandInteractionEvent event) {
 
-	/**
-	 * A method that is called when the bot is reloaded
-	 */
-	public void onReload() {
-		Debugger.debug("Startup", "Starting the bot! onReload();167");
+            }
+        });
+        slashCommandHandler = new SlashCommandHandler();
+    }
 
-		// Check if the bot is enabled before doing anything
-		if(enabled) {
-			Common.error("The bot is already enabled!");
-			return;
-		}
+    /**
+     * A method that is called when the bot is reloaded
+     */
+    public void onReload() {
+        Debugger.debug("Startup", "Starting the bot! onReload();167");
 
-		// Run the onReloadableStart() method
-		onReloadableStart();
+        // Check if the bot is enabled before doing anything
+        if (enabled) {
+            Common.error("The bot is already enabled!");
+            return;
+        }
 
-		// Register all the commands
-		slashCommandHandler.registerCommands();
+        // Run the onReloadableStart() method
+        onReloadableStart();
 
-		// Load the static commands
-		getSlashCommandHandler().addCommand(new PingCommand());
+        // Register all the commands
+        slashCommandHandler.registerCommands();
 
-		// A boolean that says the bot is loaded and enabled
-		enabled = true;
-	}
+        // Load the static commands
+        getSlashCommandHandler().addCommand(new PingCommand());
 
-	/**
-	 * Registration of the bot itself
-	 *
-	 * @param token = The token of the bot
-	 * @param activity = The activity status of the bot
-	 */
-	private static void registerJda(String token, String activity) {
-		Debugger.debug("Startup", "Registering JDA! registerJda();149");
-		try {
-			jda = JDABuilder.createDefault(token)
-					.setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
-					.setDisabledIntents(GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.GUILD_MESSAGE_TYPING)
-					.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
-					.setMemberCachePolicy(MemberCachePolicy.ALL)
-					.setChunkingFilter(ChunkingFilter.ALL)
-					.setActivity(Activity.watching(activity))
-					.setEventManager(new AnnotatedEventManager())
-					.build().awaitReady();
+        // A boolean that says the bot is loaded and enabled
+        enabled = true;
+    }
 
-			// Set self to the bot
-			self = jda.getSelfUser();
-		} catch(LoginException | InterruptedException ex) {
-			ex.printStackTrace();
-		}
-	}
+    /**
+     * Registration of the bot itself
+     *
+     * @param token    = The token of the bot
+     * @param activity = The activity status of the bot
+     */
+    private static void registerJda(String token, String activity) {
+        Debugger.debug("Startup", "Registering JDA! registerJda();149");
+        try {
+            jda = JDABuilder.createDefault(token)
+                    .setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
+                    .setDisabledIntents(GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.GUILD_MESSAGE_TYPING)
+                    .disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .setChunkingFilter(ChunkingFilter.ALL)
+                    .setActivity(Activity.watching(activity))
+                    .setEventManager(new AnnotatedEventManager())
+                    .build().awaitReady();
 
-	// ----------------------------------------------------------------------------------------
-	// Delegate methods    <-- Methods that can be used to load your stuff
-	// ----------------------------------------------------------------------------------------
+            // Set self to the bot
+            self = jda.getSelfUser();
+        } catch (LoginException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	/**
-	 * Called way before everything starts (Not recommended to use)
-	 */
-	protected void onPreLoad() {
-	}
+    // ----------------------------------------------------------------------------------------
+    // Delegate methods    <-- Methods that can be used to load your stuff
+    // ----------------------------------------------------------------------------------------
+
+    /**
+     * Called way before everything starts (Not recommended to use)
+     */
+    protected void onPreLoad() {
+    }
 
 
-	/**
-	 * Called just before the bot starts
-	 */
-	protected void onBotLoad() {
-	}
+    /**
+     * Called just before the bot starts
+     */
+    protected void onBotLoad() {
+    }
 
-	//Copyright
-	/**
-	 * The main loading method, called when we are ready to load
-	 */
-	protected abstract void onBotStart();
+    //Copyright
 
-	/**
-	 * The main method called when we are about to shut down
-	 */
-	protected void onBotStop() {
-	}
+    /**
+     * The main loading method, called when we are ready to load
+     */
+    protected abstract void onBotStart();
 
-	/**
-	 * Invoked before settings were reloaded.
-	 */
-	protected void onBotPreReload() {
-	}
+    /**
+     * The main method called when we are about to shut down
+     */
+    protected void onBotStop() {
+    }
 
-	/**
-	 * Invoked after settings were reloaded.
-	 */
-	protected void onBotReload() {
-	}
+    /**
+     * Invoked before settings were reloaded.
+     */
+    protected void onBotPreReload() {
+    }
 
-	/**
-	 * Register your commands, events, tasks and files here.
-	 * <p>
-	 * This is invoked when you do `/reload`
-	 */
-	protected void onReloadableStart() {
-	}
+    /**
+     * Invoked after settings were reloaded.
+     */
+    protected void onBotReload() {
+    }
 
-	// ----------------------------------------------------------------------------------------
-	// Foundation handle settings
-	// ----------------------------------------------------------------------------------------
+    /**
+     * Register your commands, events, tasks and files here.
+     * <p>
+     * This is invoked when you do `/reload`
+     */
+    protected void onReloadableStart() {
+    }
 
-	/**
-	 * Should every message be divided by \n by an own method (tends to work more
-	 * than split("\n"))
-	 *
-	 * @return If the system need to force a new line with \n
-	 */
-	public boolean enforceNewLine() {
-		return false;
-	}
+    // ----------------------------------------------------------------------------------------
+    // Foundation handle settings
+    // ----------------------------------------------------------------------------------------
 
-	// ----------------------------------------------------------------------------------------
-	// Main getters
-	// ----------------------------------------------------------------------------------------
+    /**
+     * Should every message be divided by \n by an own method (tends to work more
+     * than split("\n"))
+     *
+     * @return If the system need to force a new line with \n
+     */
+    public boolean enforceNewLine() {
+        return false;
+    }
 
-	/**
-	 * Retrieve the JDA instance
-	 * @return JDA instance
-	 */
-	public static JDA getJDA() {
-		return jda;
-	}
+    // ----------------------------------------------------------------------------------------
+    // Main getters
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * Retrieve the bot instance
-	 * @return Bot instance
-	 */
-	public static SimpleBot getBot() {
-		return instance;
-	}
+    /**
+     * Retrieve the JDA instance
+     *
+     * @return JDA instance
+     */
+    public static JDA getJDA() {
+        return jda;
+    }
 
-	/**
-	 * Retrieve the bots main guild
-	 * @return Main guild
-	 */
-	public static Guild getGuild() {
-		return mainGuild;
-	}
+    /**
+     * Retrieve the bot instance
+     *
+     * @return Bot instance
+     */
+    public static SimpleBot getBot() {
+        return instance;
+    }
 
-	/**
-	 * Retrieve the bot members self
-	 * @return Self
-	 */
-	public static SelfUser getSelf() {
-		return self;
-	}
+    /**
+     * Retrieve the bots main guild
+     *
+     * @return Main guild
+     */
+    public static Guild getGuild() {
+        return mainGuild;
+    }
 
-	/**
-	 * Retrieve the slash command handler
-	 * @return Slash command handler
-	 */
-	public static SlashCommandHandler getSlashCommandHandler() {
-		return slashCommandHandler;
-	}
+    /**
+     * Retrieve the bot members self
+     *
+     * @return Self
+     */
+    public static SelfUser getSelf() {
+        return self;
+    }
 
-	// ----------------------------------------------------------------------------------------
-	// Additional features
-	// ----------------------------------------------------------------------------------------
+    /**
+     * Retrieve the slash command handler
+     *
+     * @return Slash command handler
+     */
+    public static SlashCommandHandler getSlashCommandHandler() {
+        return slashCommandHandler;
+    }
 
-	/**
-	 * Retrieve the version of the bot
-	 * @return Version
-	 */
-	public static String getVersion() {
-		return "1.0.0";
-	}
+    // ----------------------------------------------------------------------------------------
+    // Additional features
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * Retrieve the name of the bot
-	 * @return Name
-	 */
-	public static String getName() {
-		return SimpleSettings.getInstance().getName();
-	}
+    /**
+     * Retrieve the version of the bot
+     *
+     * @return Version
+     */
+    public static String getVersion() {
+        return "1.0.0";
+    }
 
-	/**
-	 * Retrieve the developer of the bot
-	 * @return Developer
-	 */
-	public String getDeveloper() {
-		return "Greazi";
-	}
+    /**
+     * Retrieve the name of the bot
+     *
+     * @return Name
+     */
+    public static String getName() {
+        return SimpleSettings.getName();
+    }
 
-	/**
-	 * !!! THIS WILL BE MOVED WITH THE NEW SETTINGS SYSTEM !!!
-	 *
-	 * Retrieve the main embed image of the bot
-	 * @return Embed image
-	 */
-	public String getEmbedAuthorImage() {
-		return "https://i.imgur.com/ddzfapZ.png";
-	}
+    /**
+     * Retrieve the developer of the bot
+     *
+     * @return Developer
+     */
+    public String getDeveloper() {
+        return "Greazi";
+    }
 
-	/**
-	 * Get the embed author link
-	 * @return Author link
-	 */
-	public String getLink() {
-		return "https://greazi.com";
-	}
+    /**
+     * !!! THIS WILL BE MOVED WITH THE NEW SETTINGS SYSTEM !!!
+     * <p>
+     * Retrieve the main embed image of the bot
+     *
+     * @return Embed image
+     */
+    public String getEmbedAuthorImage() {
+        return "https://i.imgur.com/ddzfapZ.png";
+    }
 
-	/**
-	 *  Check if the bot is enabled
-	 * @return Bot enabled
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
+    /**
+     * Get the embed author link
+     *
+     * @return Author link
+     */
+    public String getLink() {
+        return "https://greazi.com";
+    }
+
+    /**
+     * Check if the bot is enabled
+     *
+     * @return Bot enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
 }
