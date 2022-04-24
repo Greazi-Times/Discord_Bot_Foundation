@@ -1,4 +1,11 @@
-package com.greazi.discordbotfoundation.command;
+/*
+ * Copyright (c) 2021 - 2022. Greazi - All rights reservered
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
+package com.greazi.discordbotfoundation.handlers.commands;
 
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
