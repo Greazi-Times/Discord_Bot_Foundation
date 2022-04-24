@@ -136,54 +136,96 @@ public class SimpleSettings {
 		}
 	}
 
-	// Default values
-	public static String getName(){
-		return getString("Name");
+	// ----------------------------------------------------------------------------------------
+	// Main settings
+	// ----------------------------------------------------------------------------------------
+
+	/**
+	 * Retrieve all the bot settings
+	 */
+	public static class Bot {
+
+		// Set the main path of the settings values
+		private static final String path = "Bot.";
+
+		// The token for the bot
+		public static String Token() {
+			return getString(path + "Token");
+		}
+
+		// The main guild of the bot
+		public static String MainGuild() {
+			return getString(path + "MainGuild");
+		}
+
+		// The name of the bot
+		public static String Name() {
+			return getString(path + "Name");
+		}
 	}
 
-	public static String getActivity(){
-		return getString("Activity");
+	/**
+	 * Retrieve all the activity settings
+	 */
+	public static class Activity {
+
+		// Set the main path of the settings values
+		private static final String path = "Activity.";
+
+		// The activity type
+		public static String Type() {
+			return getString(path + "Activity.Type");
+		}
+
+		// The message for the activity
+		public static String Message() {
+			return getString(path + "Activity.Message");
+		}
 	}
 
-	public static String getToken(){
-		return getString("Token");
+	/**
+	 * Retrieve all the database settings
+	 */
+	public static class Database {
+
+		// Set the main path of the settings values
+		private static final String path = "Database.";
+
+		// Returns if the database system is enabled
+		public static boolean Enabled(){
+			return getBoolean(path + "Enabled");
+		}
+
+		// The database host
+		public static String Host(){
+			return getString(path + "Host");
+		}
+
+		// The database port
+		public static int Port(){
+			return getInt(path + "Port");
+		}
+
+		// The database name
+		public static String Database(){
+			return getString(path + "Database");
+		}
+
+		// The database username
+		public static String Username(){
+			return getString(path + "Username");
+		}
+
+		// The database password
+		public static String Password(){
+			return getString(path + "Password");
+		}
 	}
 
-	public static String getMainGuild(){
-		return getString("MainGuild");
-	}
-
-	public static String getDebug(){
+	/**
+	 * Retrieve all debug sections that are enabled
+	 */
+	public static String Debug(){
 		return getString("Debug");
 	}
-
-	public static boolean getMysqlEnabled(){
-		return getBoolean("Mysql.Enabled");
-	}
-
-	public static String getMysqlHost(){
-		return getString("Mysql.Host");
-	}
-
-	public static int getMysqlPort(){
-		return getInt("Mysql.Port");
-	}
-
-	public static String getMysqlDatabase(){
-		return getString("Mysql.Database");
-	}
-
-	public static String getMysqlUsername(){
-		return getString("Mysql.Username");
-	}
-
-	public static String getMysqlPassword(){
-		return getString("Mysql.Password");
-	}
-
-	public static boolean getMysqlStoreMembers(){
-		return getBoolean("Mysql.StoreMembers");
-	}
-
-
 }

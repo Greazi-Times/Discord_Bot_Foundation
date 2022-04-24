@@ -100,11 +100,11 @@ public abstract class SimpleBot {
         onPreLoad();
 
         // Initialize the bot
-        registerJda(SimpleSettings.getToken(), SimpleSettings.getActivity());
+        registerJda(SimpleSettings.Bot.Token(), SimpleSettings.Activity.Message());
 
         // Set the main guild of the bot
-        if (SimpleSettings.getMainGuild() != null) {
-            mainGuild = jda.getGuildById(SimpleSettings.getMainGuild());
+        if (SimpleSettings.Bot.MainGuild() != null) {
+            mainGuild = jda.getGuildById(SimpleSettings.Bot.MainGuild());
         } else {
             Common.error("Main Guild not set in settings.yml");
             mainGuild = jda.getGuilds().get(0);
@@ -124,12 +124,6 @@ public abstract class SimpleBot {
 		// Message that the bot has started
 		Common.success("Bot is ready");
 	}
-
-        // This is a method that will be ren everytime the bot is reloaded
-        // In here you add all the commands and events
-        /** @link {@link #onReloadableStart()} */
-        onReload();
-    }
 
     /**
      * The pre start of the bot. Register the bot and do some simple checks
@@ -329,7 +323,7 @@ public abstract class SimpleBot {
      * @return Name
      */
     public static String getName() {
-        return SimpleSettings.getName();
+        return SimpleSettings.Bot.Name();
     }
 
     /**

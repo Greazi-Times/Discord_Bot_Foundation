@@ -58,7 +58,7 @@ public class MysqlMember {
     }
 
     public Member getDiscordMember(){
-        return Objects.requireNonNull(SimpleBot.getJDA().getGuildById(SimpleSettings.getMainGuild())).getMemberById(discord_id);
+        return Objects.requireNonNull(SimpleBot.getJDA().getGuildById(SimpleSettings.Bot.MainGuild())).getMemberById(discord_id);
     }
 
 }

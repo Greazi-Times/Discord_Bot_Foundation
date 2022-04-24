@@ -1,13 +1,58 @@
-Name: "TestBot"
-Activity: "watching"
-Token: "OTMwMTc3MzgyMjY5MjE4ODI2.YdyFMQ.aHxgAwncpO5-W_K701tko3ABtNI"
-MainGuild: "611555111441006633"
-Debug: ""
-Mysql:
+# !-----------------------------------------------------------------------------------------------!
+#              Welcome to the main configuration of the foundation system
+#
+#           This file contains all the main settings of the discord bot in here
+# !-----------------------------------------------------------------------------------------------!
+# **NOTE: This file is here to show the default methods that need to be inside the bot at all times!**
+# -------------------------------------------------------------------------------------------------
+#  The essential setting for the bot.
+#  **IMPORTANT** these settings need to be configured!
+# -------------------------------------------------------------------------------------------------
+Bot:
+  
+  # The token for the bot
+  # A token can be made inside the discors applications portal
+  # https://discord.com/developers/applications
+  Token: "0000000000000000000000000000000000000000"
+  
+  # The main guild of the bot
+  MainGuild: "000000000000000000"
+  
+  # The name of your bot
+  Name: "DiscordBot"
+
+# -------------------------------------------------------------------------------------------------
+#  Manage the activity of the bot
+#  !!This system is still in BETA!!
+# -------------------------------------------------------------------------------------------------
+Activity:
+
+  # **IMPORTANT** THIS FEATURE IS NOT WORKING AT THIS MOMENT
+  # The type of the activity
+  # Possible options: PLAYING, STREAMING, LISTENING and WATCHING
+  Type: "WATICHING"
+
+  # The message after the activity type
+  Message: "Foundation"
+
+# -------------------------------------------------------------------------------------------------
+# Configure the database settings here
+# -------------------------------------------------------------------------------------------------
+Database:
+
+  # Should we store all the data on the database
   Enabled: false
-  Host: "Foundation"
+  
+  # The database information
+  Host: "localhost"
   Port: 3306
-  Database: "Foundation"
+  Databas: "Foundation"
   Username: "Foundation_User"
   Password: "Foundation_Password"
-  StoreMembers: false
+
+# -------------------------------------------------------------------------------------------------
+# List of section names that will print informative messages about their features.
+# If you have issues, try enabling either of these sections to self-diagnose:
+# [Startup, Database, SlashCommandHandler]
+# -------------------------------------------------------------------------------------------------
+Debug: []
