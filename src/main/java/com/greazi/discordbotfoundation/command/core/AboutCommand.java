@@ -5,7 +5,7 @@
  * Proprietary and confidential
  */
 
-package com.greazi.discordbotfoundation.command.general;
+package com.greazi.discordbotfoundation.command.core;
 
 import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
@@ -13,17 +13,17 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.awt.*;
 
-public class PingCommand extends SimpleSlashCommand {
+public class AboutCommand extends SimpleSlashCommand {
 
-    public PingCommand() {
-        setCommand("ping");
+    public AboutCommand() {
+        setCommand("about");
         setDefaultEnabled();
-        setDescription("Test the latency of the bot");
+        setDescription("Get some info about the bot");
     }
 
     @Override
     protected void execute(SlashCommandInteractionEvent event) {
-        event.replyEmbeds(new SimpleEmbedBuilder("Bot latency")
+        event.replyEmbeds(new SimpleEmbedBuilder("About the bot")
                 .text("Gateway: " + event.getJDA().getGatewayPing(),
                         "Rest: " + event.getJDA().getRestPing().complete(),
                         "Response: " + event.getJDA().getResponseTotal())
