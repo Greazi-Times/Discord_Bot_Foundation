@@ -1,11 +1,11 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
-import com.greazi.discordbotfoundation.command.SlashCommandHandler;
+import com.greazi.discordbotfoundation.handlers.buttons.ButtonHandler;
+import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
+import com.greazi.discordbotfoundation.handlers.commands.SlashCommandHandler;
 import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import com.greazi.discordbotfoundation.utils.color.Color;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -35,6 +35,7 @@ public abstract class SimpleBot {
     private static Guild mainGuild;
     private static SelfUser self;
     private static SlashCommandHandler slashCommandHandler;
+    private static ButtonHandler buttonHandler;
 
     private boolean enabled;
 
@@ -302,6 +303,15 @@ public abstract class SimpleBot {
      */
     public static SlashCommandHandler getSlashCommandHandler() {
         return slashCommandHandler;
+    }
+
+    /**
+     * Retrieve the button handler
+     *
+     * @return Button handler
+     */
+    public static ButtonHandler getButtonHandler() {
+        return buttonHandler;
     }
 
     // ----------------------------------------------------------------------------------------
