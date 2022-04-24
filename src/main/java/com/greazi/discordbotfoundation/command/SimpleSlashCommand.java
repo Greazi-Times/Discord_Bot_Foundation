@@ -1,6 +1,5 @@
 package com.greazi.discordbotfoundation.command;
 
-import com.greazi.discordbotfoundation.SimpleBot;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -11,6 +10,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+// TODO: Make proper debug messages with IDs
 
 public abstract class SimpleSlashCommand {
 

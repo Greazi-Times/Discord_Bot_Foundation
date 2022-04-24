@@ -1,11 +1,20 @@
-package com.greazi.discordbotfoundation.command;
+/*
+ * Copyright (c) 2021 - 2022. Greazi - All rights reservered
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
+
+package com.greazi.discordbotfoundation.modal;
+
 
 import com.greazi.discordbotfoundation.SimpleBot;
+import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
+import com.greazi.discordbotfoundation.command.SlashCommandHandler;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
@@ -16,54 +25,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-// TODO: Make proper debug messages with IDs
-
-public class SlashCommandHandler extends ListenerAdapter {
+public class ModalHandler {
 
     private final HashMap<String, SimpleSlashCommand> cmdList = new HashMap<>();
-    private final List<SlashCommandData> slashCommands = new ArrayList<>();
 
-    public SlashCommandHandler(){
-        Debugger.debug("SlashCommandHandler", "SlashCommandHandler main method");
+    public SlashCommandHandler() {
+        Debugger.debug("ModalHandler", "ModalHandler main method");
         SimpleBot.getJDA().addEventListener(this);
     }
 
     public SlashCommandHandler addCommand(SimpleSlashCommand module) {
-        Debugger.debug("SlashCommandHandler", "Start of addCommand(...);27");
+        Debugger.debug("ModalHandler", "Start of addCommand(...);27");
 
         SlashCommandData command = Commands.slash(module.getCommand(), module.getDescription());
-        Debugger.debug("SlashCommandHandler", "Retrieved SlashCommandData; " + module.getCommand() + ", " + module.getDescription());
+        Debugger.debug("ModalHandler", "Retrieved SlashCommandData; " + module.getCommand() + ", " + module.getDescription());
 
-        Debugger.debug("SlashCommandHandler", "  Retrieving subcommands for; " + module.getCommand());
+        Debugger.debug("ModalHandler", "  Retrieving subcommands for; " + module.getCommand());
         List<SubcommandData> moduleSubcommands = module.getSubCommands();
         for (SubcommandData var : moduleSubcommands) {
             command.addSubcommands(var);
-            Debugger.debug("SlashCommandHandler", "    - " + var);
+            Debugger.debug("ModalHandler", "    - " + var);
         }
 
-        Debugger.debug("SlashCommandHandler", "  Retrieving subcommand groups for; " + module.getCommand());
+        Debugger.debug("ModalHandler", "  Retrieving subcommand groups for; " + module.getCommand());
         List<SubcommandGroupData> moduleSubcommandGroup = module.getSubcommandGroup();
         for (SubcommandGroupData var : moduleSubcommandGroup) {
             command.addSubcommandGroups(var);
-            Debugger.debug("SlashCommandHandler", "    - " + var);
+            Debugger.debug("ModalHandler", "    - " + var);
         }
 
-        Debugger.debug("SlashCommandHandler", "  Checking if subcommands exists for; " + module.getCommand());
-        if (module.getSubCommands().isEmpty() && module.getSubcommandGroup().isEmpty() && !module.getOptions().isEmpty()){
-            Debugger.debug("SlashCommandHandler", "    No subcommands getting options;");
+        Debugger.debug("ModalHandler", "  Checking if subcommands exists for; " + module.getCommand());
+        if (module.getSubCommands().isEmpty() && module.getSubcommandGroup().isEmpty() && !module.getOptions().isEmpty()) {
+            Debugger.debug("ModalHandler", "    No subcommands getting options;");
             List<OptionData> moduleOptions = module.getOptions();
             for (OptionData var : moduleOptions) {
                 command.addOptions(var);
-                Debugger.debug("SlashCommandHandler", "      - " + var);
+                Debugger.debug("ModalHandler", "      - " + var);
             }
         }
-        Debugger.debug("SlashCommandHandler", "  Setting other info;",
+        Debugger.debug("ModalHandler", "  Setting other info;",
                 "    Default enabled; " + module.getDefaultEnabled(),
                 "    Description; " + module.getDescription());
         command.setDefaultEnabled(module.getDefaultEnabled());
         command.setDescription(module.getDescription());
 
-        Debugger.debug("SlashCommandHandler", "  Adding the whole command; " + command.getName());
+        Debugger.debug("ModalHandler", "  Adding the whole command; " + command.getName());
         slashCommands.add(command);
         cmdList.put(module.getCommand(), module);
 
@@ -71,17 +77,17 @@ public class SlashCommandHandler extends ListenerAdapter {
     }
 
     public void registerCommands() {
-        Debugger.debug("SlashCommandHandler", "Start of registerCommands()");
+        Debugger.debug("ModalHandler", "Start of registerCommands()");
         if (slashCommands.isEmpty()) return;
 
         SimpleBot.getGuild().updateCommands()
                 .addCommands(slashCommands)
                 .queue(commands -> {
                     commands.forEach(cmd -> {
-                        Debugger.debug("SlashCommandHandler", "  Getting command from cmdList " + cmd.getName());
+                        Debugger.debug("ModalHandler", "  Getting command from cmdList " + cmd.getName());
                         SimpleSlashCommand module = cmdList.get(cmd.getName());
 
-                        Debugger.debug("SlashCommandHandler", "  Adding privilages to " + cmd.getName());
+                        Debugger.debug("ModalHandler", "  Adding privilages to " + cmd.getName());
                         List<CommandPrivilege> commandPrivileges = new ArrayList<>();
                         module.getDisabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.disableRole(role.getId())));
                         module.getDisabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.disableUser(user.getId())));
@@ -97,7 +103,7 @@ public class SlashCommandHandler extends ListenerAdapter {
     @Override
     @SubscribeEvent
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        Debugger.debug("SlashCommandHandler", "A slash command event has been triggered onSlashCommandInteraction(...);96");
+        Debugger.debug("ModalHandler", "A slash command event has been triggered onSlashCommandInteraction(...);96");
         // Retrieve the command class from the command that has been run
         SimpleSlashCommand module = cmdList.get(event.getName());
 
@@ -111,17 +117,17 @@ public class SlashCommandHandler extends ListenerAdapter {
             return;
         }
 
-        Debugger.debug("SlashCommandHandler", "  Found event; " + module);
+        Debugger.debug("ModalHandler", "  Found event; " + module);
 
-        if (module.getGuildOnly() && !Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.getMainGuild())){
+        if (module.getGuildOnly() && !Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.getInstance().getMainGuild())) {
             return;
         }
 
-        if (event.getTextChannel().isNSFW() && !module.getNsfwOnly()){
+        if (event.getTextChannel().isNSFW() && !module.getNsfwOnly()) {
             return;
         }
 
-        Debugger.debug("SlashCommandHandler", "  Executing command logic");
+        Debugger.debug("ModalHandler", "  Executing command logic");
         module.execute(event);
     }
 }

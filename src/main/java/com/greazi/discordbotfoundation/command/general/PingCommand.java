@@ -7,7 +7,6 @@
 
 package com.greazi.discordbotfoundation.command.general;
 
-import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.command.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

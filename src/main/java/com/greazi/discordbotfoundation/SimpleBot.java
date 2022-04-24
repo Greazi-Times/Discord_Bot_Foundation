@@ -116,8 +116,14 @@ public abstract class SimpleBot {
         // Set up the command manager that handles slash commands
         setupCommandManager();
 
-        // A that can be used to load stuff that can be load after the bot has been initialized
-        onBotStart();
+		// This is a method that will be ren everytime the bot is reloaded
+		// In here you add all the commands and events
+		/** @link {@link #onReloadableStart()} */
+		onReload();
+
+		// Message that the bot has started
+		Common.success("Bot is ready");
+	}
 
         // This is a method that will be ren everytime the bot is reloaded
         // In here you add all the commands and events
