@@ -20,6 +20,9 @@ import java.util.List;
 
 // TODO: Make proper debug messages with IDs
 
+/**
+ * A slash command creator to simply create your slash command
+ */
 public abstract class SimpleSlashCommand {
 
     // ----------------------------------------------------------------------------------------
