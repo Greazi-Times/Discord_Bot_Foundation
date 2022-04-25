@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation;
 
+import com.greazi.discordbotfoundation.command.core.TestCommand;
 import com.greazi.discordbotfoundation.handlers.buttons.ButtonHandler;
 import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.handlers.commands.SlashCommandHandler;
@@ -19,6 +20,9 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+
+// TODO: ALL FILES!!!!
+//    Check all files for comments and add them if needed
 
 /**
  * A basic discord bot that represents the discord bot library
@@ -66,6 +70,7 @@ public abstract class SimpleBot {
     // ----------------------------------------------------------------------------------------
 
     // TODO Add this method for the reload of the bot
+
     /**
      * For your convenience, event listeners and timed tasks may be set here to stop/unregister
      * them automatically on reload
@@ -119,7 +124,7 @@ public abstract class SimpleBot {
 
 		// This is a method that will be ren everytime the bot is reloaded
 		// In here you add all the commands and events
-		/** @link {@link #onReloadableStart()} */
+		/** {@link #onReloadableStart()} */
 		onReload();
 
 		// Message that the bot has started
@@ -161,6 +166,7 @@ public abstract class SimpleBot {
 
         // Load the static commands
         getSlashCommandHandler().addCommand(new PingCommand());
+        getSlashCommandHandler().addCommand(new TestCommand());
 
         // A boolean that says the bot is loaded and enabled
         enabled = true;
