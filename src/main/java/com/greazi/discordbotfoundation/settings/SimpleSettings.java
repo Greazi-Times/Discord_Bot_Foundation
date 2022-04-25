@@ -31,6 +31,7 @@ public class SimpleSettings {
 		if(!file.exists()) {
 			try {
 				InputStream inputStream = SimpleSettings.class.getResourceAsStream(Constants.File.SETTINGS);
+				assert inputStream != null;
 				Files.copy(inputStream, Paths.get(file.toURI()), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
