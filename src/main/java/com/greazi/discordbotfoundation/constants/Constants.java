@@ -19,4 +19,8 @@ public final class Constants {
 		 */
 		public static final String DEBUG = "debug.log";
 	}
+
+	public static final class Version {
+		public static final String FOUNDATION = "0.6.0-BETA";
+	}
 }
