@@ -10,36 +10,49 @@ package com.greazi.discordbotfoundation.handlers.buttons;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.Objects;
 
-
-// TODO: Make a proper debug message return
+/**
+ * The button handler that handles the whole button event.
+ * Uses the information of {@link SimpleButton}
+ */
 public class ButtonHandler extends ListenerAdapter {
 
+    /**
+     * A HasMap of all the buttons that have been added
+     */
     private final HashMap<String, SimpleButton> buttonList = new HashMap<>();
 
+    /**
+     * Add the button to the button list
+     * @param module The button module
+     * @return this {@link SimpleButton}
+     */
     public ButtonHandler addButtonListener(SimpleButton module) {
 
-        buttonList.put(module.getbutton(), module);
+        buttonList.put(module.getButton(), module);
 
         return this;
     }
 
-
-    // TODO: Add a method that check disabled and enabled methods before running the button's code
+    /**
+     * The main event listener for the {@link ButtonInteractionEvent} event of JDA
+     * @param event ButtonInteractionEvent
+     */
     @Override
     @SubscribeEvent
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
         Debugger.debug("Buttons", "A button has been pressed");
-        // Retrieve the command class from the command that has been run
+        // Retrieve the button class from the button that has been pressed
         SimpleButton module = buttonList.get(event.getId());
 
+        // Check if the button exists
         if (module == null) {
             event.replyEmbeds(new SimpleEmbedBuilder("ERROR - button not found")
                     .text("The button you used does not exist or hasn't been activated!",
@@ -50,17 +63,39 @@ public class ButtonHandler extends ListenerAdapter {
             return;
         }
 
+        // Debug message will be changed / optimized later
         Debugger.debug("Buttons", "Found event; " + module);
 
-        if (module.getGuildOnly() && !Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.Bot.MainGuild())){
+
+        // If the button has been pressed inside the main guild
+        if (module.getGuildOnly() && event.getGuild().getId().equals(SimpleSettings.Bot.MainGuild())){
             return;
         }
 
+        // If the button is pressed inside a NSFW channel
         if (event.getTextChannel().isNSFW() && !module.getNsfwOnly()){
             return;
         }
 
+        // Get the member from the event
+        Member member = event.getMember();
+
+        // If the member is allowed to use the button
+        if (!module.getEnabledUsers().contains(member.getIdLong()) || module.getDisabledUsers().contains(member.getIdLong())) {
+            return;
+        }
+
+        // If the member has the role to use the button
+        if (member.getRoles().contains(module.getDisabledRoles())) {
+            if (!member.getRoles().contains(module.getEnabledRoles())) {
+                return;
+            }
+        }
+
+        // Debug message that will be changed later
         Debugger.debug("Button", "  Executing command logic");
+
+        // If all checks are oke than execute the button logic
         module.execute(event);
     }
 }

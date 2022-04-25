@@ -7,14 +7,20 @@
 
 package com.greazi.discordbotfoundation.handlers.buttons;
 
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A class that lets you create a button
+ */
 public abstract class SimpleButton {
 
     // ----------------------------------------------------------------------------------------
@@ -22,14 +28,35 @@ public abstract class SimpleButton {
     // ----------------------------------------------------------------------------------------
 
     /**
-     * Set the button like "/button"
+     * Set the button like "example"
      */
     private String button_id = "example";
 
     /**
+     * Set the button its style
+     * OPTIONS: Primary, Success, Secondary, Destructive
+     */
+    private ButtonStyle button_style = ButtonStyle.PRIMARY;
+
+    /**
      * Set the help description for the button
      */
-    private String description = "No Description";
+    private String label = "example label";
+
+    /**
+     * Set the url for the button
+     */
+    private String url;
+
+    /**
+     * Add an emoji to the button
+     */
+    private Emoji emoji;
+
+    /**
+     * Make the button disabled (Grayed out)
+     */
+    private boolean disabled = false;
 
     /**
      * Is the button bound to only the main guild of the bot
@@ -80,15 +107,48 @@ public abstract class SimpleButton {
     /**
      * Set the button
      */
-    public void setbutton(String button_id) {
+    public void setButton(String button_id) {
         this.button_id = button_id;
     }
 
     /**
-     * Set the description
+     * Set the button its style
+     * OPTIONS: Primary, Success, Secondary, Destructive
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setButtonStyle(ButtonStyle button_style) {
+        this.button_style = button_style;
+    }
+
+    /**
+     * Set the emoji of the button
+     * @param emoji The emoji that needs to be displayed
+     */
+    public void setEmoji(Emoji emoji) {
+        this.emoji = emoji;
+    }
+
+    /**
+     * Set the url for the button
+     * @param url The url for the button
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * Set the button disabled (Grayed out)
+     * @param disabled Should the button be disabled
+     */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    /**
+     * Set the label of the button
+     * @param label The label name
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     /**
@@ -163,22 +223,51 @@ public abstract class SimpleButton {
     // ----------------------------------------------------------------------------------------
 
     /**
-     * Returns the button
+     * Get the button ID
      *
-     * @return the button
+     * @return The button ID
      */
-    public String getbutton() {
+    public String getButton() {
         return button_id;
     }
 
-    public String getDescription() {
-        return description;
+    /**
+     * Get the button style
+     *
+     * @return The button style
+     */
+    public ButtonStyle getButtonStyle() {
+        return button_style;
+    }
+
+    /**
+     * Get the button Label
+     * @return The button Label
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Get the button Emoji
+     * @return The button Emoji
+     */
+    public Emoji getEmoji() {
+        return this.emoji;
+    }
+
+    /**
+     * Get the URL for the button
+     * @return The URL
+     */
+    public String getUrl() {
+        return this.url;
     }
 
     /**
      * Whether the button is restricted to the main guild of the bot
      *
-     * @return the restricted guild
+     * @return The restricted guild
      */
     public boolean getGuildOnly() {
         return guildOnly;
@@ -227,5 +316,39 @@ public abstract class SimpleButton {
      */
     public List<User> getDisabledUsers() {
         return disabledUsers;
+    }
+
+    // ----------------------------------------------------------------------------------------
+    // Button creator
+    // ----------------------------------------------------------------------------------------
+
+    /**
+     * Set the button its style
+     * OPTIONS: Primary, Success, Secondary, Destructive
+     */
+    public Button build() {
+
+        // Create the main button component
+        Button button = Button.of(this.button_style, this.button_id, this.label);
+
+        // Set the button emoji if set
+        if(this.emoji != null) {
+            button.withEmoji(this.emoji);
+        }
+
+        // Set the button to disabled
+        if(this.disabled == true) {
+            button.asDisabled();
+        } else {
+            button.asEnabled();
+        }
+
+        // Set the button url if set
+        if(this.url != null) {
+            button.withUrl(this.url);
+        }
+
+        // return the button.
+        return button;
     }
 }
