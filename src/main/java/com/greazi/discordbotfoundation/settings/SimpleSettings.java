@@ -71,13 +71,13 @@ public class SimpleSettings {
 			}
 
 			finalKey.append(currentKey);
-			if (i != keys.length - 1) {
-				map = (Map<String, Object>) map.get(currentKey);
-				finalKey.append(".");
-			}else{
+			if (i == keys.length - 1) {
 				cachedSettings.put(finalKey.toString(), map.get(currentKey));
 				return map.get(currentKey);
 			}
+
+			map = (Map<String, Object>) map.get(currentKey);
+			finalKey.append(".");
 		}
 		return "Unknown error";
 	}

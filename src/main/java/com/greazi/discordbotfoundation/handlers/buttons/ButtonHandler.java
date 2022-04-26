@@ -7,6 +7,7 @@
 
 package com.greazi.discordbotfoundation.handlers.buttons;
 
+import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
@@ -17,12 +18,18 @@ import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * The button handler that handles the whole button event.
  * Uses the information of {@link SimpleButton}
  */
 public class ButtonHandler extends ListenerAdapter {
+
+    public ButtonHandler(){
+        Debugger.debug("Buttons", "Buttons main method");
+        SimpleBot.getJDA().addEventListener(this);
+    }
 
     /**
      * A HasMap of all the buttons that have been added
@@ -35,10 +42,17 @@ public class ButtonHandler extends ListenerAdapter {
      * @return this {@link SimpleButton}
      */
     public ButtonHandler addButtonListener(SimpleButton module) {
-
         buttonList.put(module.getButton(), module);
-
         return this;
+    }
+
+    /**
+     * Get a button by id
+     * @param button_id The button id
+     * @return this {@link SimpleButton}
+     */
+    public SimpleButton getButton(String button_id) {
+        return buttonList.get(button_id);
     }
 
     /**
@@ -50,7 +64,7 @@ public class ButtonHandler extends ListenerAdapter {
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
         Debugger.debug("Buttons", "A button has been pressed");
         // Retrieve the button class from the button that has been pressed
-        SimpleButton module = buttonList.get(event.getId());
+        SimpleButton module = buttonList.get(event.getButton().getId());
 
         // Check if the button exists
         if (module == null) {
@@ -66,31 +80,38 @@ public class ButtonHandler extends ListenerAdapter {
         // Debug message will be changed / optimized later
         Debugger.debug("Buttons", "Found event; " + module);
 
-
         // If the button has been pressed inside the main guild
-        if (module.getGuildOnly() && event.getGuild().getId().equals(SimpleSettings.Bot.MainGuild())){
+        if (!Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.Bot.MainGuild()) && module.getGuildOnly()){
             return;
         }
 
         // If the button is pressed inside a NSFW channel
-        if (event.getTextChannel().isNSFW() && !module.getNsfwOnly()){
+        if (!event.getTextChannel().isNSFW() && module.getNsfwOnly()){
             return;
         }
 
-        // Get the member from the event
-        Member member = event.getMember();
-
-        // If the member is allowed to use the button
-        if (!module.getEnabledUsers().contains(member.getIdLong()) || module.getDisabledUsers().contains(member.getIdLong())) {
-            return;
-        }
-
-        // If the member has the role to use the button
-        if (member.getRoles().contains(module.getDisabledRoles())) {
-            if (!member.getRoles().contains(module.getEnabledRoles())) {
-                return;
-            }
-        }
+//        // Get the member from the event
+//        Member member = event.getMember();
+//
+//        // If the member is allowed to use the button
+//        if(module.getDisabledUsers().contains(member.getIdLong())){
+//            return;
+//        }
+//        if(!module.getEnabledUsers().isEmpty()){
+//            if (!module.getEnabledUsers().contains(member.getIdLong())) {
+//                return;
+//            }
+//        }
+//
+//        // If the member has the role to use the button
+//        if (member.getRoles().contains(module.getDisabledRoles())) {
+//            return;
+//        }
+//        if(!module.getEnabledRoles().isEmpty()){
+//            if (member.getRoles().containsAll(module.getEnabledRoles())) {
+//                //run
+//            }
+//        }
 
         // Debug message that will be changed later
         Debugger.debug("Button", "  Executing command logic");
@@ -98,4 +119,5 @@ public class ButtonHandler extends ListenerAdapter {
         // If all checks are oke than execute the button logic
         module.execute(event);
     }
+
 }

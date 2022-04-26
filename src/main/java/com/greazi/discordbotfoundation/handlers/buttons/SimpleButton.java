@@ -333,19 +333,19 @@ public abstract class SimpleButton {
 
         // Set the button emoji if set
         if(this.emoji != null) {
-            button.withEmoji(this.emoji);
+            button = button.withEmoji(this.emoji);
         }
 
         // Set the button to disabled
-        if(this.disabled == true) {
-            button.asDisabled();
+        if(this.disabled) {
+            button = button.asDisabled();
         } else {
-            button.asEnabled();
+            button = button.asEnabled();
         }
 
         // Set the button url if set
         if(this.url != null) {
-            button.withUrl(this.url);
+            button = button.withUrl(this.url);
         }
 
         // return the button.
