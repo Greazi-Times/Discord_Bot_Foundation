@@ -5,10 +5,7 @@ import com.greazi.discordbotfoundation.handlers.buttons.SimpleButton;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.Modal;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public abstract class SimpleModal {
 
@@ -24,9 +21,11 @@ public abstract class SimpleModal {
 
     private LinkedHashMap<String, SimpleTextInput> textInputs = new LinkedHashMap<>();
 
-    private LinkedHashMap<String, SimpleSelect> selectMenus = new LinkedHashMap<>();
+    // Disabled because select menus are not compatible with modals
+    //private LinkedHashMap<String, SimpleSelect> selectMenus = new LinkedHashMap<>();
 
-    private List<String> buttonIds = Collections.emptyList();
+    // Disabled because buttons are not compatible with modals
+    //private ArrayList<String> buttonIds = new ArrayList<>();
 
     // ----------------------------------------------------------------------------------------
     // Main methods
@@ -72,39 +71,53 @@ public abstract class SimpleModal {
     }
 
     /**
-     * Set the selectMenus
+     * Add multiple textInputs
      */
-    public void setSelectMenus(LinkedHashMap<String, SimpleSelect> selectMenus) {
-        this.selectMenus = selectMenus;
+    public void addTextInputs(SimpleTextInput... textInputs) {
+        for (SimpleTextInput textInput : textInputs) {
+            this.textInputs.put(textInput.getId(), textInput);
+        }
     }
 
-    /**
-     * Add a selectMenu
-     */
-    public void addSelectInput(SimpleSelect selectMenu) {
-        this.selectMenus.put(selectMenu.getId(), selectMenu);
-    }
+    // Disabled because select menus are not compatible with modals
+//    /**
+//     * Set the selectMenus
+//     */
+//    public void setSelectMenus(LinkedHashMap<String, SimpleSelect> selectMenus) {
+//        this.selectMenus = selectMenus;
+//    }
 
-    /**
-     * Set the buttons
-     */
-    public void setButtons(List<String> buttonIds) {
-        this.buttonIds = buttonIds;
-    }
+    // Disabled because select menus are not compatible with modals
+//    /**
+//     * Add a selectMenu
+//     */
+//    public void addSelectInput(SimpleSelect selectMenu) {
+//        this.selectMenus.put(selectMenu.getId(), selectMenu);
+//    }
 
-    /**
-     * Add a button
-     */
-    public void addButton(SimpleButton button) {
-        this.buttonIds.add(button.getButton());
-    }
+    // Disabled because button are not compatible with modals
+//    /**
+//     * Set the buttons
+//     */
+//    public void setButtons(ArrayList<String> buttonIds) {
+//        this.buttonIds = buttonIds;
+//    }
 
-    /**
-     * Add a button
-     */
-    public void addButton(String buttonId) {
-        this.buttonIds.add(buttonId);
-    }
+    // Disabled because button are not compatible with modals
+//    /**
+//     * Add a button
+//     */
+//    public void addButton(SimpleButton button) {
+//        this.buttonIds.add(button.getButton());
+//    }
+
+    // Disabled because button are not compatible with modals
+//    /**
+//     * Add a button
+//     */
+//    public void addButton(String buttonId) {
+//        this.buttonIds.add(buttonId);
+//    }
 
     /**
      * Set this modal as main guild only
@@ -173,13 +186,15 @@ public abstract class SimpleModal {
         this.textInputs.forEach((id, textInput) -> {
             modalBuilder.addActionRow(textInput.build());
         });
-        this.selectMenus.forEach((id, selectMenu) -> {
-            modalBuilder.addActionRow(selectMenu.build());
-        });
-        this.buttonIds.forEach(buttonId -> {
-            SimpleButton button = SimpleBot.getButtonHandler().getButton(buttonId);
-            modalBuilder.addActionRow(button.build());
-        });
+        // Disabled because select menus are not compatible with modals
+//        this.selectMenus.forEach((id, selectMenu) -> {
+//            modalBuilder.addActionRow(selectMenu.build());
+//        });
+        // Disabled because button are not compatible with modals
+//        this.buttonIds.forEach(buttonId -> {
+//            SimpleButton button = SimpleBot.getButtonHandler().getButton(buttonId);
+//            modalBuilder.addActionRow(button.build());
+//        });
 
         return modalBuilder.build();
     }
