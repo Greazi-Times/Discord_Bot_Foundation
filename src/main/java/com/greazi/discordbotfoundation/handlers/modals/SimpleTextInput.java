@@ -27,8 +27,12 @@ public class SimpleTextInput {
         builder.setRequiredRange(minLength, maxLength);
     }
 
-    public void setRequired(String placeholder){
-        builder.setPlaceholder(placeholder);
+    public void setRequired(){
+        builder.setRequired(true);
+    }
+
+    public void setValue(String value){
+        builder.setValue(value);
     }
 
     public void setPlaceholder(String placeholder){
