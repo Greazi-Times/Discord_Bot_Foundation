@@ -1,8 +1,8 @@
 package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.debug.FoException;
+import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import com.greazi.discordbotfoundation.utils.time.TimeUtil;
-import com.greazi.discordbotfoundation.utils.color.Color;
 import lombok.Getter;
 
 import java.util.*;
@@ -112,7 +112,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void success(String message) {
-		log(Color.GREEN + "Success: " + message);
+		log(ConsoleColor.GREEN + "Success: " + message + ConsoleColor.RESET);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void warning(String message) {
-		log(Color.YELLOW + "Warning: " + message);
+		log(ConsoleColor.YELLOW + "Warning: " + message);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public final class Common {
 	 * @param messages
 	 */
 	public static void error(final String... messages) {
-		logFramed(Color.RED + messages);
+		logFramed(ConsoleColor.RED + Arrays.toString(messages) + ConsoleColor.RESET);
 	}
 
 	/**
@@ -244,8 +244,8 @@ public final class Common {
 		while (throwable.getCause() != null)
 			throwable = throwable.getCause();
 
-		final String throwableName = throwable == null ? "Unknown error." : throwable.getClass().getSimpleName();
-		final String throwableMessage = throwable == null || throwable.getMessage() == null || throwable.getMessage().isEmpty() ? "" : ": " + throwable.getMessage();
+		final String throwableName = throwable.getClass().getSimpleName();
+		final String throwableMessage = throwable.getMessage() == null || throwable.getMessage().isEmpty() ? "" : ": " + throwable.getMessage();
 
 		for (int i = 0; i < msgs.length; i++) {
 			final String error = throwableName + throwableMessage;

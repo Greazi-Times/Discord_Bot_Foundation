@@ -7,7 +7,7 @@ package com.greazi.discordbotfoundation.debug;
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import com.greazi.discordbotfoundation.utils.color.Color;
+import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -50,9 +50,9 @@ public final class Debugger {
 		if (isDebugged(section)) {
 			for (final String message : messages)
 				if (SimpleBot.hasInstance())
-					Common.log("[" + Color.YELLOW + section + Color.RESET + "] " + message);
+					Common.log("[" + ConsoleColor.YELLOW + section + ConsoleColor.RESET + "] " + message + ConsoleColor.RESET);
 				else
-					System.out.println("[" + Color.YELLOW + section + Color.RESET + "] " + message);
+					System.out.println("[" + ConsoleColor.YELLOW + section + ConsoleColor.RESET + "] " + message + ConsoleColor.RESET);
 		}
 	}
 
