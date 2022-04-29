@@ -5,7 +5,11 @@ import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import com.greazi.discordbotfoundation.utils.time.TimeUtil;
 import lombok.Getter;
 
+import java.awt.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 /**
  * This class holds some pre-made log and message send modules
@@ -35,7 +39,7 @@ public final class Common {
 	 * The log prefix applied on log() methods
 	 */
 	@Getter
-	private static String logPrefix = "[" + SimpleBot.getName() + "]";
+	private static String logPrefix = "[INFO]";
 
 	/**
 	 * Set the log prefix applied for messages in the console from log() methods.
@@ -112,7 +116,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void success(String message) {
-		log(ConsoleColor.GREEN + "Success: " + message + ConsoleColor.RESET);
+		logNoPrefix(ConsoleColor.GREEN + "[SUCCESS] " + message + ConsoleColor.RESET);
 	}
 
 	/**
@@ -122,7 +126,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void warning(String message) {
-		log(ConsoleColor.YELLOW + "Warning: " + message);
+		logNoPrefix(ConsoleColor.RED + "[WARNING] " + message + ConsoleColor.RESET);
 	}
 
 	/**
@@ -166,9 +170,15 @@ public final class Common {
 				continue;
 
 			for (final String part : splitNewline(message)) {
-				final String log = ((addLogPrefix && ADD_LOG_PREFIX ? logPrefix + " " : "") + part.replace("\n", "\n&r")).trim();
 
-				System.out.println(log);
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+				LocalTime localTime = LocalTime.now();
+
+				if(addLogPrefix && ADD_LOG_PREFIX){
+					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.GREEN + logPrefix + ConsoleColor.RESET + " " + part);
+				} else {
+					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + part);
+				}
 			}
 		}
 	}
@@ -192,11 +202,11 @@ public final class Common {
 	 */
 	public static void logFramed(final boolean disablePlugin, final String... messages) {
 		if (messages != null && !Valid.isNullOrEmpty(messages)) {
-			log("&7" + consoleLine());
+			logNoPrefix(ConsoleColor.BLACK_BRIGHT + consoleLine());
 			for (final String msg : messages)
-				log(" &c" + msg);
+				logNoPrefix(msg + ConsoleColor.RESET);
 
-			log("&7" + consoleLine());
+			logNoPrefix(ConsoleColor.BLACK_BRIGHT + consoleLine());
 		}
 	}
 

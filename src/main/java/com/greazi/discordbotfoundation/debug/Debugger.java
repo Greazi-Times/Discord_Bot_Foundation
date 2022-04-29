@@ -34,7 +34,7 @@ public final class Debugger {
 	 * @return
 	 */
 	public static boolean isDebugged(String section) {
-		return SimpleSettings.Debug().contains(section) || SimpleSettings.Debug().contains("*");
+		return SimpleSettings.Debug().toLowerCase().contains(section.toLowerCase()) || SimpleSettings.Debug().contains("*");
 	}
 
 	/**
@@ -50,7 +50,7 @@ public final class Debugger {
 		if (isDebugged(section)) {
 			for (final String message : messages)
 				if (SimpleBot.hasInstance())
-					Common.log("[" + ConsoleColor.YELLOW + section + ConsoleColor.RESET + "] " + message + ConsoleColor.RESET);
+					Common.logNoPrefix(ConsoleColor.YELLOW + "[DEBUGGER" + ConsoleColor.BLACK_BRIGHT + "/" + ConsoleColor.YELLOW + section + "] " + ConsoleColor.RESET + message + ConsoleColor.RESET);
 				else
 					System.out.println("[" + ConsoleColor.YELLOW + section + ConsoleColor.RESET + "] " + message + ConsoleColor.RESET);
 		}
