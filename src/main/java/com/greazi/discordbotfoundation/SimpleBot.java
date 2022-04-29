@@ -7,6 +7,7 @@ import com.greazi.discordbotfoundation.handlers.commands.SlashCommandHandler;
 import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
+import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -41,8 +42,8 @@ public abstract class SimpleBot {
     private static SelfUser self;
     private static SlashCommandHandler slashCommandHandler;
     private static ButtonHandler buttonHandler;
-
     private static ModalHandler modalHandler;
+    private static SelectMenuHandler menuHandler;
 
     private boolean enabled;
 
@@ -149,6 +150,7 @@ public abstract class SimpleBot {
         slashCommandHandler = new SlashCommandHandler();
         buttonHandler = new ButtonHandler();
         modalHandler = new ModalHandler();
+        menuHandler = new SelectMenuHandler();
     }
 
     /**
