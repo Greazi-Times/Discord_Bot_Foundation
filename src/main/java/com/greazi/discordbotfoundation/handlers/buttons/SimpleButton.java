@@ -13,6 +13,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+import net.dv8tion.jda.internal.interactions.component.ButtonImpl;
+import net.dv8tion.jda.internal.utils.Checks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,12 +48,12 @@ public abstract class SimpleButton {
     /**
      * Set the url for the button
      */
-    private String url;
+    private String url = null;
 
     /**
      * Add an emoji to the button
      */
-    private Emoji emoji;
+    private Emoji emoji = null;
 
     /**
      * Make the button disabled (Grayed out)
@@ -113,7 +115,7 @@ public abstract class SimpleButton {
 
     /**
      * Set the button its style
-     * OPTIONS: Primary, Success, Secondary, Destructive
+     * OPTIONS: Primary, Success, Secondary, Destructive, Link
      */
     public void setButtonStyle(ButtonStyle button_style) {
         this.button_style = button_style;
@@ -327,28 +329,12 @@ public abstract class SimpleButton {
      * OPTIONS: Primary, Success, Secondary, Destructive
      */
     public Button build() {
-
-        // Create the main button component
-        Button button = Button.of(this.button_style, this.button_id, this.label);
-
-        // Set the button emoji if set
-        if(this.emoji != null) {
-            button = button.withEmoji(this.emoji);
-        }
-
-        // Set the button to disabled
-        if(this.disabled) {
-            button = button.asDisabled();
-        } else {
-            button = button.asEnabled();
-        }
-
-        // Set the button url if set
-        if(this.url != null) {
-            button = button.withUrl(this.url);
-        }
-
-        // return the button.
-        return button;
+        Checks.notEmpty(this.button_id, "ID");
+        Checks.notLonger(this.button_id, Button.ID_MAX_LENGTH, "ID");
+        Checks.notNull(this.button_style, "Style");
+        Checks.check(this.button_style != ButtonStyle.UNKNOWN, "Cannot make button with unknown style!");
+        Checks.notEmpty(this.label, "Label");
+        Checks.notLonger(this.label, Button.LABEL_MAX_LENGTH, "Label");
+        return new ButtonImpl(this.button_id, this.label, this.button_style, this.url, this.disabled, this.emoji);
     }
 }
