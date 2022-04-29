@@ -32,7 +32,7 @@ public abstract class SimpleModal {
     // ----------------------------------------------------------------------------------------
 
     /**
-     * Run the command logic
+     * Run the modal logic
      *
      * @param event ModalInteractionEvent
      */
