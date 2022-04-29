@@ -336,6 +336,15 @@ public abstract class SimpleBot {
         return modalHandler;
     }
 
+    /**
+     * Retrieve the select menu handler
+     *
+     * @return SelectMenu handler
+     */
+    public static SelectMenuHandler getSelectMenuHandler() {
+        return menuHandler;
+    }
+
     // ----------------------------------------------------------------------------------------
     // Additional features
     // ----------------------------------------------------------------------------------------

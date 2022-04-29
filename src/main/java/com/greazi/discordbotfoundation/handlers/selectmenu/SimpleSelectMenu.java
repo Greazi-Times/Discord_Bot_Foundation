@@ -6,30 +6,16 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenuInteraction;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public abstract class SimpleSelectMenu {
 
-    private final String menu_id;
+    private String menu_id;
     private String placeholder;
     private boolean disabled = false;
     private int min = 1;
     private int max = 1;
-    private List<SelectOption> options;
-
-    /**
-     * Creates a new {@link SimpleSelectMenu} with the provided custom id.
-     *
-     * @param  menu_id
-     *         The id used to identify this menu with {@link SimpleSelectMenu#execute(SelectMenuInteraction)} ()} for component interactions
-     *
-     * @throws IllegalArgumentException
-     *         If the provided id is null, empty, or longer than 100 characters
-     */
-    public SimpleSelectMenu(String menu_id) {
-        this.menu_id = menu_id;
-    }
+    private List<SelectOption> options = new ArrayList<>();
 
     // ----------------------------------------------------------------------------------------
     // Main methods
@@ -45,6 +31,22 @@ public abstract class SimpleSelectMenu {
     // ----------------------------------------------------------------------------------------
     // Setters
     // ----------------------------------------------------------------------------------------
+
+    /**
+     * Change the custom id used to identify the select menu.
+     *
+     * @param  menu_id
+     *         The new custom id to use
+     *
+     * @throws IllegalArgumentException
+     *         If the provided id is null, empty, or longer than 100 characters
+     *
+     * @return The same builder instance for chaining
+     */
+    public SimpleSelectMenu setMenuId(String menu_id) {
+        this.menu_id = menu_id;
+        return this;
+    }
 
     /**
      * Configure the placeholder which is displayed when no selections have been made yet.
