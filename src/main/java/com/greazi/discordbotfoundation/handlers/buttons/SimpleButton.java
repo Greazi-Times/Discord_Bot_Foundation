@@ -109,7 +109,7 @@ public abstract class SimpleButton {
     /**
      * Set the button
      */
-    public void setButton(String button_id) {
+    public void setId(String button_id) {
         this.button_id = button_id;
     }
 
@@ -229,7 +229,7 @@ public abstract class SimpleButton {
      *
      * @return The button ID
      */
-    public String getButton() {
+    public String getId() {
         return button_id;
     }
 

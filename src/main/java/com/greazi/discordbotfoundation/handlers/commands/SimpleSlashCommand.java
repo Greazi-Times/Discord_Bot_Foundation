@@ -9,6 +9,7 @@ package com.greazi.discordbotfoundation.handlers.commands;
 
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -58,7 +59,7 @@ public abstract class SimpleSlashCommand {
     /**
      * Set the users that can use this command
      */
-    private List<User> enabledUsers = new ArrayList<>();
+    private List<UserSnowflake> enabledUsers = new ArrayList<>();
 
     /**
      * Set the roles that can not use this command
@@ -150,14 +151,14 @@ public abstract class SimpleSlashCommand {
         this.enabledRoles = Arrays.asList(roles);
     }
 
-    public void setEnabledUsers(List<User> users) {
+    public void setEnabledUsers(List<UserSnowflake> users) {
         this.enabledUsers = users;
     }
 
     /**
      * Set the list users that can use this command
      */
-    public void setEnabledUsers(User... users) {
+    public void setEnabledUsers(UserSnowflake... users) {
         this.enabledUsers = Arrays.asList(users);
     }
 
@@ -292,7 +293,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the allowed users
      */
-    public List<User> getEnabledUsers() {
+    public List<UserSnowflake> getEnabledUsers() {
         return enabledUsers;
     }
 
