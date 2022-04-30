@@ -30,7 +30,7 @@ Activity:
   # **IMPORTANT** THIS FEATURE IS NOT WORKING AT THIS MOMENT
   # The type of the activity
   # Possible options: PLAYING, STREAMING, LISTENING and WATCHING
-  Type: "WATICHING"
+  Type: "WATCHING"
 
   # The message after the activity type
   Message: "Foundation"
