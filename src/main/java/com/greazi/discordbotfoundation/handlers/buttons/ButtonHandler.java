@@ -11,7 +11,6 @@ import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -42,7 +41,8 @@ public class ButtonHandler extends ListenerAdapter {
      * @return this {@link SimpleButton}
      */
     public ButtonHandler addButtonListener(SimpleButton module) {
-        buttonList.put(module.getButton(), module);
+        Debugger.debug("BUTTON", "Adding new button: " + module.getId(), "Class: " + module);
+        buttonList.put(module.getId(), module);
         return this;
     }
 
