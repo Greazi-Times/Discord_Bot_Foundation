@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SimpleSettings {
 
@@ -181,6 +182,31 @@ public class SimpleSettings {
 		// The message for the activity
 		public static String Message() {
 			return getString(path + "Activity.Message");
+		}
+	}
+
+	/**
+	 * Retrieve all the console settings
+	 */
+	public static class Console {
+
+		// Set the main path of the settings values
+		private static final String consolePath = "Console.";
+
+		public static class Commands{
+
+			// Set the main path of the settings values
+			private static final String commandsPath = "Commands.";
+
+			// If console commands are enabled
+			public static boolean Enabled() {
+				return getBoolean(consolePath + commandsPath + "Enabled");
+			}
+
+			// A list of disabled commands
+			public static ArrayList<String> Disabled() {
+				return getArray(consolePath + commandsPath + "Disabled").stream().map(String::toLowerCase).collect(Collectors.toCollection(ArrayList::new));
+			}
 		}
 	}
 

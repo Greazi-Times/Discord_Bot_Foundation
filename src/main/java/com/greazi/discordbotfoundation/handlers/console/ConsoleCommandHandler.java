@@ -2,6 +2,7 @@ package com.greazi.discordbotfoundation.handlers.console;
 
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.debug.Debugger;
+import com.greazi.discordbotfoundation.settings.SimpleSettings;
 
 import java.io.Console;
 import java.util.Arrays;
@@ -21,17 +22,22 @@ public class ConsoleCommandHandler {
             while (true) {
                 String input = console.readLine();
 
-                if(input == null || input.isEmpty()) return;
+                if(input == null || input.isEmpty()) continue;
 
                 List<String> splitInput = Arrays.asList(input.split(" "));
 
                 String command = splitInput.get(0);
                 List<String> args = splitInput.subList(1, splitInput.size());
 
+                if(SimpleSettings.Console.Commands.Disabled().contains(command.toLowerCase())) continue;
+
                 execute(command, args);
             }
         });
-        thread.start();
+        if(SimpleSettings.Console.Commands.Enabled()){
+            thread.start();
+            Debugger.debug("Console", "Console commands enabled");
+        }
     }
 
     public ConsoleCommandHandler addCommand(SimpleConsoleCommand module) {

@@ -2,6 +2,7 @@ package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.console.ClearCommand;
 import com.greazi.discordbotfoundation.console.HelpCommand;
+import com.greazi.discordbotfoundation.console.StopCommand;
 import com.greazi.discordbotfoundation.handlers.buttons.ButtonHandler;
 import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.handlers.commands.SlashCommandHandler;
@@ -11,6 +12,7 @@ import com.greazi.discordbotfoundation.handlers.console.ConsoleCommandHandler;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
+import javafx.scene.paint.Stop;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -182,7 +184,10 @@ public abstract class SimpleBot {
         enabled = true;
 
         // Load the static console commands
-        getConsoleCommandHandler().addCommand(new HelpCommand()).addCommand(new ClearCommand());
+        getConsoleCommandHandler()
+                .addCommand(new HelpCommand())
+                .addCommand(new ClearCommand())
+                .addCommand(new StopCommand());
     }
 
     /**

@@ -2,6 +2,7 @@ package com.greazi.discordbotfoundation.console;
 
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.handlers.console.SimpleConsoleCommand;
+import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 
 import java.util.List;
@@ -18,9 +19,13 @@ public class HelpCommand extends SimpleConsoleCommand {
     public void execute(List<String> args) {
         if(args.size() == 0) {
             System.out.println("Available commands:");
-            SimpleBot.getConsoleCommandHandler().getCommandList().forEach((name, command) -> {
-                command.sendHelp();
-            });
+            SimpleBot.getConsoleCommandHandler()
+                    .getCommandList()
+                    .forEach((name, command) -> {
+                        if(!SimpleSettings.Console.Commands.Disabled().contains(command.getCommand().toLowerCase())) {
+                            command.sendHelp();
+                        }
+                    });
             System.out.println("");
             System.out.println("For more information on a specific command, type `help <command>`");
         }else{
