@@ -333,7 +333,9 @@ public abstract class SimpleButton {
         Checks.notLonger(this.button_id, Button.ID_MAX_LENGTH, "ID");
         Checks.notNull(this.button_style, "Style");
         Checks.check(this.button_style != ButtonStyle.UNKNOWN, "Cannot make button with unknown style!");
-        Checks.notEmpty(this.label, "Label");
+        if(this.emoji == null) {
+            Checks.notEmpty(this.label, "Label");
+        }
         Checks.notLonger(this.label, Button.LABEL_MAX_LENGTH, "Label");
         return new ButtonImpl(this.button_id, this.label, this.button_style, this.url, this.disabled, this.emoji);
     }
