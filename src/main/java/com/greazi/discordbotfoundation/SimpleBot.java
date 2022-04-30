@@ -1,11 +1,13 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.command.core.TestCommand;
+import com.greazi.discordbotfoundation.console.ClearCommand;
+import com.greazi.discordbotfoundation.console.HelpCommand;
 import com.greazi.discordbotfoundation.handlers.buttons.ButtonHandler;
 import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.handlers.commands.SlashCommandHandler;
 import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
+import com.greazi.discordbotfoundation.handlers.console.ConsoleCommandHandler;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
@@ -44,6 +46,7 @@ public abstract class SimpleBot {
     private static ButtonHandler buttonHandler;
     private static ModalHandler modalHandler;
     private static SelectMenuHandler menuHandler;
+    private static ConsoleCommandHandler consoleCommandHandler;
 
     private boolean enabled;
 
@@ -151,6 +154,7 @@ public abstract class SimpleBot {
         buttonHandler = new ButtonHandler();
         modalHandler = new ModalHandler();
         menuHandler = new SelectMenuHandler();
+        consoleCommandHandler = new ConsoleCommandHandler();
     }
 
     /**
@@ -173,10 +177,12 @@ public abstract class SimpleBot {
 
         // Load the static commands
         getSlashCommandHandler().addCommand(new PingCommand());
-        getSlashCommandHandler().addCommand(new TestCommand());
 
         // A boolean that says the bot is loaded and enabled
         enabled = true;
+
+        // Load the static console commands
+        getConsoleCommandHandler().addCommand(new HelpCommand()).addCommand(new ClearCommand());
     }
 
     /**
@@ -343,6 +349,15 @@ public abstract class SimpleBot {
      */
     public static SelectMenuHandler getSelectMenuHandler() {
         return menuHandler;
+    }
+
+    /**
+     * Retrieve the console command handler
+     *
+     * @return Console command handler
+     */
+    public static ConsoleCommandHandler getConsoleCommandHandler() {
+        return consoleCommandHandler;
     }
 
     // ----------------------------------------------------------------------------------------
