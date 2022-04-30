@@ -116,7 +116,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void success(String message) {
-		logNoPrefix(ConsoleColor.GREEN + "[SUCCESS] " + message + ConsoleColor.RESET);
+		logNoPrefix(ConsoleColor.GREEN + "[SUCCESS] " + message);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void warning(String message) {
-		logNoPrefix(ConsoleColor.RED + "[WARNING] " + message + ConsoleColor.RESET);
+		logNoPrefix(ConsoleColor.RED + "[WARNING] " + message);
 	}
 
 	/**
@@ -175,9 +175,9 @@ public final class Common {
 				LocalTime localTime = LocalTime.now();
 
 				if(addLogPrefix && ADD_LOG_PREFIX){
-					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.GREEN + logPrefix + ConsoleColor.RESET + " " + part);
+					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.GREEN + logPrefix + ConsoleColor.RESET + " " + part + ConsoleColor.RESET);
 				} else {
-					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + part);
+					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.RESET + part + ConsoleColor.RESET);
 				}
 			}
 		}
