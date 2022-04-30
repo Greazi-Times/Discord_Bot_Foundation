@@ -7,10 +7,12 @@
 
 package com.greazi.discordbotfoundation.handlers.buttons;
 
+import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
+import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -26,7 +28,7 @@ import java.util.Objects;
 public class ButtonHandler extends ListenerAdapter {
 
     public ButtonHandler(){
-        Debugger.debug("Buttons", "Buttons main method");
+        Debugger.debug("Button", "Buttons main method");
         SimpleBot.getJDA().addEventListener(this);
     }
 
@@ -41,7 +43,7 @@ public class ButtonHandler extends ListenerAdapter {
      * @return this {@link SimpleButton}
      */
     public ButtonHandler addButtonListener(SimpleButton module) {
-        Debugger.debug("BUTTON", "Adding new button: " + module.getId(), "Class: " + module);
+        Debugger.debug("Button", "Adding new button: " + module.getId(), "Class: " + module);
         buttonList.put(module.getId(), module);
         return this;
     }
@@ -62,7 +64,10 @@ public class ButtonHandler extends ListenerAdapter {
     @Override
     @SubscribeEvent
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
-        Debugger.debug("Buttons", "A button has been pressed");
+        Debugger.debug("Button", "A button has been pressed");
+
+        Common.log("User, " + ConsoleColor.CYAN + event.getMember().getEffectiveName() + ConsoleColor.RESET + " used Button: " + ConsoleColor.CYAN + event.getId() + ConsoleColor.RESET);
+
         // Retrieve the button class from the button that has been pressed
         SimpleButton module = buttonList.get(event.getButton().getId());
 
@@ -78,7 +83,7 @@ public class ButtonHandler extends ListenerAdapter {
         }
 
         // Debug message will be changed / optimized later
-        Debugger.debug("Buttons", "Found event; " + module);
+        Debugger.debug("Button", "Found event; " + module);
 
         // If the button has been pressed inside the main guild
         if (!Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.Bot.MainGuild()) && module.getGuildOnly()){
@@ -89,6 +94,8 @@ public class ButtonHandler extends ListenerAdapter {
         if (!event.getTextChannel().isNSFW() && module.getNsfwOnly()){
             return;
         }
+
+        // TODO: Fix this part
 
 //        // Get the member from the event
 //        Member member = event.getMember();
