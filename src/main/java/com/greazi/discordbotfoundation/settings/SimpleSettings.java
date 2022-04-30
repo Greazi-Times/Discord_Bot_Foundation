@@ -21,14 +21,23 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The main settings class that handles the whole settings system
+ */
 public class SimpleSettings {
 
+	// Maps of all the settings and settings cache
 	private static Map<String, Object> settings = Maps.newHashMap();
 	private static final Map<String, Object> cachedSettings = Maps.newHashMap();
 
+	/**
+	 * The main method that calls the file and sets the file
+	 */
 	public static void init() {
+		// The settings file
 		File file = new File(Constants.File.SETTINGS);
 
+		// If the file doesn't exist it will create a new file
 		if(!file.exists()) {
 			try {
 				InputStream inputStream = SimpleSettings.class.getResourceAsStream(Constants.File.SETTINGS);
@@ -39,6 +48,7 @@ public class SimpleSettings {
 			}
 		}
 
+		// Set up the Yaml handler
 		try {
 			InputStream inputStream = Files.newInputStream(file.toPath());
 			Yaml yaml = new Yaml();
@@ -48,6 +58,11 @@ public class SimpleSettings {
 		}
 	}
 
+	/**
+	 * Retrieve an Object from the settings
+	 * @param key The settings path
+	 * @return The settings value
+	 */
 	private static Object getObject(String key) {
 		if (cachedSettings.containsKey(key)) {
 			return cachedSettings.get(key);
@@ -83,11 +98,21 @@ public class SimpleSettings {
 		return "Unknown error";
 	}
 
+	/**
+	 * Retrieve a String from the settings file
+	 * @param key The settings path
+	 * @return The settings value
+	 */
 	protected static String getString(String key) {
 		Object returnValue = getObject(key);
 		return String.valueOf(returnValue);
 	}
 
+	/**
+	 * Retrieve a Boolean from the settings file
+	 * @param key The settings path
+	 * @return The settings value
+	 */
 	protected static boolean getBoolean(String key) {
 		String returnValue = getString(key);
 		if(returnValue.equalsIgnoreCase("true") || returnValue.equalsIgnoreCase("false") || returnValue.equalsIgnoreCase("1") || returnValue.equalsIgnoreCase("0")) {
@@ -98,6 +123,11 @@ public class SimpleSettings {
 		}
 	}
 
+	/**
+	 * Retrieve an int from the settings file
+	 * @param key The settings path
+	 * @return The settings value
+	 */
 	protected static int getInt(String key) {
 		String returnValue = getString(key);
 		try {
@@ -108,6 +138,11 @@ public class SimpleSettings {
 		}
 	}
 
+	/**
+	 * Retrieve a Double from the settings file
+	 * @param key The settings path
+	 * @return The settings value
+	 */
 	protected static double getDouble(String key) {
 		String returnValue = getString(key);
 		try {
@@ -118,6 +153,11 @@ public class SimpleSettings {
 		}
 	}
 
+	/**
+	 * Retrieve a Long from the settings file
+	 * @param key The settings path
+	 * @return The settings value
+	 */
 	protected static long getLong(String key) {
 		String returnValue = getString(key);
 		try {
@@ -128,6 +168,11 @@ public class SimpleSettings {
 		}
 	}
 
+	/**
+	 * Retrieve a ArrayList from the settings file
+	 * @param key The settings path
+	 * @return The settings value
+	 */
 	protected static ArrayList<String> getArray(String key) {
 		Object returnValue = getObject(key);
 		if(returnValue instanceof ArrayList) {

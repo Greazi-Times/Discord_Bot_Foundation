@@ -12,7 +12,6 @@ import com.greazi.discordbotfoundation.handlers.console.ConsoleCommandHandler;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import javafx.scene.paint.Stop;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -52,6 +51,10 @@ public abstract class SimpleBot {
 
     private boolean enabled;
 
+    // ----------------------------------------------------------------------------------------
+    // Instance specific
+    // ----------------------------------------------------------------------------------------
+
     /**
      * Returns the instance of {@link SimpleBot}.
      * <p>
@@ -75,31 +78,13 @@ public abstract class SimpleBot {
     }
 
     // ----------------------------------------------------------------------------------------
-    // Instance specific
-    // ----------------------------------------------------------------------------------------
-
-    // TODO Add this method for the reload of the bot
-
-    /**
-     * For your convenience, event listeners and timed tasks may be set here to stop/unregister
-     * them automatically on reload
-     */
-    /*private final Reloadables reloadables = new Reloadables();*/
-
-    /**
-     * An internal flag to indicate whether we are calling the {@link #onReloadableStart()}
-     * block. We register things using {@link #} <-- reloadable during this block
-     */
-    private boolean startingReloadables = false;
-
-    // ----------------------------------------------------------------------------------------
     // Main methods
     // ----------------------------------------------------------------------------------------
 
     /**
      * The main method that is the beginning of the bot
      * <p>
-     * By default, it will start the bot with the {@link #registerJda(String, String)} method
+     * By default, it will start the bot with the {@link #registerJda(String, Activity)} method
      */
     public SimpleBot() {
         // A debugger that sends a message to the console when the bot is starting
@@ -114,8 +99,28 @@ public abstract class SimpleBot {
         // Load way before the bot starts to avoid any issues
         onPreLoad();
 
+        // Check the activity for the bot
+        Activity activityType;
+        String activity = SimpleSettings.Activity.Message();
+        switch (SimpleSettings.Activity.Type().toLowerCase()) {
+            case "watching":
+                activityType = Activity.watching(activity);
+                break;
+            case "playing":
+                activityType = Activity.playing(activity);
+                break;
+            case "streaming":
+                activityType = Activity.streaming(activity, getLink());
+                break;
+            case "listening":
+                activityType = Activity.listening(activity);
+                break;
+            default:
+                activityType = Activity.watching(getName());
+        }
+
         // Initialize the bot
-        registerJda(SimpleSettings.Bot.Token(), SimpleSettings.Activity.Message());
+        registerJda(SimpleSettings.Bot.Token(), activityType);
 
         // Set the main guild of the bot
         if (SimpleSettings.Bot.MainGuild() != null) {
@@ -196,8 +201,8 @@ public abstract class SimpleBot {
      * @param token    = The token of the bot
      * @param activity = The activity status of the bot
      */
-    private static void registerJda(String token, String activity) {
-        Debugger.debug("Startup", "Registering JDA! registerJda();149");
+    private static void registerJda(String token,Activity activity) {
+        Debugger.debug("Startup", "Registering JDA! registerJda();189");
         try {
             jda = JDABuilder.createDefault(token)
                     .setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
@@ -205,7 +210,7 @@ public abstract class SimpleBot {
                     .disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .setChunkingFilter(ChunkingFilter.ALL)
-                    .setActivity(Activity.watching(activity))
+                    .setActivity(activity)
                     .setEventManager(new AnnotatedEventManager())
                     .build().awaitReady();
 

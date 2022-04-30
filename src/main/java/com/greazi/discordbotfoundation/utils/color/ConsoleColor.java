@@ -1,5 +1,8 @@
 package com.greazi.discordbotfoundation.utils.color;
 
+/**
+ * A color class to color the console
+ */
 public class ConsoleColor {
     public static final String RESET = "\033[0m";  // Text Reset
 
