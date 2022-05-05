@@ -12,7 +12,6 @@ import com.greazi.discordbotfoundation.handlers.console.ConsoleCommandHandler;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import javafx.scene.paint.Stop;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -26,6 +25,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.io.File;
 
 // TODO: ALL FILES!!!!
 //    Check all files for comments and add them if needed

@@ -10,14 +10,12 @@ package com.greazi.discordbotfoundation.settings;
 import com.google.common.collect.Maps;
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.constants.Constants;
+import com.greazi.discordbotfoundation.utils.ResourceCopier;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,12 +28,11 @@ public class SimpleSettings {
 		File file = new File(Constants.File.SETTINGS);
 
 		if(!file.exists()) {
-			try {
-				InputStream inputStream = SimpleSettings.class.getResourceAsStream(Constants.File.SETTINGS);
-				assert inputStream != null;
-				Files.copy(inputStream, Paths.get(file.toURI()), StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
+			try{
+				new ResourceCopier().saveResource(Constants.File.SETTINGS);
+			}catch (Exception e){
 				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 
