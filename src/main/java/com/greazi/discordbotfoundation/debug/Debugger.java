@@ -40,7 +40,7 @@ public final class Debugger {
 	/**
 	 * Prints a debug messages to the console if the given section is being debugged
 	 * <p>
-	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yml,
+	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yaml,
 	 * by default your class extending {@link SimpleSettings}
 	 *
 	 * @param section

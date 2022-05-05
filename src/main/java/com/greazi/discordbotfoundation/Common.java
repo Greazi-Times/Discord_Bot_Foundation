@@ -195,12 +195,12 @@ public final class Common {
 	/**
 	 * Logs a bunch of messages to the console in a {@link #consoleLine()} frame.
 	 * <p>
-	 * Used when an error occurs, can also disable the plugin
+	 * Used when an error occurs, can also disable the bot
 	 *
-	 * @param disablePlugin
+	 * @param disableBot
 	 * @param messages
 	 */
-	public static void logFramed(final boolean disablePlugin, final String... messages) {
+	public static void logFramed(final boolean disableBot, final String... messages) {
 		if (messages != null && !Valid.isNullOrEmpty(messages)) {
 			logNoPrefix(ConsoleColor.BLACK_BRIGHT + consoleLine());
 			for (final String msg : messages)
@@ -405,7 +405,7 @@ public final class Common {
 }
 
 /**
- * A wrapper for Spigot
+ * A wrapper for sneaky error's
  */
 class SneakyThrow {
 
