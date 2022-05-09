@@ -4,9 +4,9 @@ import com.greazi.discordbotfoundation.handlers.console.SimpleConsoleCommand;
 
 import java.util.List;
 
-public class ClearCommand extends SimpleConsoleCommand {
+public class ClearConsoleCommand extends SimpleConsoleCommand {
 
-    public ClearCommand() {
+    public ClearConsoleCommand() {
         super("clear");
         setDescription("Clears the console");
         setUsage("clear");
