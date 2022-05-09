@@ -184,7 +184,11 @@ public abstract class SimpleBot {
         slashCommandHandler.registerCommands();
 
         // Load the static commands
-        getSlashCommandHandler().addCommand(new PingCommand());
+        registerCommands(
+                new PingCommand(),
+                new AboutCommand(),
+                new StopCommand()
+        );
 
         // A boolean that says the bot is loaded and enabled
         enabled = true;
@@ -223,6 +227,26 @@ public abstract class SimpleBot {
     }
 
     // ----------------------------------------------------------------------------------------
+    // Registration methods   <- Used to register your commands, buttons, menus, modals and console commands
+    // ----------------------------------------------------------------------------------------
+
+    /**
+     * Register a new command in the slash command list
+     * @param command SimpleSlashCommand
+     */
+    protected final void registerCommand(SimpleSlashCommand command) {
+        getSlashCommandHandler().addCommand(command);
+    }
+
+    /**
+     * Register new commands in the slash command list at once
+     * @param commands SimpleSlashCommands
+     */
+    protected final void registerCommands(SimpleSlashCommand... commands) {
+        for(SimpleSlashCommand command : commands) {
+            getSlashCommandHandler().addCommand(command);
+        }
+    }
     // Delegate methods    <-- Methods that can be used to load your stuff
     // ----------------------------------------------------------------------------------------
 
@@ -331,7 +355,7 @@ public abstract class SimpleBot {
      *
      * @return Slash command handler
      */
-    public static SlashCommandHandler getSlashCommandHandler() {
+    private static SlashCommandHandler getSlashCommandHandler() {
         return slashCommandHandler;
     }
 
