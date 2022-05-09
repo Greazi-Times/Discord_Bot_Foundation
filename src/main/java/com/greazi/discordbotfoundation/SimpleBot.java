@@ -268,6 +268,24 @@ public abstract class SimpleBot {
     }
 
     /**
+     * Register a new menu in the menu list
+     * @param menu SimpleSelectMenu
+     */
+    protected final void registerMenu(SimpleSelectMenu menu) {
+        getSelectMenuHandler().addMenuListener(menu);
+    }
+
+    /**
+     * Register new menus in the menu list at once
+     * @param menus SimpleSelectMenu
+     */
+    protected final void registerMenus(SimpleSelectMenu... menus) {
+        for(SimpleSelectMenu menu : menus) {
+            getSelectMenuHandler().addMenuListener(menu);
+        }
+    }
+
+    /**
      * Register a new console command in the console command list
      * @param command SimpleConsoleCommand
      */
