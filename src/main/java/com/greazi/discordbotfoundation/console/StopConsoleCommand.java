@@ -6,9 +6,9 @@ import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 
 import java.util.List;
 
-public class StopCommand extends SimpleConsoleCommand {
+public class StopConsoleCommand extends SimpleConsoleCommand {
 
-    public StopCommand() {
+    public StopConsoleCommand() {
         super("stop");
         setDescription("Stops the bot");
         setUsage("stop");
