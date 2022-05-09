@@ -194,10 +194,11 @@ public abstract class SimpleBot {
         enabled = true;
 
         // Load the static console commands
-        getConsoleCommandHandler()
-                .addCommand(new HelpCommand())
-                .addCommand(new ClearCommand())
-                .addCommand(new StopCommand());
+        registerConsoleCommands(
+                new HelpConsoleCommand(),
+                new ClearConsoleCommand(),
+                new StopConsoleCommand()
+        );
     }
 
     /**
@@ -247,6 +248,24 @@ public abstract class SimpleBot {
             getSlashCommandHandler().addCommand(command);
         }
     }
+    /**
+     * Register a new console command in the console command list
+     * @param command SimpleConsoleCommand
+     */
+    protected final void registerConsoleCommand(SimpleConsoleCommand command) {
+        getConsoleCommandHandler().addCommand(command);
+    }
+
+    /**
+     * Register new console commands in the console commands list
+     * @param commands SimpleConsoleCommand
+     */
+    protected final void registerConsoleCommands(SimpleConsoleCommand... commands) {
+        for(SimpleConsoleCommand command : commands) {
+            getConsoleCommandHandler().addCommand(command);
+        }
+    }
+
     // Delegate methods    <-- Methods that can be used to load your stuff
     // ----------------------------------------------------------------------------------------
 
