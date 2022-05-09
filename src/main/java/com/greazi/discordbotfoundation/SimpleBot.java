@@ -248,6 +248,25 @@ public abstract class SimpleBot {
             getSlashCommandHandler().addCommand(command);
         }
     }
+
+    /**
+     * Register a new button in the button list
+     * @param button SimpleButton
+     */
+    protected final void registerButton(SimpleButton button) {
+        getButtonHandler().addButtonListener(button);
+    }
+
+    /**
+     * Register new buttons in the button list at once
+     * @param buttons SimpleButton
+     */
+    protected final void registerButtons(SimpleButton... buttons) {
+        for(SimpleButton button : buttons) {
+            getButtonHandler().addButtonListener(button);
+        }
+    }
+
     /**
      * Register a new console command in the console command list
      * @param command SimpleConsoleCommand
