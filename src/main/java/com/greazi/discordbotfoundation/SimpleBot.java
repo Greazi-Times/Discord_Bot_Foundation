@@ -1,16 +1,22 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.console.ClearCommand;
-import com.greazi.discordbotfoundation.console.HelpCommand;
-import com.greazi.discordbotfoundation.console.StopCommand;
+import com.greazi.discordbotfoundation.command.core.AboutCommand;
+import com.greazi.discordbotfoundation.command.core.StopCommand;
+import com.greazi.discordbotfoundation.console.ClearConsoleCommand;
+import com.greazi.discordbotfoundation.console.HelpConsoleCommand;
+import com.greazi.discordbotfoundation.console.StopConsoleCommand;
 import com.greazi.discordbotfoundation.handlers.buttons.ButtonHandler;
+import com.greazi.discordbotfoundation.handlers.buttons.SimpleButton;
 import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
 import com.greazi.discordbotfoundation.handlers.commands.SlashCommandHandler;
 import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.handlers.console.ConsoleCommandHandler;
+import com.greazi.discordbotfoundation.handlers.console.SimpleConsoleCommand;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
+import com.greazi.discordbotfoundation.handlers.modals.SimpleModal;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
+import com.greazi.discordbotfoundation.handlers.selectmenu.SimpleSelectMenu;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -25,7 +31,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.io.File;
+import java.util.HashMap;
 
 // TODO: ALL FILES!!!!
 //    Check all files for comments and add them if needed
@@ -88,6 +94,8 @@ public abstract class SimpleBot {
      * By default, it will start the bot with the {@link #registerJda(String, Activity)} method
      */
     public SimpleBot() {
+        this.enabled = false;
+
         // A debugger that sends a message to the console when the bot is starting
         Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
 
@@ -142,8 +150,17 @@ public abstract class SimpleBot {
 		/** {@link #onReloadableStart()} */
 		onReload();
 
-		// Message that the bot has started
-		Common.success("Bot is ready");
+        // TODO: Create a check if the bot is fully enabled
+        setEnabled();
+
+        // A check if the bot is truly enabled !!!NOT YET FINISHED!!!
+        if(enabled) {
+            // Message that the bot has started
+            Common.success("Bot is ready");
+        } else {
+            Common.error("The bot failed to enable something is wrong!");
+        }
+
 	}
 
     /**
@@ -286,6 +303,24 @@ public abstract class SimpleBot {
     }
 
     /**
+     * Register a new modal in the modal list
+     * @param modal SimpleModal
+     */
+    protected final void registerModal(SimpleModal modal) {
+        getModalHandler().addModalListener(modal);
+    }
+
+    /**
+     * Register new modals in the modal list at once
+     * @param modals SimpleModal
+     */
+    protected final void registerModals(SimpleModal... modals) {
+        for(SimpleModal modal : modals) {
+            getModalHandler().addModalListener(modal);
+        }
+    }
+
+    /**
      * Register a new console command in the console command list
      * @param command SimpleConsoleCommand
      */
@@ -303,6 +338,7 @@ public abstract class SimpleBot {
         }
     }
 
+    // ----------------------------------------------------------------------------------------
     // Delegate methods    <-- Methods that can be used to load your stuff
     // ----------------------------------------------------------------------------------------
 
@@ -367,6 +403,17 @@ public abstract class SimpleBot {
     }
 
     // ----------------------------------------------------------------------------------------
+    // Main setters
+    // ----------------------------------------------------------------------------------------
+
+    /**
+     * Set the bot as status enabled
+     */
+    private void setEnabled() {
+        this.enabled = true;
+    }
+
+    // ----------------------------------------------------------------------------------------
     // Main getters
     // ----------------------------------------------------------------------------------------
 
@@ -420,7 +467,7 @@ public abstract class SimpleBot {
      *
      * @return Button handler
      */
-    public static ButtonHandler getButtonHandler() {
+    private static ButtonHandler getButtonHandler() {
         return buttonHandler;
     }
 
@@ -429,7 +476,7 @@ public abstract class SimpleBot {
      *
      * @return Modal handler
      */
-    public static ModalHandler getModalHandler() {
+    private static ModalHandler getModalHandler() {
         return modalHandler;
     }
 
@@ -438,7 +485,7 @@ public abstract class SimpleBot {
      *
      * @return SelectMenu handler
      */
-    public static SelectMenuHandler getSelectMenuHandler() {
+    private static SelectMenuHandler getSelectMenuHandler() {
         return menuHandler;
     }
 
@@ -447,8 +494,47 @@ public abstract class SimpleBot {
      *
      * @return Console command handler
      */
-    public static ConsoleCommandHandler getConsoleCommandHandler() {
+    private static ConsoleCommandHandler getConsoleCommandHandler() {
         return consoleCommandHandler;
+    }
+
+    /**
+     * Get a modal from the modal from the modal handler
+     * @param button_id The ID of the button
+     * @return SimpleButton
+     */
+    public static SimpleButton getButton(String button_id) {
+        return getButtonHandler().getButton(button_id);
+    }
+
+    public static SimpleSelectMenu getSelectMenu(String menu_id) {
+        return getSelectMenuHandler().getMenu(menu_id);
+    }
+
+    /**
+     * Get a modal from the modal from the modal handler
+     * @param modal_id The ID of the modal
+     * @return SimpleModal
+     */
+    public static SimpleModal getModal(String modal_id) {
+        return getModalHandler().getModal(modal_id);
+    }
+
+    /**
+     * Get a console command from the console command handler
+     * @param consoleCommand The console command
+     * @return Console Command
+     */
+    public static SimpleConsoleCommand getConsoleCommand(String consoleCommand) {
+        return getConsoleCommandHandler().getCommand(consoleCommand);
+    }
+
+    /**
+     * Get all console commands from the console command handler
+     * @return Console Command HashMap
+     */
+    public static HashMap<String, SimpleConsoleCommand> getConsoleCommands() {
+        return getConsoleCommandHandler().getCommandList();
     }
 
     // ----------------------------------------------------------------------------------------
@@ -501,6 +587,8 @@ public abstract class SimpleBot {
     public String getLink() {
         return "https://greazi.com";
     }
+
+
 
     /**
      * Check if the bot is enabled
