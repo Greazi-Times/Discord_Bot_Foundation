@@ -252,6 +252,19 @@ public class SimpleSettings {
 		}
 	}
 
+	public static class Stop {
+
+		private static final String stopPath = "Commands.Stop.";
+
+		public static boolean Enabled() {
+			return getBoolean(stopPath + "Enabled");
+		}
+
+		public static ArrayList<String> AllowedRoles() {
+			return getArray(stopPath + "AllowedRoles").stream().map(String::toLowerCase).collect(Collectors.toCollection(ArrayList::new));
+		}
+	}
+
 	/**
 	 * Retrieve all the database settings
 	 */
