@@ -55,6 +55,8 @@ public class SlashCommandHandler extends ListenerAdapter {
         // Retrieve the slash command data
         SlashCommandData command = Commands.slash(module.getCommand(), module.getDescription());
 
+        Debugger.debug("SlashCommand", "Adding new slash command: " + command.getName());
+
         // add sub commands
         List<SubcommandData> moduleSubcommands = module.getSubCommands();
         for (SubcommandData var : moduleSubcommands) {
@@ -80,6 +82,7 @@ public class SlashCommandHandler extends ListenerAdapter {
         // Set description
         command.setDescription(module.getDescription());
 
+        Debugger.debug("SlashCommand", "Added slash command: " + command.getName());
 
         // Add the slash command
         slashCommands.add(command);
@@ -95,6 +98,8 @@ public class SlashCommandHandler extends ListenerAdapter {
     public void registerCommands() {
         // Check if the slash commands isn't empty
         if (slashCommands.isEmpty()) return;
+
+        Debugger.debug("SlashCommand", "Registering slash commands");
 
         // TODO: Add a check for main guild
         //      Once main guild == true add to main guild only if not add to all guilds
