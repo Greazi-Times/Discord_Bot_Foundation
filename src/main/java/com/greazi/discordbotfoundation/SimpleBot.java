@@ -18,6 +18,7 @@ import com.greazi.discordbotfoundation.handlers.modals.SimpleModal;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SimpleSelectMenu;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
+import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -169,12 +170,6 @@ public abstract class SimpleBot {
     public final void setupCommandManager() {
         Debugger.debug("Startup", "Starting the bot! onPreStart();105");
 
-        jda.addEventListener(new SimpleSlashCommand() {
-            @Override
-            protected void execute(SlashCommandInteractionEvent event) {
-
-            }
-        });
         slashCommandHandler = new SlashCommandHandler();
         buttonHandler = new ButtonHandler();
         modalHandler = new ModalHandler();
@@ -207,8 +202,10 @@ public abstract class SimpleBot {
                 new StopCommand()
         );
 
-        // A boolean that says the bot is loaded and enabled
-        enabled = true;
+        registerButtons(
+          new StopCommand.Buttons.Confirm(),
+          new StopCommand.Buttons.Cancel()
+        );
 
         // Load the static console commands
         registerConsoleCommands(
@@ -216,6 +213,16 @@ public abstract class SimpleBot {
                 new ClearConsoleCommand(),
                 new StopConsoleCommand()
         );
+
+        // A boolean that says the bot is loaded and enabled
+        enabled = true;
+
+        // A log option to show how many things are registered
+        Common.log("Loaded a total of " + ConsoleColor.CYAN + getSlashCommandHandler().getTotal() + ConsoleColor.RESET + " slash commands");
+        Common.log("Loaded a total of " + ConsoleColor.CYAN + getConsoleCommandHandler().getTotal() + ConsoleColor.RESET + " console commands");
+        Common.log("Loaded a total of " + ConsoleColor.CYAN + getSelectMenuHandler().getTotal() + ConsoleColor.RESET + " menus");
+        Common.log("Loaded a total of " + ConsoleColor.CYAN + getButtonHandler().getTotal() + ConsoleColor.RESET + " buttons");
+        Common.log("Loaded a total of " + ConsoleColor.CYAN + getModalHandler().getTotal() + ConsoleColor.RESET + " modals");
     }
 
     /**
@@ -540,6 +547,8 @@ public abstract class SimpleBot {
     // ----------------------------------------------------------------------------------------
     // Additional features
     // ----------------------------------------------------------------------------------------
+
+    // TODO: Fix this so it works properly with a @Override
 
     /**
      * Retrieve the version of the bot
