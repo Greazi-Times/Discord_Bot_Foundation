@@ -10,8 +10,8 @@ public class StopConsoleCommand extends SimpleConsoleCommand {
 
     public StopConsoleCommand() {
         super("stop");
-        setDescription("Stops the bot");
-        setUsage("stop");
+        description("Stops the bot");
+        usage("stop");
     }
 
     @Override

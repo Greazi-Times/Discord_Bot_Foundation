@@ -11,8 +11,8 @@ public class HelpConsoleCommand extends SimpleConsoleCommand {
 
     public HelpConsoleCommand() {
         super("help");
-        setDescription("Shows this help message");
-        setUsage("help <command>");
+        description("Shows this help message");
+        usage("help <command>");
     }
 
     @Override

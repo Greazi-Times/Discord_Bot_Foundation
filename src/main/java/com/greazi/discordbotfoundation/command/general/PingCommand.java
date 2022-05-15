@@ -23,9 +23,9 @@ public class PingCommand extends SimpleSlashCommand {
      * Default enabled can not be disabled.
      */
     public PingCommand() {
-        setCommand("ping");
-        setDefaultEnabled();
-        setDescription("Test the latency of the bot");
+        super("ping");
+        description("Test the latency of the bot");
+        defaultEnabled();
     }
 
     /**

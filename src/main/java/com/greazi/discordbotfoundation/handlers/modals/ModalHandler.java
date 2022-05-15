@@ -91,4 +91,11 @@ public class ModalHandler extends ListenerAdapter {
         module.execute(event);
     }
 
+    /**
+     * Get the total amount of modals registered
+     * @return Total amount of modals
+     */
+    public int getTotal() {
+        return modalList.size();
+    }
 }

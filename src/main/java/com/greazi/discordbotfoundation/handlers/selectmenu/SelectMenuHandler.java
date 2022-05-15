@@ -81,4 +81,11 @@ public class SelectMenuHandler extends ListenerAdapter {
         module.execute(event);
     }
 
+    /**
+     * Get the total amount of menus registered
+     * @return Total amount of menus
+     */
+    public int getTotal() {
+        return menuList.size();
+    }
 }

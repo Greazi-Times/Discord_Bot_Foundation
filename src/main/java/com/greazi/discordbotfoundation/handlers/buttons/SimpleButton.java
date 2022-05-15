@@ -90,7 +90,7 @@ public abstract class SimpleButton {
      * Set the users that can not use this button
      */
     private List<User> disabledUsers = new ArrayList<>();
-    
+
     // ----------------------------------------------------------------------------------------
     // Main methods
     // ----------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ public abstract class SimpleButton {
     /**
      * Set the button
      */
-    public void setId(String button_id) {
+    public SimpleButton(String button_id) {
         this.button_id = button_id;
     }
 
@@ -117,7 +117,7 @@ public abstract class SimpleButton {
      * Set the button its style
      * OPTIONS: Primary, Success, Secondary, Destructive, Link
      */
-    public void setButtonStyle(ButtonStyle button_style) {
+    public void buttonStyle(ButtonStyle button_style) {
         this.button_style = button_style;
     }
 
@@ -125,7 +125,7 @@ public abstract class SimpleButton {
      * Set the emoji of the button
      * @param emoji The emoji that needs to be displayed
      */
-    public void setEmoji(Emoji emoji) {
+    public void emoji(Emoji emoji) {
         this.emoji = emoji;
     }
 
@@ -133,7 +133,7 @@ public abstract class SimpleButton {
      * Set the url for the button
      * @param url The url for the button
      */
-    public void setUrl(String url) {
+    public void url(String url) {
         this.url = url;
     }
 
@@ -141,7 +141,7 @@ public abstract class SimpleButton {
      * Set the button disabled (Grayed out)
      * @param disabled Should the button be disabled
      */
-    public void setDisabled(boolean disabled) {
+    public void disabled(boolean disabled) {
         this.disabled = disabled;
     }
 
@@ -149,74 +149,74 @@ public abstract class SimpleButton {
      * Set the label of the button
      * @param label The label name
      */
-    public void setLabel(String label) {
+    public void label(String label) {
         this.label = label;
     }
 
     /**
      * Set this button as main guild only
      */
-    public void setMainGuildOnly() {
+    public void mainGuildOnly() {
         this.guildOnly = true;
     }
 
     /**
      * Set whether the button can only be used inside a NSFW channel
      */
-    public void setNsfwOnly() {
+    public void nsfwOnly() {
         this.nsfwOnly = true;
     }
 
     /**
      * Set the list of roles that can use this button
      */
-    public void setEnabledRoles(List<Role> roles) {
+    public void enabledRoles(List<Role> roles) {
         this.enabledRoles = roles;
     }
 
     /**
      * Set the list of roles that can use this button
      */
-    public void setEnabledRoles(Role... roles) {
+    public void enabledRoles(Role... roles) {
         this.enabledRoles = Arrays.asList(roles);
     }
 
-    public void setEnabledUsers(List<User> users) {
+    public void enabledUsers(List<User> users) {
         this.enabledUsers = users;
     }
 
     /**
      * Set the list users that can use this button
      */
-    public void setEnabledUsers(User... users) {
+    public void enabledUsers(User... users) {
         this.enabledUsers = Arrays.asList(users);
     }
 
     /**
      * Set the list of roles that can not use the button
      */
-    public void setDisabledRoles(Role... roles) {
+    public void disabledRoles(Role... roles) {
         this.disabledRoles = Arrays.asList(roles);
     }
 
     /**
      * Set the list of roles that can not use the button
      */
-    public void setDisabledRoles(List<Role> roles) {
+    public void disabledRoles(List<Role> roles) {
         this.disabledRoles = roles;
     }
 
     /**
      * Set the list of users that can not use the button
      */
-    public void setDisabledUsers(User... users) {
+    public void disabledUsers(User... users) {
         this.disabledUsers = Arrays.asList(users);
     }
 
     /**
      * Set the list of users that can not use the button
      */
-    public void setDisabledUsers(List<User> users) {
+    public void disabledUsers(List<User> users) {
         this.disabledUsers = users;
     }
 

@@ -16,17 +16,17 @@ public abstract class SimpleConsoleCommand {
         this.command = command;
     }
 
-    public SimpleConsoleCommand setDescription(String description) {
+    public SimpleConsoleCommand description(String description) {
         this.description = description;
         return this;
     }
 
-    public SimpleConsoleCommand setUsage(String usage) {
+    public SimpleConsoleCommand usage(String usage) {
         this.usage = usage;
         return this;
     }
 
-    public SimpleConsoleCommand addArgument(String argument) {
+    public SimpleConsoleCommand argument(String argument) {
         arguments.add(argument);
         return this;
     }

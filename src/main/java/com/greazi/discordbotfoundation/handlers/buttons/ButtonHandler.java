@@ -127,4 +127,12 @@ public class ButtonHandler extends ListenerAdapter {
         module.execute(event);
     }
 
+    /**
+     * Get the total amount of registered buttons
+     * @return Total registered buttons
+     */
+    public int getTotal() {
+        return buttonList.size();
+    }
+
 }

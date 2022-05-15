@@ -1,7 +1,5 @@
 package com.greazi.discordbotfoundation.handlers.modals;
 
-import com.greazi.discordbotfoundation.SimpleBot;
-import com.greazi.discordbotfoundation.handlers.buttons.SimpleButton;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.Modal;
 
@@ -45,38 +43,38 @@ public abstract class SimpleModal {
     /**
      * Set the id
      */
-    public void setId(String id) {
+    public SimpleModal(String id) {
         this.id = id;
     }
 
     /**
      * Set the title
      */
-    public void setTitle(String title) {
+    public void title(String title) {
         this.title = title;
-    }
-
-    /**
-     * Set the textInputs
-     */
-    public void setTextInputs(LinkedHashMap<String, SimpleTextInput> textInputs) {
-        this.textInputs = textInputs;
     }
 
     /**
      * Add a textInput
      */
-    public void addTextInput(SimpleTextInput textInput) {
+    public void textInput(SimpleTextInput textInput) {
         this.textInputs.put(textInput.getId(), textInput);
     }
 
     /**
      * Add multiple textInputs
      */
-    public void addTextInputs(SimpleTextInput... textInputs) {
+    public void textInputs(SimpleTextInput... textInputs) {
         for (SimpleTextInput textInput : textInputs) {
             this.textInputs.put(textInput.getId(), textInput);
         }
+    }
+
+    /**
+     * Set the textInputs
+     */
+    public void textInputs(LinkedHashMap<String, SimpleTextInput> textInputs) {
+        this.textInputs = textInputs;
     }
 
     // Disabled because select menus are not compatible with modals
@@ -122,7 +120,7 @@ public abstract class SimpleModal {
     /**
      * Set this modal as main guild only
      */
-    public void setMainGuildOnly() {
+    public void mainGuildOnly() {
         this.guildOnly = true;
     }
 

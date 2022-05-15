@@ -7,6 +7,8 @@
 
 package com.greazi.discordbotfoundation.handlers.commands;
 
+import com.google.gson.annotations.Since;
+import com.greazi.discordbotfoundation.utils.annotations.Disabled;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.UserSnowflake;
@@ -19,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// TODO: Make proper debug messages with IDs
-
 /**
  * A slash command creator to simply create your slash command
  */
@@ -31,12 +31,12 @@ public abstract class SimpleSlashCommand {
     // ----------------------------------------------------------------------------------------
 
     /**
-     * Set the command like "/command"
+     * The actual command itself
      */
     private String command = "example";
 
     /**
-     * Set the help description for the slash command
+     * The help description for the slash command
      */
     private String description = "No Description";
 
@@ -49,26 +49,31 @@ public abstract class SimpleSlashCommand {
      * Is the command bound to a NSFW channel
      * (This means if it can only be used in a NSFW channel)
      */
+    @Disabled(since = "2.0")
     private boolean nsfwOnly = false;
 
     /**
-     * Set the roles that can use this command
+     * The roles that can use this command
      */
+    @Disabled(since = "2.0")
     private List<Role> enabledRoles = new ArrayList<>();
 
     /**
-     * Set the users that can use this command
+     * The users that can use this command
      */
+    @Disabled(since = "2.0")
     private List<UserSnowflake> enabledUsers = new ArrayList<>();
 
     /**
-     * Set the roles that can not use this command
+     * The roles that can not use this command
      */
+    @Disabled(since = "2.0")
     private List<Role> disabledRoles = new ArrayList<>();
 
     /**
-     * Set the users that can not use this command
+     * The users that can not use this command
      */
+    @Disabled(since = "2.0")
     private List<User> disabledUsers = new ArrayList<>();
 
     /**
@@ -77,21 +82,24 @@ public abstract class SimpleSlashCommand {
     private boolean defaultEnabled = true;
 
     /**
-     * Set the subcommands
+     * The subcommands
      */
     private List<SubcommandData> subCommands = new ArrayList<>();
 
     /**
-     * Set the subcommand groups
+     * The subcommand groups
      */
     private List<SubcommandGroupData> subcommandGroup = new ArrayList<>();
 
     /**
-     * Set the options of the command
+     * The options of the command
      * !! This can not be used alongside subCommand or subCommandGroup !!
      */
     private List<OptionData> options = new ArrayList<>();
 
+    /**
+     * The category of the command
+     */
     private String category = null;
 
     // ----------------------------------------------------------------------------------------
@@ -112,116 +120,135 @@ public abstract class SimpleSlashCommand {
     /**
      * Set the command
      */
-    public void setCommand(String command) {
+    public SimpleSlashCommand(String command) {
         this.command = command;
     }
 
     /**
      * Set the description
      */
-    public void setDescription(String description) {
+    public void description(String description) {
         this.description = description;
     }
 
     /**
      * Set this command as main guild only
      */
-    public void setMainGuildOnly() {
+    public void mainGuildOnly() {
         this.guildOnly = true;
     }
 
     /**
      * Set whether the command can only be used inside a NSFW channel
      */
-    public void setNsfwOnly() {
+    @Disabled(since = "2.0")
+    public void nsfwOnly() {
         this.nsfwOnly = true;
     }
 
     /**
      * Set the list of roles that can use this command
      */
-    public void setEnabledRoles(List<Role> roles) {
+    @Disabled(since = "2.0")
+    public void enabledRoles(List<Role> roles) {
         this.enabledRoles = roles;
     }
 
     /**
      * Set the list of roles that can use this command
      */
-    public void setEnabledRoles(Role... roles) {
+    @Disabled(since = "2.0")
+    public void enabledRoles(Role... roles) {
         this.enabledRoles = Arrays.asList(roles);
     }
 
-    public void setEnabledUsers(List<UserSnowflake> users) {
+    /**
+     * Set the list of users that can use this command
+     */
+    @Disabled(since = "2.0")
+    public void enabledUsers(List<UserSnowflake> users) {
         this.enabledUsers = users;
     }
 
     /**
      * Set the list users that can use this command
      */
-    public void setEnabledUsers(UserSnowflake... users) {
+    @Disabled(since = "2.0")
+    public void enabledUsers(UserSnowflake... users) {
         this.enabledUsers = Arrays.asList(users);
     }
 
     /**
      * Set the list of roles that can not use the command
      */
-    public void setDisabledRoles(Role... roles) {
+    @Disabled(since = "2.0")
+    public void disabledRoles(Role... roles) {
         this.disabledRoles = Arrays.asList(roles);
     }
 
     /**
      * Set the list of roles that can not use the command
      */
-    public void setDisabledRoles(List<Role> roles) {
+    @Disabled(since = "2.0")
+    public void disabledRoles(List<Role> roles) {
         this.disabledRoles = roles;
     }
 
     /**
      * Set the list of users that can not use the command
      */
-    public void setDisabledUsers(User... users) {
+    @Disabled(since = "2.0")
+    public void disabledUsers(User... users) {
         this.disabledUsers = Arrays.asList(users);
     }
 
     /**
      * Set the list of users that can not use the command
      */
-    public void setDisabledUsers(List<User> users) {
+    @Disabled(since = "2.0")
+    public void disabledUsers(List<User> users) {
         this.disabledUsers = users;
     }
 
     /**
      * Set whether the command is enabled by default
      */
-    public void setDefaultEnabled() {
+    public void defaultEnabled() {
         this.defaultEnabled = true;
+    }
+
+    /**
+     * Set whether the command is enabled by default
+     */
+    public void defaultEnabled(boolean defaultEnabled) {
+        this.defaultEnabled = defaultEnabled;
     }
 
     /**
      * Set the subcommands
      */
-    public void setSubCommands(List<SubcommandData> subCommands) {
+    public void subCommands(List<SubcommandData> subCommands) {
         this.subCommands = subCommands;
     }
 
     /**
      * Set the subcommands
      */
-    public void setSubCommands(SubcommandData... subCommands) {
+    public void subCommands(SubcommandData... subCommands) {
         this.subCommands = Arrays.asList(subCommands);
     }
 
     /**
      * Set the subcommand group
      */
-    public void setSubcommandGroup(List<SubcommandGroupData> subcommandGroupDataList) {
+    public void subcommandGroup(List<SubcommandGroupData> subcommandGroupDataList) {
         this.subcommandGroup = subcommandGroupDataList;
     }
 
     /**
      * Set the subcommand group
      */
-    public void setSubcommandGroup(SubcommandGroupData... subcommandGroupDataList) {
+    public void subcommandGroup(SubcommandGroupData... subcommandGroupDataList) {
         this.subcommandGroup = Arrays.asList(subcommandGroupDataList);
     }
 
@@ -229,7 +256,7 @@ public abstract class SimpleSlashCommand {
      * Set the options of the command
      * !! This can not be used alongside subCommand or subCommandGroup !!
      */
-    public void setOptions(List<OptionData> optionDataList) {
+    public void options(List<OptionData> optionDataList) {
         this.options = optionDataList;
     }
 
@@ -237,13 +264,18 @@ public abstract class SimpleSlashCommand {
      * Set the options of the command
      * !! This can not be used alongside subCommand or subCommandGroup !!
      */
-    public void setOptions(OptionData... optionDataList) {
+    public void options(OptionData... optionDataList) {
         this.options = Arrays.asList(optionDataList);
     }
 
-    public void setCategory(String category) {
+    /**
+     * Set the category of the command
+     */
+    @Disabled(since = "2.0")
+    public void category(String category) {
         this.category = category;
     }
+
     // ----------------------------------------------------------------------------------------
 	// Getters
 	// ----------------------------------------------------------------------------------------
@@ -257,6 +289,11 @@ public abstract class SimpleSlashCommand {
         return command;
     }
 
+    /**
+     * Return the description of the command
+     *
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
@@ -275,6 +312,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the restriction to a NSFW channel
      */
+    @Disabled(since = "2.0")
     public boolean getNsfwOnly() {
         return nsfwOnly;
     }
@@ -284,6 +322,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the allowed roles
      */
+    @Disabled(since = "2.0")
     public List<Role> getEnabledRoles() {
         return enabledRoles;
     }
@@ -293,6 +332,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the allowed users
      */
+    @Disabled(since = "2.0")
     public List<UserSnowflake> getEnabledUsers() {
         return enabledUsers;
     }
@@ -302,6 +342,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the disallowed roles
      */
+    @Disabled(since = "2.0")
     public List<Role> getDisabledRoles() {
         return disabledRoles;
     }
@@ -311,6 +352,7 @@ public abstract class SimpleSlashCommand {
      *
      * @return the disallowed users
      */
+    @Disabled(since = "2.0")
     public List<User> getDisabledUsers() {
         return disabledUsers;
     }
@@ -352,8 +394,12 @@ public abstract class SimpleSlashCommand {
         return options;
     }
 
+    /**
+     * Get the category of the command
+     *
+     * @return the category
+     */
     public String getCategory() {
         return category;
     }
-
 }

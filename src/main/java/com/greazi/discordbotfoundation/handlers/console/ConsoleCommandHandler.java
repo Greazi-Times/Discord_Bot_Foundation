@@ -65,4 +65,12 @@ public class ConsoleCommandHandler {
 
         command.execute(args);
     }
+
+    /**
+     * Get the total amount of console commands
+     * @return Total amount of console commands
+     */
+    public int getTotal() {
+        return commandList.size();
+    }
 }

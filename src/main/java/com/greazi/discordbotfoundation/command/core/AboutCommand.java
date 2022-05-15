@@ -22,9 +22,9 @@ import java.awt.*;
 public class AboutCommand extends SimpleSlashCommand {
 
     public AboutCommand() {
-        setCommand("about");
-        setDefaultEnabled();
-        setDescription("Get some info about the bot");
+        super("about");
+        description("Get some info about the bot");
+        defaultEnabled();
     }
 
     @Override

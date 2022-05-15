@@ -1,7 +1,6 @@
 package com.greazi.discordbotfoundation.handlers.selectmenu;
 
 import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenuInteraction;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
@@ -43,9 +42,8 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setMenuId(String menu_id) {
+    public SimpleSelectMenu(String menu_id) {
         this.menu_id = menu_id;
-        return this;
     }
 
     /**
@@ -59,7 +57,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setPlaceholder(String placeholder) {
+    public SimpleSelectMenu placeholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
     }
@@ -78,7 +76,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setMin(int min) {
+    public SimpleSelectMenu min(int min) {
         this.min = min;
         return this;
     }
@@ -97,7 +95,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setMax(int max) {
+    public SimpleSelectMenu max(int max) {
         this.max = max;
         return this;
     }
@@ -118,7 +116,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setMinMax(int min, int max) {
+    public SimpleSelectMenu minMax(int min, int max) {
         this.min = min;
         this.max = max;
         return this;
@@ -133,7 +131,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setDisabled(boolean disabled) {
+    public SimpleSelectMenu disabled(boolean disabled) {
         this.disabled = disabled;
         return this;
     }
@@ -149,7 +147,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setOptions(SelectOption... options) {
+    public SimpleSelectMenu options(SelectOption... options) {
         this.options = Arrays.asList(options);
         return this;
     }
@@ -165,7 +163,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu setOptions(List<SelectOption> options) {
+    public SimpleSelectMenu options(List<SelectOption> options) {
         this.options = options;
         return this;
     }
@@ -187,7 +185,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu addOption(String label, String value, boolean selected){
+    public SimpleSelectMenu option(String label, String value, boolean selected){
         SelectOption option = SelectOption.of(label, value)
                 .withDefault(selected);
         this.options.add(option);
@@ -213,7 +211,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu addOption(String label, String value, String description, boolean selected){
+    public SimpleSelectMenu option(String label, String value, String description, boolean selected){
         SelectOption option = SelectOption.of(label, value)
                 .withDescription(description)
                 .withDefault(selected);
@@ -240,7 +238,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu addOption(String label, String value, Emoji emoji, boolean selected){
+    public SimpleSelectMenu option(String label, String value, Emoji emoji, boolean selected){
         SelectOption option = SelectOption.of(label, value)
                 .withEmoji(emoji)
                 .withDefault(selected);
@@ -269,7 +267,7 @@ public abstract class SimpleSelectMenu {
      *
      * @return The same builder instance for chaining
      */
-    public SimpleSelectMenu addOption(String label, String value, String description, Emoji emoji, boolean selected){
+    public SimpleSelectMenu option(String label, String value, String description, Emoji emoji, boolean selected){
         SelectOption option = SelectOption.of(label, value)
                 .withDescription(description)
                 .withEmoji(emoji)

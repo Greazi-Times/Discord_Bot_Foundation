@@ -38,6 +38,9 @@ public class SlashCommandHandler extends ListenerAdapter {
     private final HashMap<String, SimpleSlashCommand> cmdList = new HashMap<>();
     private final List<SlashCommandData> slashCommands = new ArrayList<>();
 
+    private final List<SlashCommandData> publicSlashCommands = new ArrayList<>();
+    private final List<SlashCommandData> mainGuildSlashCommands = new ArrayList<>();
+
     /**
      * The main slash command handler
      */
@@ -84,9 +87,18 @@ public class SlashCommandHandler extends ListenerAdapter {
 
         Debugger.debug("SlashCommand", "Added slash command: " + command.getName());
 
+        // TODO: When api has an update for the slash command system update it to that system
+        //       Check it out here: https://github.com/DV8FromTheWorld/JDA/pull/2113
         // Add the slash command
-        slashCommands.add(command);
-        // Add the slash command to the hashmap
+        if (module.getGuildOnly()) {
+            mainGuildSlashCommands.add(command);
+            Debugger.debug("SlashCommand", "Guild only for: " + command.getName());
+        } else {
+            publicSlashCommands.add(command);
+            Debugger.debug("SlashCommand", "Public command for: " + command.getName());
+        }
+
+        // Add it to our internal list
         cmdList.put(module.getCommand(), module);
         
         return this;
@@ -100,26 +112,16 @@ public class SlashCommandHandler extends ListenerAdapter {
         if (slashCommands.isEmpty()) return;
 
         Debugger.debug("SlashCommand", "Registering slash commands");
-
-        // TODO: Add a check for main guild
-        //      Once main guild == true add to main guild only if not add to all guilds
         
         // Add all slash commands to the main guild
         SimpleBot.getGuild().updateCommands()
-                .addCommands(slashCommands)
-                .queue(commands -> {
-                    commands.forEach(cmd -> {
-                        SimpleSlashCommand module = cmdList.get(cmd.getName());
+                .addCommands(mainGuildSlashCommands)
+                .queue();
 
-                        List<CommandPrivilege> commandPrivileges = new ArrayList<>();
-                        module.getDisabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.disableRole(role.getId())));
-                        module.getDisabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.disableUser(user.getId())));
-                        module.getEnabledRoles().forEach(role -> commandPrivileges.add(CommandPrivilege.enableRole(role.getId())));
-                        module.getEnabledUsers().forEach(user -> commandPrivileges.add(CommandPrivilege.enableUser(user.getId())));
-
-                        SimpleBot.getGuild().updateCommandPrivilegesById(cmd.getId(), commandPrivileges);
-                    });
-                });
+        // Add the commands to all the guilds PUBLIC!!
+        SimpleBot.getJDA().updateCommands()
+                .addCommands(publicSlashCommands)
+                .queue();
     }
 
     /**
@@ -161,5 +163,13 @@ public class SlashCommandHandler extends ListenerAdapter {
         Debugger.debug("SlashCommand", "Executing command logic");        
         // Run the command logic
         module.execute(event);
+    }
+
+    /**
+     * Get the total amount of slash commands registered
+     * @return Total amount of slash commands
+     */
+    public int getTotal() {
+        return cmdList.size();
     }
 }

@@ -8,8 +8,8 @@ public class ClearConsoleCommand extends SimpleConsoleCommand {
 
     public ClearConsoleCommand() {
         super("clear");
-        setDescription("Clears the console");
-        setUsage("clear");
+        description("Clears the console");
+        usage("clear");
     }
 
     @Override
