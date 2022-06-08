@@ -2,6 +2,7 @@ package com.greazi.discordbotfoundation.utils;
 
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
+import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -32,10 +33,10 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      */
     public SimpleEmbedBuilder(String title) {
         if(title != null)
-            setAuthor(title, SimpleBot.getBot().getLink(), SimpleBot.getBot().getEmbedAuthorImage());
+            setAuthor(title, SimpleSettings.Embed.Link(), SimpleSettings.Embed.Image.Author());
 
         color(new Color(47, 49, 54));
-        footer("Developed by " + SimpleBot.getBot().getDeveloper());
+        footer(SimpleBot.getBot().getDeveloper());
     }
 
     /**
@@ -45,9 +46,9 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      */
     public SimpleEmbedBuilder(String title, boolean footer) {
         if(title != null)
-            setAuthor(title, SimpleBot.getBot().getLink(), SimpleBot.getBot().getEmbedAuthorImage());
+            setAuthor(title, SimpleSettings.Embed.Link(), SimpleSettings.Embed.Image.Author());
         if(footer)
-            footer("Developed by " + SimpleBot.getBot().getDeveloper());
+            footer(SimpleBot.getBot().getDeveloper());
 
         color(new Color(47, 49, 54));
     }
@@ -58,7 +59,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      */
     public SimpleEmbedBuilder(boolean footer) {
         if(footer)
-            footer("Developed by " + SimpleBot.getBot().getDeveloper());
+            footer(SimpleBot.getBot().getDeveloper());
 
         color(new Color(47, 49, 54));
     }
@@ -68,7 +69,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      * @param text
      */
     public SimpleEmbedBuilder footer(String text) {
-        setFooter(SimpleBot.getBot().getDeveloper() + " • " + text, SimpleBot.getBot().getEmbedAuthorImage());
+        setFooter(text + " • " + SimpleSettings.Embed.Footer(), SimpleSettings.Embed.Image.Footer());
 
         return this;
     }
@@ -77,7 +78,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      * Set the embed color to red
      */
     public SimpleEmbedBuilder error() {
-        color(new Color(178,34,34));
+        color(new Color(255,67,67));
 
         return this;
     }
@@ -86,7 +87,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      * Set the embed color to green
      */
     public SimpleEmbedBuilder success() {
-        color(new Color(50, 205, 50));
+        color(new Color(140,255,142));
 
         return this;
     }

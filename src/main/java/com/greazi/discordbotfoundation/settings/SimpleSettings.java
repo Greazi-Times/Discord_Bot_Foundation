@@ -228,6 +228,38 @@ public class SimpleSettings {
 	}
 
 	/**
+	 * Retrieve all the embed settings
+	 */
+	public static class Embed {
+
+		// Set the main path of the settings values
+		private static final String path = "Embed.";
+
+		// The link
+		public static String Link() {
+			return getString(path + "Link");
+		}
+
+		// The footer
+		public static String Footer() {
+			return getString(path + "Footer");
+		}
+
+		public static class Image {
+
+			// The author image
+			public static String Author() {
+				return getString(path + "Image.Author");
+			}
+
+			// The footer image
+			public static String Footer() {
+				return getString(path + "Image.Footer");
+			}
+		}
+	}
+
+	/**
 	 * Retrieve all the console settings
 	 */
 	public static class Console {

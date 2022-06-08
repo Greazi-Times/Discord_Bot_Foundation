@@ -35,6 +35,19 @@ Activity:
   # The message after the activity type
   Message: "Foundation"
 
+Embed:
+  Link: "https://greazi.com"
+  Footer: "Copyright ©Greazi"
+  Image:
+    Author: "https://www.greazi.com/wp-content/uploads/2021/08/cropped-bannerempty.png"
+    Footer: "https://www.greazi.com/wp-content/uploads/2021/08/cropped-bannerempty.png"
+
+Commands:
+  Stop:
+    Enabled: true
+    AllowedRoles:
+      - owner
+
 # -------------------------------------------------------------------------------------------------
 #  Manage the console of the bot
 # -------------------------------------------------------------------------------------------------
