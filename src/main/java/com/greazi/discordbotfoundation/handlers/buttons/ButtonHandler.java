@@ -43,7 +43,7 @@ public class ButtonHandler extends ListenerAdapter {
      * @return this {@link SimpleButton}
      */
     public ButtonHandler addButtonListener(SimpleButton module) {
-        Debugger.debug("Button", "Adding new button: " + module.getId(), "Class: " + module);
+        Debugger.debug("Button", "Adding new button: " + module.getId());
         buttonList.put(module.getId(), module);
         return this;
     }
@@ -66,7 +66,7 @@ public class ButtonHandler extends ListenerAdapter {
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
         Debugger.debug("Button", "A button has been pressed");
 
-        Common.log("User, " + ConsoleColor.CYAN + event.getMember().getEffectiveName() + ConsoleColor.RESET + " used Button: " + ConsoleColor.CYAN + event.getId() + ConsoleColor.RESET);
+        Common.log("User, " + ConsoleColor.CYAN + event.getMember().getEffectiveName() + ConsoleColor.RESET + " used Button: " + ConsoleColor.CYAN + event.getButton().getId() + ConsoleColor.RESET);
 
         // Retrieve the button class from the button that has been pressed
         SimpleButton module = buttonList.get(event.getButton().getId());
@@ -81,9 +81,6 @@ public class ButtonHandler extends ListenerAdapter {
                     .build()).setEphemeral(true).queue();
             return;
         }
-
-        // Debug message will be changed / optimized later
-        Debugger.debug("Button", "Found event; " + module);
 
         // If the button has been pressed inside the main guild
         if (!Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.Bot.MainGuild()) && module.getGuildOnly()){
