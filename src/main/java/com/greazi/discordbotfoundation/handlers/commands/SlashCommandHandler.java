@@ -17,6 +17,7 @@ import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +37,6 @@ public class SlashCommandHandler extends ListenerAdapter {
 
     // The hashmap and list of tall the slash commands
     private final HashMap<String, SimpleSlashCommand> cmdList = new HashMap<>();
-    private final List<SlashCommandData> slashCommands = new ArrayList<>();
-
     private final List<SlashCommandData> publicSlashCommands = new ArrayList<>();
     private final List<SlashCommandData> mainGuildSlashCommands = new ArrayList<>();
 
@@ -108,11 +107,24 @@ public class SlashCommandHandler extends ListenerAdapter {
      *  Register all slash commands to JDA
      */
     public void registerCommands() {
+//        for(Command command : SimpleBot.getJDA().retrieveCommands().complete()) {
+//            SimpleBot.getJDA().deleteCommandById(command.getIdLong());
+//        }
+
         // Check if the slash commands isn't empty
-        if (slashCommands.isEmpty()) return;
+        if(mainGuildSlashCommands.isEmpty()) Common.warning("Be aware no main guild slash commands can be found!");
+        if(publicSlashCommands.isEmpty()) Common.warning("Be aware no public slash commands can be found!");
 
         Debugger.debug("SlashCommand", "Registering slash commands");
-        
+
+        // A for loop to loop through all commands to really see what commands get registered
+        for(SlashCommandData commandData : mainGuildSlashCommands){
+            Debugger.debug("UpdateCommands", "Register command " + commandData.getName() + " on main guild");
+        }
+        for(SlashCommandData commandData : publicSlashCommands){
+            Debugger.debug("UpdateCommands", "Register command " + commandData.getName() + " publicly");
+        }
+
         // Add all slash commands to the main guild
         SimpleBot.getGuild().updateCommands()
                 .addCommands(mainGuildSlashCommands)
@@ -165,11 +177,30 @@ public class SlashCommandHandler extends ListenerAdapter {
         module.execute(event);
     }
 
+    // TODO: Make the total count better so it will show the actually registered commands with JDA instead of the count
+    //       of the lists that are made
+
     /**
      * Get the total amount of slash commands registered
      * @return Total amount of slash commands
      */
     public int getTotal() {
         return cmdList.size();
+    }
+
+    /**
+     * Get the total amount of public registered slash commands
+     * @return Total amount of public slash commands
+     */
+    public int getPublicTotal() {
+        return publicSlashCommands.size();
+    }
+
+    /**
+     * Get the total amount of private registered slash commands
+     * @return Total amount of private slash commands
+     */
+    public int getGuildTotal() {
+        return mainGuildSlashCommands.size();
     }
 }
