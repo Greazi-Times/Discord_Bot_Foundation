@@ -1,21 +1,3 @@
-## [0.4.3](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.2...v0.4.3) (2022-06-08)
-
-
-### Reverts
-
-* Revert "Merge branch 'main' of https://github.com/Greazi-Times/Discord_Bot_Foundation" ([6a8f66e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/6a8f66e28bffc40d57c20166572b21325468b194))
-
-
-
-## [0.4.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.6.0...v0.4.2) (2022-06-08)
-
-
-### Reverts
-
-* Revert "chore: Fix files" ([b1ed3e6](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/b1ed3e6c69453ec1d07edea3d437e979d1af6abb))
-
-
-
 # [0.6.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.5.0...v0.6.0) (2022-06-08)
 
 
