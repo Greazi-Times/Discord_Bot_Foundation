@@ -7,7 +7,7 @@ package com.greazi.discordbotfoundation.debug;
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
+import com.greazi.discordbotfoundation.utils.color.Color;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -34,13 +34,13 @@ public final class Debugger {
 	 * @return
 	 */
 	public static boolean isDebugged(String section) {
-		return SimpleSettings.Debug().toLowerCase().contains(section.toLowerCase()) || SimpleSettings.Debug().contains("*");
+		return SimpleSettings.getInstance().getDebug().contains(section) || SimpleSettings.getInstance().getDebug().contains("*");
 	}
 
 	/**
 	 * Prints a debug messages to the console if the given section is being debugged
 	 * <p>
-	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yaml,
+	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yml,
 	 * by default your class extending {@link SimpleSettings}
 	 *
 	 * @param section
@@ -50,9 +50,9 @@ public final class Debugger {
 		if (isDebugged(section)) {
 			for (final String message : messages)
 				if (SimpleBot.hasInstance())
-					Common.logNoPrefix(ConsoleColor.YELLOW + "[DEBUGGER" + ConsoleColor.BLACK_BRIGHT + "/" + ConsoleColor.YELLOW + section + "] " + ConsoleColor.RESET + message + ConsoleColor.RESET);
+					Common.log("[" + Color.YELLOW + section + Color.RESET + "] " + message);
 				else
-					System.out.println("[" + ConsoleColor.YELLOW + section + ConsoleColor.RESET + "] " + message + ConsoleColor.RESET);
+					System.out.println("[" + Color.YELLOW + section + Color.RESET + "] " + message);
 		}
 	}
 

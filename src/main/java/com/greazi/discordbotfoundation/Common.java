@@ -1,14 +1,11 @@
 package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.debug.FoException;
-import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import com.greazi.discordbotfoundation.utils.time.TimeUtil;
+import com.greazi.discordbotfoundation.utils.color.Color;
 import lombok.Getter;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
 
 /**
  * This class holds some pre-made log and message send modules
@@ -38,7 +35,7 @@ public final class Common {
 	 * The log prefix applied on log() methods
 	 */
 	@Getter
-	private static String logPrefix = "[INFO]";
+	private static String logPrefix = "[" + SimpleBot.getName() + "]";
 
 	/**
 	 * Set the log prefix applied for messages in the console from log() methods.
@@ -115,7 +112,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void success(String message) {
-		logNoPrefix(ConsoleColor.GREEN + "[SUCCESS] " + message);
+		log(Color.GREEN + "Success: " + message);
 	}
 
 	/**
@@ -125,7 +122,7 @@ public final class Common {
 	 * @param message
 	 */
 	public static void warning(String message) {
-		logNoPrefix(ConsoleColor.RED + "[WARNING] " + message);
+		log(Color.YELLOW + "Warning: " + message);
 	}
 
 	/**
@@ -169,15 +166,9 @@ public final class Common {
 				continue;
 
 			for (final String part : splitNewline(message)) {
+				final String log = ((addLogPrefix && ADD_LOG_PREFIX ? logPrefix + " " : "") + part.replace("\n", "\n&r")).trim();
 
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-				LocalTime localTime = LocalTime.now();
-
-				if(addLogPrefix && ADD_LOG_PREFIX){
-					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.GREEN + logPrefix + ConsoleColor.RESET + " " + part + ConsoleColor.RESET);
-				} else {
-					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.RESET + part + ConsoleColor.RESET);
-				}
+				System.out.println(log);
 			}
 		}
 	}
@@ -194,18 +185,18 @@ public final class Common {
 	/**
 	 * Logs a bunch of messages to the console in a {@link #consoleLine()} frame.
 	 * <p>
-	 * Used when an error occurs, can also disable the bot
+	 * Used when an error occurs, can also disable the plugin
 	 *
-	 * @param disableBot
+	 * @param disablePlugin
 	 * @param messages
 	 */
-	public static void logFramed(final boolean disableBot, final String... messages) {
+	public static void logFramed(final boolean disablePlugin, final String... messages) {
 		if (messages != null && !Valid.isNullOrEmpty(messages)) {
-			logNoPrefix(ConsoleColor.BLACK_BRIGHT + consoleLine());
+			log("&7" + consoleLine());
 			for (final String msg : messages)
-				logNoPrefix(msg + ConsoleColor.RESET);
+				log(" &c" + msg);
 
-			logNoPrefix(ConsoleColor.BLACK_BRIGHT + consoleLine());
+			log("&7" + consoleLine());
 		}
 	}
 
@@ -216,7 +207,7 @@ public final class Common {
 	 * @param messages
 	 */
 	public static void error(final String... messages) {
-		logFramed(ConsoleColor.RED + Arrays.toString(messages) + ConsoleColor.RESET);
+		logFramed(Color.RED + messages);
 	}
 
 	/**
@@ -253,8 +244,8 @@ public final class Common {
 		while (throwable.getCause() != null)
 			throwable = throwable.getCause();
 
-		final String throwableName = throwable.getClass().getSimpleName();
-		final String throwableMessage = throwable.getMessage() == null || throwable.getMessage().isEmpty() ? "" : ": " + throwable.getMessage();
+		final String throwableName = throwable == null ? "Unknown error." : throwable.getClass().getSimpleName();
+		final String throwableMessage = throwable == null || throwable.getMessage() == null || throwable.getMessage().isEmpty() ? "" : ": " + throwable.getMessage();
 
 		for (int i = 0; i < msgs.length; i++) {
 			final String error = throwableName + throwableMessage;
@@ -404,7 +395,7 @@ public final class Common {
 }
 
 /**
- * A wrapper for sneaky error's
+ * A wrapper for Spigot
  */
 class SneakyThrow {
 
