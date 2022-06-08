@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public final class Debugger {
 	/**
 	 * Get if the given section is being debugged
 	 * <p>
-	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yaml,
+	 * You can set if the section is debugged by setting it in "Debug" key in your settings.yml,
 	 * by default your class extending {@link SimpleSettings}
 	 * <p>
 	 * If you set Debug to ["*"] this will always return true
