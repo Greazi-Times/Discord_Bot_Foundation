@@ -8,6 +8,8 @@
 .gradle/
 *.iml
 *.DS_Store
+*.bin
+*.lock
 
 # IntelliJ
 out/

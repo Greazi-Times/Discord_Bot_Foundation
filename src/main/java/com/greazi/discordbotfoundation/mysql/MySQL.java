@@ -59,6 +59,16 @@ public class MySQL extends SQL {
         this.connected = true;
     }
 
+    public void close(){
+        try {
+            if(connection != null)
+                connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        this.connected = false;
+    }
+
     private void createDatabase(String host, int port, String username, String password, String database, String attributes) throws SQLException {
         connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + (attributes.isEmpty() ? "" : "?" + attributes), username, password);
 

@@ -7,7 +7,7 @@ public final class Constants {
 		/**
 		 * The name of our settings file
 		 */
-		public static final String SETTINGS = "Settings.json";
+		public static final String SETTINGS = "settings.yaml";
 
 		/**
 		 * The error.log file created automatically to log errors to !!THIS FILE WILL BE USED LATER ON BUT IS HERE TO JUST HAVE IT ALREADY!!
@@ -18,5 +18,9 @@ public final class Constants {
 		 * The debug.log file to log debug messages to
 		 */
 		public static final String DEBUG = "debug.log";
+	}
+
+	public static final class Version {
+		public static final String FOUNDATION = "1.0.0-BETA";
 	}
 }

@@ -9,8 +9,16 @@ import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+ * ProjectUtils is a class that allows you to handle some basic stuff on the project
+ * Not yet done and tested
+ */
 public class ProjectUtil {
 
+    /**
+     * Retrieve files
+     * @return File names
+     */
     public static String[] getFiles() {
         ArrayList<String> names = new ArrayList<>();
         try {
@@ -30,6 +38,11 @@ public class ProjectUtil {
         return names.toArray(new String[0]);
     }
 
+    /**
+     * Retrieve classes according to their names
+     * @param prefix
+     * @return The class
+     */
     public static Class<?>[] getClasses(String prefix) {
         return Arrays.stream(getFiles())
                 .filter(fileName -> fileName.endsWith(".class"))
@@ -47,15 +60,36 @@ public class ProjectUtil {
                 .toArray(Class[]::new);
     }
 
+    /**
+     * Remove letters on the front
+     * @param s String
+     * @param am Amount
+     * @return The edited message
+     */
     public static String removeFront(String s, int am) {
         return s.substring(am);
     }
 
+    /**
+     * Remove letters on the end
+     * @param s String
+     * @param am Amount
+     * @return The edited message
+     */
     public static String removeEnd(String s, int am) {
         return s.substring(0, s.length() - am);
     }
 
+    /**
+     * Remove letters on both sides
+     * @param s String
+     * @param am Amount
+     * @return The edited message
+     */
     public static String removeBoth(String s, int am) {
         return s.substring(am, s.length() - am);
     }
+
+
+
 }
