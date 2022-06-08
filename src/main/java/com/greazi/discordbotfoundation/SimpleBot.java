@@ -5,6 +5,7 @@ import com.greazi.discordbotfoundation.command.core.StopCommand;
 import com.greazi.discordbotfoundation.console.ClearConsoleCommand;
 import com.greazi.discordbotfoundation.console.HelpConsoleCommand;
 import com.greazi.discordbotfoundation.console.StopConsoleCommand;
+import com.greazi.discordbotfoundation.constants.Constants;
 import com.greazi.discordbotfoundation.handlers.buttons.ButtonHandler;
 import com.greazi.discordbotfoundation.handlers.buttons.SimpleButton;
 import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
@@ -26,6 +27,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -100,6 +103,10 @@ public abstract class SimpleBot {
         // A debugger that sends a message to the console when the bot is starting
         Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
 
+        if(getStartupLogo() != null) {
+            Common.logNoPrefix(getStartupLogo());
+        }
+
         // Load the settings from the config file
         SimpleSettings.init();
 
@@ -162,6 +169,9 @@ public abstract class SimpleBot {
             Common.error("The bot failed to enable something is wrong!");
         }
 
+        for(Command command : getJDA().retrieveCommands().complete()) {
+            Common.log(command.getName() + " " + command.getDescription());
+        }
 	}
 
     /**
@@ -189,12 +199,6 @@ public abstract class SimpleBot {
             return;
         }
 
-        // Run the onReloadableStart() method
-        onReloadableStart();
-
-        // Register all the commands
-        slashCommandHandler.registerCommands();
-
         // Load the static commands
         registerCommands(
                 new PingCommand(),
@@ -214,11 +218,17 @@ public abstract class SimpleBot {
                 new StopConsoleCommand()
         );
 
+        // Run the onReloadableStart() method
+        onReloadableStart();
+
+        // Register commands to JDA
+        slashCommandHandler.registerCommands();
+
         // A boolean that says the bot is loaded and enabled
         enabled = true;
 
         // A log option to show how many things are registered
-        Common.log("Loaded a total of " + ConsoleColor.CYAN + getSlashCommandHandler().getTotal() + ConsoleColor.RESET + " slash commands");
+        Common.log("Loaded a total of " + ConsoleColor.CYAN + getSlashCommandHandler().getTotal() + ConsoleColor.RESET + " slash commands " + ConsoleColor.CYAN + getSlashCommandHandler().getGuildTotal() + ConsoleColor.RESET + " main guild and " + ConsoleColor.CYAN + getSlashCommandHandler().getPublicTotal() + ConsoleColor.RESET + " public");
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getConsoleCommandHandler().getTotal() + ConsoleColor.RESET + " console commands");
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getSelectMenuHandler().getTotal() + ConsoleColor.RESET + " menus");
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getButtonHandler().getTotal() + ConsoleColor.RESET + " buttons");
@@ -551,12 +561,30 @@ public abstract class SimpleBot {
     // TODO: Fix this so it works properly with a @Override
 
     /**
+     * The start-up fancy logo
+     *
+     * @return null by default
+     */
+    protected String[] getStartupLogo() {
+        return null;
+    }
+
+    /**
+     * Get the year of foundation displayed on the about command
+     *
+     * @return -1 by default, or the founded year
+     */
+    public int getFoundedYear() {
+        return -1;
+    }
+
+    /**
      * Retrieve the version of the bot
      *
      * @return Version
      */
     public static String getVersion() {
-        return "1.0.0";
+        return Constants.Version.FOUNDATION;
     }
 
     /**
@@ -574,18 +602,7 @@ public abstract class SimpleBot {
      * @return Developer
      */
     public String getDeveloper() {
-        return "Greazi";
-    }
-
-    /**
-     * !!! THIS WILL BE MOVED WITH THE NEW SETTINGS SYSTEM !!!
-     * <p>
-     * Retrieve the main embed image of the bot
-     *
-     * @return Embed image
-     */
-    public String getEmbedAuthorImage() {
-        return "https://i.imgur.com/ddzfapZ.png";
+        return null;
     }
 
     /**
@@ -596,8 +613,6 @@ public abstract class SimpleBot {
     public String getLink() {
         return "https://greazi.com";
     }
-
-
 
     /**
      * Check if the bot is enabled
