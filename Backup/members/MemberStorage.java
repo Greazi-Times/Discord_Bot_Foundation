@@ -15,7 +15,7 @@ import java.util.Map;
 public class MemberStorage {
 
     public MemberStorage() {
-        if (!SimpleSettings.getInstance().isMysqlEnabled()) return;
+        if (!SimpleSettings.getMysqlEnabled()) return;
 
         ITable membersTable = SimpleBot.getMySQL().table("members");
 
@@ -42,7 +42,7 @@ public class MemberStorage {
                     SimpleBot.getMySQL().getConnection().prepareStatement("alter table "+membersTable.getName()+" add primary key(`discord_id`);");
 
                     Common.warning("Adding all members");
-                    Guild mainGuild = SimpleBot.getJDA().getGuildById(SimpleSettings.getInstance().getMainGuild());
+                    Guild mainGuild = SimpleBot.getJDA().getGuildById(SimpleSettings.getMainGuild());
                     mainGuild.getMembers().forEach(member -> {
                         Insert query = membersTable.insert();
                         query.field("discord_id", member.getId());

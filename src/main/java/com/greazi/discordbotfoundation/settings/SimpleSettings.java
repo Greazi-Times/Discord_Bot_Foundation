@@ -342,4 +342,6 @@ public class SimpleSettings {
 	public static String Debug(){
 		return getString("Debug");
 	}
+
+
 }
