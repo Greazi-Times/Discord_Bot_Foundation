@@ -33,14 +33,13 @@ public class StopCommand extends SimpleSlashCommand {
 	 */
 	public StopCommand() {
 		super("stop");
-
-		getRoleList();
+		description("Stop the bot from running");
 
 		if(SimpleSettings.Stop.Enabled()) defaultEnabled();
+		mainGuildOnly();
 
-		defaultEnabled();
-		description("Stop the bot from running");
-		enabledRoles(roleList);
+//		getRoleList();
+//		enabledRoles(roleList);
 	}
 
 	/**
