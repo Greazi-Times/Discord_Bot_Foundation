@@ -1,3 +1,12 @@
+## [0.4.3](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.2...v0.4.3) (2022-06-08)
+
+
+### Reverts
+
+* Revert "Merge branch 'main' of https://github.com/Greazi-Times/Discord_Bot_Foundation" ([6a8f66e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/6a8f66e28bffc40d57c20166572b21325468b194))
+
+
+
 ## [0.4.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.6.0...v0.4.2) (2022-06-08)
 
 
@@ -88,20 +97,6 @@
 ### Bug Fixes
 
 * Added command listener event for main cmd module ([0bd4f66](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/0bd4f668338bfc499fe75591d6344ccf33c569f1))
-
-
-
-# [0.4.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.3.0...v0.4.0) (2022-03-06)
-
-
-### Bug Fixes
-
-* Fixed command registration issue ([e669647](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e669647bd937ef74d700b4c41ed64b5db77b5fd2))
-
-
-### Features
-
-* Added a simple startup box ([c4293f3](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/c4293f3c278f1013c201ad6cca3b269dae810529))
 
 
 
