@@ -1,0 +1,17 @@
+#################
+## IDEA
+#################
+
+# User-specific stuff
+.idea/
+.idea_modules/
+.gradle/
+*.iml
+*.DS_Store
+*.bin
+*.lock
+
+# IntelliJ
+out/
+build/
+
