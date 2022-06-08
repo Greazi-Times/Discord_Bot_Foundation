@@ -20,7 +20,11 @@ public final class Constants {
 		public static final String DEBUG = "debug.log";
 	}
 
+	/**
+	 * Version variable changed manually up to release
+	 */
 	public static final class Version {
+		// The version
 		public static final String FOUNDATION = "1.0.0";
 	}
 }
