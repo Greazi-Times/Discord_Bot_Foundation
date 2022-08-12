@@ -1,3 +1,12 @@
+## [0.11.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.1...v0.11.2) (2022-08-12)
+
+
+### Bug Fixes
+
+* **Console:** Added a check so the stop command can't be disabled ([f3a5652](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/f3a56520a4006fde0070685579b2062aea45ea49))
+
+
+
 ## [0.11.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.0...v0.11.1) (2022-08-12)
 
 
@@ -40,15 +49,6 @@
 ### Reverts
 
 * Revert "Merge branch 'main' of https://github.com/Greazi-Times/Discord_Bot_Foundation" ([6a8f66e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/6a8f66e28bffc40d57c20166572b21325468b194))
-
-
-
-## [0.4.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.6.0...v0.4.2) (2022-06-08)
-
-
-### Reverts
-
-* Revert "chore: Fix files" ([b1ed3e6](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/b1ed3e6c69453ec1d07edea3d437e979d1af6abb))
 
 
 
