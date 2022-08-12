@@ -29,6 +29,11 @@ public class ConsoleCommandHandler {
                 String command = splitInput.get(0);
                 List<String> args = splitInput.subList(1, splitInput.size());
 
+                if(command.equals("stop")){
+                    execute(command, args);
+                    return;
+                }
+
                 if(SimpleSettings.Console.Commands.Disabled().contains(command.toLowerCase())) continue;
 
                 execute(command, args);
