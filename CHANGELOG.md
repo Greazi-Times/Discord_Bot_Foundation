@@ -1,3 +1,12 @@
+## [0.11.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.0...v0.11.1) (2022-08-12)
+
+
+### Bug Fixes
+
+* Embed footer ([bb7a555](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/bb7a555d00b2c3f72fba65f40e20e9b1671fc1b5))
+
+
+
 # [0.11.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.10.0...v0.11.0) (2022-08-12)
 
 
@@ -40,14 +49,6 @@
 ### Reverts
 
 * Revert "chore: Fix files" ([b1ed3e6](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/b1ed3e6c69453ec1d07edea3d437e979d1af6abb))
-
-
-
-# [0.6.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v1.0.0...v0.6.0) (2022-06-08)
-
-
-
-# [0.5.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.1...v0.5.0) (2022-03-23)
 
 
 
