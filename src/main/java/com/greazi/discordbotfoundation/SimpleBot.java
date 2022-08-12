@@ -25,10 +25,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.SelfUser;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -127,7 +125,7 @@ public abstract class SimpleBot {
                 activityType = Activity.playing(activity);
                 break;
             case "streaming":
-                activityType = Activity.streaming(activity, getLink());
+                activityType = Activity.streaming(activity, getDeveloperWebsite());
                 break;
             case "listening":
                 activityType = Activity.listening(activity);
@@ -601,8 +599,8 @@ public abstract class SimpleBot {
      *
      * @return Developer
      */
-    public String getDeveloper() {
-        return null;
+    public String getDeveloperName() {
+        return SimpleSettings.Developer.Name();
     }
 
     /**
@@ -610,8 +608,8 @@ public abstract class SimpleBot {
      *
      * @return Author link
      */
-    public String getLink() {
-        return "https://greazi.com";
+    public String getDeveloperWebsite() {
+        return SimpleSettings.Developer.Website();
     }
 
     /**

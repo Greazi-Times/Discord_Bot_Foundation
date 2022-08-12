@@ -228,6 +228,30 @@ public class SimpleSettings {
 	}
 
 	/**
+	 * Retrieve all the developer settings
+	 */
+	public static class Developer {
+
+		// Set the main path of the settings values
+		private static final String path = "Developer.";
+
+		// The Name
+		public static String Name() {
+			return getString(path + "Name");
+		}
+
+		// The Website
+		public static String Website() {
+			return getString(path + "Website");
+		}
+
+		// The Image
+		public static String Image() {
+			return getString(path + "Image");
+		}
+	}
+
+	/**
 	 * Retrieve all the embed settings
 	 */
 	public static class Embed {

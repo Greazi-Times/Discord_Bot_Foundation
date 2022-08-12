@@ -35,6 +35,14 @@ Activity:
   # The message after the activity type
   Message: "Foundation"
 
+Developer:
+  # The name of the developer of the bot
+  Name: "Greazi"
+  # The website of the developer of the bot
+  Website: "https://greazi.com"
+  # The image of the developer of the bot
+  Image: "https://www.greazi.com/wp-content/uploads/2021/08/cropped-bannerempty.png"
+
 Embed:
   Link: "https://greazi.com"
   Footer: "Copyright ©Greazi"

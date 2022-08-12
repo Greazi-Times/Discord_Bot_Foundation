@@ -36,7 +36,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
             setAuthor(title, SimpleSettings.Embed.Link(), SimpleSettings.Embed.Image.Author());
 
         color(new Color(47, 49, 54));
-        footer(SimpleBot.getBot().getDeveloper());
+        footer(SimpleSettings.Embed.Footer());
     }
 
     /**
@@ -48,7 +48,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
         if(title != null)
             setAuthor(title, SimpleSettings.Embed.Link(), SimpleSettings.Embed.Image.Author());
         if(footer)
-            footer(SimpleBot.getBot().getDeveloper());
+            footer(SimpleSettings.Embed.Footer());
 
         color(new Color(47, 49, 54));
     }
@@ -59,7 +59,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      */
     public SimpleEmbedBuilder(boolean footer) {
         if(footer)
-            footer(SimpleBot.getBot().getDeveloper());
+            footer(SimpleSettings.Embed.Footer());
 
         color(new Color(47, 49, 54));
     }
