@@ -1,3 +1,18 @@
+# [0.13.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.12.0...v0.13.0) (2022-08-17)
+
+
+### Bug Fixes
+
+* Fixed modal deprication ([0b5dcae](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/0b5dcae7174247edc5ef734130afb79acbac3443))
+
+
+### Features
+
+* Added cron job system & Added stop functions ([59a5060](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/59a50609919bed4c7aa30da5932830e233c04374))
+* Added temp file storage (BETA) ([60b0890](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/60b08900f36dfb8cf0bbc048c68681f415e09aab))
+
+
+
 # [0.12.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.2...v0.12.0) (2022-08-17)
 
 
@@ -37,24 +52,6 @@
 ### Features
 
 * Added developer settings and updated embeds ([4558284](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/4558284043c444600fc407414d9ce403022e618d))
-
-
-
-# [0.10.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.3...v0.10.0) (2022-06-08)
-
-
-
-# 1.0.0 (2022-06-08)
-
-
-### Features
-
-* constants file for constants values ([d5fe753](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d5fe753dc736215c69a21beac729610d8c22da8b))
-
-
-### Reverts
-
-* Revert "chore(release): v0.4.3" ([e55b34b](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e55b34b57b66b246bf5b94828d8da495e2d2ed58))
 
 
 
