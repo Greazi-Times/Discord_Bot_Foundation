@@ -1,11 +1,11 @@
 package com.greazi.discordbotfoundation.handlers.modals;
 
-import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
-import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
-
-import java.util.List;
-
+//import net.dv8tion.jda.api.entities.Emoji;
+//import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+//import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+//
+//import java.util.List;
+//
 // Disabled because select menus are not compatible with modals
 //public class SimpleSelect {
 //

@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation;
 
+import com.google.common.annotations.Beta;
 import com.greazi.discordbotfoundation.command.core.AboutCommand;
 import com.greazi.discordbotfoundation.command.core.StopCommand;
 import com.greazi.discordbotfoundation.console.ClearConsoleCommand;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 // TODO: ALL FILES!!!!
 //    Check all files for comments and add them if needed
 
+// TODO: Create an events adder method that adds all events to the event manager
 /**
  * A basic discord bot that represents the discord bot library
  */
@@ -203,9 +205,11 @@ public abstract class SimpleBot {
         // Load the static commands
         registerCommands(
                 new PingCommand(),
-                new AboutCommand(),
-                new StopCommand()
+                new AboutCommand()
         );
+        if (SimpleSettings.Stop.Enabled()) {
+            registerCommand( new StopCommand() );
+        }
 
         // Load the static console commands
         registerConsoleCommands(

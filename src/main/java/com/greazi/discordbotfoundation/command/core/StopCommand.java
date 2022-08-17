@@ -35,7 +35,6 @@ public class StopCommand extends SimpleSlashCommand {
 		super("stop");
 		description("Stop the bot from running");
 
-		if(SimpleSettings.Stop.Enabled()) defaultEnabled();
 		mainGuildOnly();
 
 //		getRoleList();

@@ -25,7 +25,6 @@ public class PingCommand extends SimpleSlashCommand {
     public PingCommand() {
         super("ping");
         description("Test the latency of the bot");
-        defaultEnabled();
     }
 
     /**

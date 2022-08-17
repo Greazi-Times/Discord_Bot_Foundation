@@ -1,3 +1,18 @@
+# [0.12.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.2...v0.12.0) (2022-08-17)
+
+
+### Bug Fixes
+
+* Fixed JDA17 Emote -> Emoji issues ([42df9fc](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/42df9fcc3fe2757ecf74ccf0f30c45af1c35e466))
+* Fixed JDA17 Slash command issues ([97b65c7](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/97b65c763261dcd68ea6cdd858d026100fc23d20))
+
+
+### Features
+
+* Updated the way buttons are registered ([4eb7bc1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/4eb7bc1a476b897c6ca142fce4505c604337d4c2))
+
+
+
 ## [0.11.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.1...v0.11.2) (2022-08-12)
 
 
@@ -40,15 +55,6 @@
 ### Reverts
 
 * Revert "chore(release): v0.4.3" ([e55b34b](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e55b34b57b66b246bf5b94828d8da495e2d2ed58))
-
-
-
-## [0.4.3](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.4.2...v0.4.3) (2022-06-08)
-
-
-### Reverts
-
-* Revert "Merge branch 'main' of https://github.com/Greazi-Times/Discord_Bot_Foundation" ([6a8f66e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/6a8f66e28bffc40d57c20166572b21325468b194))
 
 
 

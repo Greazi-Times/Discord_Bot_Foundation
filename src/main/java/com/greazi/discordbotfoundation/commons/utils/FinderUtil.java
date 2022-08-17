@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation.commons.utils;
 
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
@@ -749,7 +750,7 @@ public final class FinderUtil
 
     /**
      * Queries a provided instance of {@link net.dv8tion.jda.api.JDA JDA} for
-     * {@link net.dv8tion.jda.api.entities.Emote Emote}s.<p>
+     * {@link net.dv8tion.jda.api.entities.emoji.Emoji Emoji}s.<p>
      *
      * If a {@link net.dv8tion.jda.api.sharding.ShardManager ShardManager} is available this will query across that
      * instead of the JDA instance.
@@ -758,7 +759,7 @@ public final class FinderUtil
      * <ul>
      *     <li>Emote Mention: Query provided matches a :emote: mention (more specifically {@literal <:emoteName:emoteID>}).
      *     <br>Note: This only returns here if the emote is <b>valid</b>. Validity being the ID retrieves a non-null
-     *     Emote and that the {@link net.dv8tion.jda.api.entities.Emote#getName() name} of the Emote is equal to the
+     *     Emote and that the {@link net.dv8tion.jda.api.entities.emoji.Emoji#getName() name} of the Emote is equal to the
      *     name found in the query.</li>
      * </ul>
      *
@@ -769,14 +770,14 @@ public final class FinderUtil
      *
      * @return A possibly-empty {@link java.util.List List} of Emotes found by the query from the provided JDA instance.
      */
-    public static List<Emote> findEmotes(String query, JDA jda)
+    public static List<RichCustomEmoji> findEmotes(String query, JDA jda)
     {
         return jdaFindEmotes(query, jda, true);
     }
 
     /**
      * Queries a provided instance of {@link net.dv8tion.jda.api.JDA JDA} for
-     * {@link net.dv8tion.jda.api.entities.Emote Emote}s.<p>
+     * {@link net.dv8tion.jda.api.entities.emoji.Emoji Emoji}s.<p>
      *
      * This only queries the instance of JDA, regardless of whether or not a
      * {@link net.dv8tion.jda.api.sharding.ShardManager ShardManager} is available.
@@ -785,7 +786,7 @@ public final class FinderUtil
      * <ul>
      *     <li>Emote Mention: Query provided matches a :emote: mention (more specifically {@literal <:emoteName:emoteID>}).
      *     <br>Note: This only returns here if the emote is <b>valid</b>. Validity being the ID retrieves a non-null
-     *     Emote and that the {@link net.dv8tion.jda.api.entities.Emote#getName() name} of the Emote is equal to the
+     *     Emote and that the {@link net.dv8tion.jda.api.entities.emoji.Emoji#getName() name} of the Emote is equal to the
      *     name found in the query.</li>
      * </ul>
      *
@@ -796,20 +797,20 @@ public final class FinderUtil
      *
      * @return A possibly-empty {@link java.util.List List} of Emotes found by the query from the provided JDA instance.
      */
-    public static List<Emote> findShardEmotes(String query, JDA jda)
+    public static List<RichCustomEmoji> findShardEmotes(String query, JDA jda)
     {
         return jdaFindEmotes(query, jda, false);
     }
 
     /**
      * Queries a provided {@link net.dv8tion.jda.api.entities.Guild Guild} for
-     * {@link net.dv8tion.jda.api.entities.Emote Emote}s.
+     * {@link net.dv8tion.jda.api.entities.emoji.Emoji Emoij}s.
      *
      * <p>The following special case is applied before the standard search is done:
      * <ul>
      *     <li>Emote Mention: Query provided matches a :emote: mention (more specifically {@literal <:emoteName:emoteID>}).
      *     <br>Note: This only returns here if the emote is <b>valid</b>. Validity being the ID retrieves a non-null
-     *     Emote and that the {@link net.dv8tion.jda.api.entities.Emote#getName() name} of the Emote is equal to the
+     *     Emote and that the {@link net.dv8tion.jda.api.entities.emoji.Emoji#getName() name} of the Emote is equal to the
      *     name found in the query.</li>
      * </ul>
      *
@@ -820,12 +821,12 @@ public final class FinderUtil
      *
      * @return A possibly-empty {@link java.util.List List} of Emotes found by the query from the provided Guild.
      */
-    public static List<Emote> findEmotes(String query, Guild guild)
+    public static List<RichCustomEmoji> findEmotes(String query, Guild guild)
     {
         Matcher mentionMatcher = EMOTE_MENTION.matcher(query);
         if(DISCORD_ID.matcher(query).matches())
         {
-            Emote emote = guild.getEmoteById(query);
+            RichCustomEmoji emote = guild.getEmojiById(query);
             if(emote != null)
                 return Collections.singletonList(emote);
         }
@@ -833,15 +834,15 @@ public final class FinderUtil
         {
             String emoteName = mentionMatcher.group(1);
             String emoteId = mentionMatcher.group(2);
-            Emote emote = guild.getEmoteById(emoteId);
+            RichCustomEmoji emote = guild.getEmojiById(emoteId);
             if(emote != null && emote.getName().equals(emoteName))
                 return Collections.singletonList(emote);
         }
 
-        return genericEmoteSearch(query, guild.getEmoteCache());
+        return genericEmoteSearch(query, guild.getEmojiCache());
     }
 
-    private static List<Emote> jdaFindEmotes(String query, JDA jda, boolean useShardManager)
+    private static List<RichCustomEmoji> jdaFindEmotes(String query, JDA jda, boolean useShardManager)
     {
         Matcher mentionMatcher = EMOTE_MENTION.matcher(query);
 
@@ -849,7 +850,7 @@ public final class FinderUtil
 
         if(DISCORD_ID.matcher(query).matches())
         {
-            Emote emote = manager != null? manager.getEmoteById(query) : jda.getEmoteById(query);
+            RichCustomEmoji emote = manager != null? manager.getEmojiById(query) : jda.getEmojiById(query);
             if(emote != null)
                 return Collections.singletonList(emote);
         }
@@ -857,20 +858,20 @@ public final class FinderUtil
         {
             String emoteName = mentionMatcher.group(1);
             String emoteId = mentionMatcher.group(2);
-            Emote emote = manager != null? manager.getEmoteById(emoteId) : jda.getEmoteById(emoteId);
+            RichCustomEmoji emote = manager != null? manager.getEmojiById(emoteId) : jda.getEmojiById(emoteId);
             if(emote != null && emote.getName().equals(emoteName))
                 return Collections.singletonList(emote);
         }
 
-        return genericEmoteSearch(query, jda.getEmoteCache());
+        return genericEmoteSearch(query, jda.getEmojiCache());
     }
 
-    private static List<Emote> genericEmoteSearch(String query, SnowflakeCacheView<Emote> cache)
+    private static List<RichCustomEmoji> genericEmoteSearch(String query, SnowflakeCacheView<RichCustomEmoji> cache)
     {
-        ArrayList<Emote> exact = new ArrayList<>();
-        ArrayList<Emote> wrongcase = new ArrayList<>();
-        ArrayList<Emote> startswith = new ArrayList<>();
-        ArrayList<Emote> contains = new ArrayList<>();
+        ArrayList<RichCustomEmoji> exact = new ArrayList<>();
+        ArrayList<RichCustomEmoji> wrongcase = new ArrayList<>();
+        ArrayList<RichCustomEmoji> startswith = new ArrayList<>();
+        ArrayList<RichCustomEmoji> contains = new ArrayList<>();
         String lowerquery = query.toLowerCase(Locale.ROOT);
         cache.forEach(emote -> {
             String name = emote.getName();

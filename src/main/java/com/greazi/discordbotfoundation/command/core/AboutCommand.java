@@ -24,7 +24,6 @@ public class AboutCommand extends SimpleSlashCommand {
     public AboutCommand() {
         super("about");
         description("Get some info about the bot");
-        defaultEnabled();
     }
 
     @Override

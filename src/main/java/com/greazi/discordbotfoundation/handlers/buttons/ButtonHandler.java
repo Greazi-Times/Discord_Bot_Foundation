@@ -88,7 +88,7 @@ public class ButtonHandler extends ListenerAdapter {
         }
 
         // If the button is pressed inside a NSFW channel
-        if (!event.getTextChannel().isNSFW() && module.getNsfwOnly()){
+        if (!event.getChannel().asTextChannel().isNSFW() && module.getNsfwOnly()){
             return;
         }
 
