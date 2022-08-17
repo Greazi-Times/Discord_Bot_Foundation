@@ -204,11 +204,6 @@ public abstract class SimpleBot {
                 new StopCommand()
         );
 
-        registerButtons(
-          new StopCommand.Buttons.Confirm(),
-          new StopCommand.Buttons.Cancel()
-        );
-
         // Load the static console commands
         registerConsoleCommands(
                 new HelpConsoleCommand(),
@@ -328,7 +323,9 @@ public abstract class SimpleBot {
     /**
      * Register a new modal in the modal list
      * @param modal SimpleModal
+     * @deprecated Use build() instead
      */
+    @Deprecated(since = "2.0.0", forRemoval = true)
     protected final void registerModal(SimpleModal modal) {
         getModalHandler().addModalListener(modal);
     }
@@ -336,7 +333,9 @@ public abstract class SimpleBot {
     /**
      * Register new modals in the modal list at once
      * @param modals SimpleModal
+     * @deprecated Use build() instead
      */
+    @Deprecated(since = "2.0.0", forRemoval = true)
     protected final void registerModals(SimpleModal... modals) {
         for(SimpleModal modal : modals) {
             getModalHandler().addModalListener(modal);

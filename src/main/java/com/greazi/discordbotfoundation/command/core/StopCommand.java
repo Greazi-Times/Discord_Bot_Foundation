@@ -54,8 +54,8 @@ public class StopCommand extends SimpleSlashCommand {
 				.error()
 				.build()
 		).addActionRow(
-				SimpleBot.getButton("confirm_stop").build(),
-				SimpleBot.getButton("cancel_stop").build()
+				new Buttons.Cancel().build(),
+				new Buttons.Cancel().build()
 		).setEphemeral(true).queue();
 	}
 
