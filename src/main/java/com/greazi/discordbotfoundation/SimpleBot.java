@@ -284,7 +284,9 @@ public abstract class SimpleBot {
     /**
      * Register a new button in the button list
      * @param button SimpleButton
+     * @deprecated Use build() instead
      */
+    @Deprecated(since = "2.0.0", forRemoval = true)
     protected final void registerButton(SimpleButton button) {
         getButtonHandler().addButtonListener(button);
     }
@@ -292,7 +294,9 @@ public abstract class SimpleBot {
     /**
      * Register new buttons in the button list at once
      * @param buttons SimpleButton
+     * @deprecated Use build() instead
      */
+    @Deprecated(since = "2.0.0", forRemoval = true)
     protected final void registerButtons(SimpleButton... buttons) {
         for(SimpleButton button : buttons) {
             getButtonHandler().addButtonListener(button);
@@ -302,7 +306,9 @@ public abstract class SimpleBot {
     /**
      * Register a new menu in the menu list
      * @param menu SimpleSelectMenu
+     * @deprecated Use build() instead
      */
+    @Deprecated(since = "2.0.0", forRemoval = true)
     protected final void registerMenu(SimpleSelectMenu menu) {
         getSelectMenuHandler().addMenuListener(menu);
     }
@@ -310,7 +316,9 @@ public abstract class SimpleBot {
     /**
      * Register new menus in the menu list at once
      * @param menus SimpleSelectMenu
+     * @deprecated Use build() instead
      */
+    @Deprecated(since = "2.0.0", forRemoval = true)
     protected final void registerMenus(SimpleSelectMenu... menus) {
         for(SimpleSelectMenu menu : menus) {
             getSelectMenuHandler().addMenuListener(menu);
@@ -482,7 +490,7 @@ public abstract class SimpleBot {
      *
      * @return Button handler
      */
-    private static ButtonHandler getButtonHandler() {
+    public static ButtonHandler getButtonHandler() {
         return buttonHandler;
     }
 
@@ -491,7 +499,7 @@ public abstract class SimpleBot {
      *
      * @return Modal handler
      */
-    private static ModalHandler getModalHandler() {
+    public static ModalHandler getModalHandler() {
         return modalHandler;
     }
 

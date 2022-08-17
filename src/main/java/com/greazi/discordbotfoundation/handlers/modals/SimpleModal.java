@@ -1,5 +1,6 @@
 package com.greazi.discordbotfoundation.handlers.modals;
 
+import com.greazi.discordbotfoundation.SimpleBot;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.Modal;
 
@@ -193,6 +194,8 @@ public abstract class SimpleModal {
 //            SimpleButton button = SimpleBot.getButtonHandler().getButton(buttonId);
 //            modalBuilder.addActionRow(button.build());
 //        });
+
+        SimpleBot.getModalHandler().addModalListener(this);
 
         return modalBuilder.build();
     }

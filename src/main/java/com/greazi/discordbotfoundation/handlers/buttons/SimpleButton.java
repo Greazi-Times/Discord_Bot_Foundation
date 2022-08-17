@@ -7,6 +7,7 @@
 
 package com.greazi.discordbotfoundation.handlers.buttons;
 
+import com.greazi.discordbotfoundation.SimpleBot;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -337,6 +338,7 @@ public abstract class SimpleButton {
             Checks.notEmpty(this.label, "Label");
         }
         Checks.notLonger(this.label, Button.LABEL_MAX_LENGTH, "Label");
+        SimpleBot.getButtonHandler().addButtonListener(this);
         return new ButtonImpl(this.button_id, this.label, this.button_style, this.url, this.disabled, this.emoji);
     }
 }
