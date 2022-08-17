@@ -1,6 +1,6 @@
 package com.greazi.discordbotfoundation.handlers.selectmenu;
 
-import net.dv8tion.jda.api.entities.Emoji;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenuInteraction;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
