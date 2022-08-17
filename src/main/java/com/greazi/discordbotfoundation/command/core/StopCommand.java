@@ -90,8 +90,7 @@ public class StopCommand extends SimpleSlashCommand {
 				event.getMessage().editMessageComponents().queue();
 
 				// Shutdown the bot
-				SimpleBot.getJDA().shutdown();
-				System.exit(0);
+				SimpleBot.getInstance().stop();
 			}
 		}
 

@@ -14,6 +14,7 @@ import com.greazi.discordbotfoundation.command.general.PingCommand;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.handlers.console.ConsoleCommandHandler;
 import com.greazi.discordbotfoundation.handlers.console.SimpleConsoleCommand;
+import com.greazi.discordbotfoundation.handlers.crons.CronHandler;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.modals.SimpleModal;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
@@ -57,6 +58,7 @@ public abstract class SimpleBot {
     private static ModalHandler modalHandler;
     private static SelectMenuHandler menuHandler;
     private static ConsoleCommandHandler consoleCommandHandler;
+    private static CronHandler cronHandler;
 
     private boolean enabled;
 
@@ -183,6 +185,7 @@ public abstract class SimpleBot {
         modalHandler = new ModalHandler();
         menuHandler = new SelectMenuHandler();
         consoleCommandHandler = new ConsoleCommandHandler();
+        cronHandler = new CronHandler();
     }
 
     /**
@@ -216,6 +219,9 @@ public abstract class SimpleBot {
 
         // Register commands to JDA
         slashCommandHandler.registerCommands();
+
+        // Register cron jobs
+        cronHandler.scheduleJobs();
 
         // A boolean that says the bot is loaded and enabled
         enabled = true;
@@ -252,6 +258,41 @@ public abstract class SimpleBot {
         } catch (LoginException | InterruptedException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void stop(){
+        Thread t = new Thread(() -> {
+            System.out.println(ConsoleColor.RED+"Stopping JDA..."+ConsoleColor.RESET);
+            jda.shutdown();
+            while(jda != null){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.println(ConsoleColor.RED+"Stopping cron jobs..."+ConsoleColor.RESET);
+            cronHandler.stop();
+            while(!cronHandler.isShutdown()){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(ConsoleColor.RED+"Stopping bot..."+ConsoleColor.RESET);
+            System.exit(0);
+        });
+        t.start();
+
+        onBotStop();
     }
 
     // ----------------------------------------------------------------------------------------
@@ -518,6 +559,15 @@ public abstract class SimpleBot {
      */
     private static ConsoleCommandHandler getConsoleCommandHandler() {
         return consoleCommandHandler;
+    }
+
+    /**
+     * Retrieve the cron jobs handler
+     *
+     * @return Console cron jobs handler
+     */
+    public static CronHandler getCronHandler() {
+        return cronHandler;
     }
 
     /**
