@@ -1,12 +1,10 @@
 package com.greazi.discordbotfoundation.mysql.query.action;
 
-import com.greazi.discordbotfoundation.mysql.query.column.Base;
 import com.greazi.discordbotfoundation.mysql.query.column.Boolean;
-import com.greazi.discordbotfoundation.mysql.query.column.IColumn;
-import com.greazi.discordbotfoundation.mysql.query.column.*;
 import com.greazi.discordbotfoundation.mysql.query.column.Double;
 import com.greazi.discordbotfoundation.mysql.query.column.Enum;
 import com.greazi.discordbotfoundation.mysql.query.column.Float;
+import com.greazi.discordbotfoundation.mysql.query.column.*;
 
 import java.lang.Integer;
 import java.lang.String;
@@ -15,228 +13,260 @@ import java.util.List;
 
 public abstract class Action implements IAction<IColumn>, IActionColumns {
 
-    protected List<IColumn> columns = new ArrayList<>();
+	protected List<IColumn> columns = new ArrayList<>();
 
-    public com.greazi.discordbotfoundation.mysql.query.column.Integer id(String name) {
-        com.greazi.discordbotfoundation.mysql.query.column.Integer column = this.integer(name);
+	@Override
+    public com.greazi.discordbotfoundation.mysql.query.column.Integer id(final String name) {
+		final com.greazi.discordbotfoundation.mysql.query.column.Integer column = this.integer(name);
 
-        column.primary().increment().unsigned();
+		column.primary().increment().unsigned();
 
-        return column;
-    }
+		return column;
+	}
 
-    /**
-     * Create a column with type BIGINT.
-     * @param name Name of the column.
-     * @return
-     */
-    public BigInteger bigInteger(String name) {
-        return this.bigInteger(name, 0);
-    }
+	/**
+	 * Create a column with type BIGINT.
+	 *
+	 * @param name Name of the column.
+	 * @return
+	 */
+	@Override
+    public BigInteger bigInteger(final String name) {
+		return this.bigInteger(name, 0);
+	}
 
-    public BigInteger bigInteger(String name, Integer length) {
-        BigInteger column = new BigInteger(this, name, length);
+	@Override
+    public BigInteger bigInteger(final String name, final Integer length) {
+		final BigInteger column = new BigInteger(this, name, length);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public MediumInteger mediumInteger(String name) {
-        return this.mediumInteger(name, 0);
-    }
+	@Override
+    public MediumInteger mediumInteger(final String name) {
+		return this.mediumInteger(name, 0);
+	}
 
-    public MediumInteger mediumInteger(String name, Integer length) {
-        MediumInteger column = new MediumInteger(this, name, length);
+	@Override
+    public MediumInteger mediumInteger(final String name, final Integer length) {
+		final MediumInteger column = new MediumInteger(this, name, length);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public TinyInteger tinyInteger(String name) {
-        return this.tinyInteger(name, 0);
-    }
+	@Override
+    public TinyInteger tinyInteger(final String name) {
+		return this.tinyInteger(name, 0);
+	}
 
-    public TinyInteger tinyInteger(String name, Integer length) {
-        TinyInteger column = new TinyInteger(this, name, length);
+	@Override
+    public TinyInteger tinyInteger(final String name, final Integer length) {
+		final TinyInteger column = new TinyInteger(this, name, length);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public SmallInteger smallInteger(String name) {
-        return this.smallInteger(name, 0);
-    }
+	@Override
+    public SmallInteger smallInteger(final String name) {
+		return this.smallInteger(name, 0);
+	}
 
-    public SmallInteger smallInteger(String name, Integer length) {
-        SmallInteger column = new SmallInteger(this, name, length);
+	@Override
+    public SmallInteger smallInteger(final String name, final Integer length) {
+		final SmallInteger column = new SmallInteger(this, name, length);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public com.greazi.discordbotfoundation.mysql.query.column.Integer integer(String name) {
-        return this.integer(name, 11);
-    }
+	@Override
+    public com.greazi.discordbotfoundation.mysql.query.column.Integer integer(final String name) {
+		return this.integer(name, 11);
+	}
 
-    public com.greazi.discordbotfoundation.mysql.query.column.Integer integer(String name, Integer length) {
-        com.greazi.discordbotfoundation.mysql.query.column.Integer column = new com.greazi.discordbotfoundation.mysql.query.column.Integer(this, name, length);
+	@Override
+    public com.greazi.discordbotfoundation.mysql.query.column.Integer integer(final String name, final Integer length) {
+		final com.greazi.discordbotfoundation.mysql.query.column.Integer column = new com.greazi.discordbotfoundation.mysql.query.column.Integer(this, name, length);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Text text(String name) {
-        Text column = new Text(this, name);
+	@Override
+    public Text text(final String name) {
+		final Text column = new Text(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public MediumText mediumText(String name) {
-        MediumText column = new MediumText(this, name);
+	@Override
+    public MediumText mediumText(final String name) {
+		final MediumText column = new MediumText(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Binary binary(String name) {
-        Binary column = new Binary(this, name);
+	@Override
+    public Binary binary(final String name) {
+		final Binary column = new Binary(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public LongBinary longBinary(String name) {
-        LongBinary column = new LongBinary(this, name);
+	@Override
+    public LongBinary longBinary(final String name) {
+		final LongBinary column = new LongBinary(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public LongText longText(String name) {
-        LongText column = new LongText(this, name);
+	@Override
+    public LongText longText(final String name) {
+		final LongText column = new LongText(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Boolean booleanColumn(String name) {
-        Boolean column = new Boolean(this, name);
+	@Override
+    public Boolean booleanColumn(final String name) {
+		final Boolean column = new Boolean(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Date date(String name) {
-        Date column = new Date(this, name);
+	@Override
+    public Date date(final String name) {
+		final Date column = new Date(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public DateTime dateTime(String name) {
-        DateTime column = new DateTime(this, name);
+	@Override
+    public DateTime dateTime(final String name) {
+		final DateTime column = new DateTime(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Timestamp timestamp(String name) {
-        Timestamp column = new Timestamp(this, name);
+	@Override
+    public Timestamp timestamp(final String name) {
+		final Timestamp column = new Timestamp(this, name);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Decimal decimal(String name, Integer length, Integer precision) {
-        Decimal column = new Decimal(this, name, length, precision);
+	@Override
+    public Decimal decimal(final String name, final Integer length, final Integer precision) {
+		final Decimal column = new Decimal(this, name, length, precision);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Decimal decimal(String name) {
-        return this.decimal(name, 5, 2);
-    }
+	@Override
+    public Decimal decimal(final String name) {
+		return this.decimal(name, 5, 2);
+	}
 
-    public Float floatColumn(String name, Integer length, Integer precision) {
-        Float column = new Float(this, name, length, precision);
+	@Override
+    public Float floatColumn(final String name, final Integer length, final Integer precision) {
+		final Float column = new Float(this, name, length, precision);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Float floatColumn(String name) {
-        return this.floatColumn(name, 11, 6);
-    }
+	@Override
+    public Float floatColumn(final String name) {
+		return this.floatColumn(name, 11, 6);
+	}
 
-    public Double doubleColumn(String name, Integer length, Integer precision) {
-        Double column = new Double(this, name, length, precision);
+	@Override
+    public Double doubleColumn(final String name, final Integer length, final Integer precision) {
+		final Double column = new Double(this, name, length, precision);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Double doubleColumn(String name) {
-        return this.doubleColumn(name, 11, 8);
-    }
+	@Override
+    public Double doubleColumn(final String name) {
+		return this.doubleColumn(name, 11, 8);
+	}
 
+	@Override
     public com.greazi.discordbotfoundation.mysql.query.column.Integer id() {
-        return this.id("id");
-    }
+		return this.id("id");
+	}
 
-    public com.greazi.discordbotfoundation.mysql.query.column.String string(String name) {
-        return this.string(name, 255);
-    }
+	@Override
+    public com.greazi.discordbotfoundation.mysql.query.column.String string(final String name) {
+		return this.string(name, 255);
+	}
 
-    public com.greazi.discordbotfoundation.mysql.query.column.String string(String name, Integer length) {
-        com.greazi.discordbotfoundation.mysql.query.column.String column = new com.greazi.discordbotfoundation.mysql.query.column.String(this, name, length, false);
+	@Override
+    public com.greazi.discordbotfoundation.mysql.query.column.String string(final String name, final Integer length) {
+		final com.greazi.discordbotfoundation.mysql.query.column.String column = new com.greazi.discordbotfoundation.mysql.query.column.String(this, name, length, false);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Enum enumColumn(String name, Object[] list) {
-        Enum column = new Enum(this, name, list);
+	@Override
+    public Enum enumColumn(final String name, final Object[] list) {
+		final Enum column = new Enum(this, name, list);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    public Base column(java.lang.String name, String content) {
-        Base column = new Base(this, name, content);
+	@Override
+    public Base column(final String name, final String content) {
+		final Base column = new Base(this, name, content);
 
-        this.columns.add(column);
+		this.columns.add(column);
 
-        return column;
-    }
+		return column;
+	}
 
-    @Override
-    public List<IColumn> getColumns() {
-        return columns;
-    }
+	@Override
+	public List<IColumn> getColumns() {
+		return columns;
+	}
 
-    @Override
-    public String getPrefix() {
-        return null;
-    }
+	@Override
+	public String getPrefix() {
+		return null;
+	}
 }
