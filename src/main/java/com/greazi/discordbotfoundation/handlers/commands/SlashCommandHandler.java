@@ -10,19 +10,15 @@ package com.greazi.discordbotfoundation.handlers.commands;
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.debug.Debugger;
-import com.greazi.discordbotfoundation.handlers.buttons.SimpleButton;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.*;
-import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,8 +75,6 @@ public class SlashCommandHandler extends ListenerAdapter {
             }
         }
 
-        // Set default enabled
-        command.setDefaultEnabled(module.getDefaultEnabled());
         // Set description
         command.setDescription(module.getDescription());
 
@@ -164,11 +158,6 @@ public class SlashCommandHandler extends ListenerAdapter {
 
         // Check if main guild is enabled
         if (!Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.Bot.MainGuild()) && module.getGuildOnly()){
-            return;
-        }
-
-        // Check if NSFW channel is enabled
-        if (!event.getTextChannel().isNSFW() && module.getNsfwOnly()){
             return;
         }
 

@@ -8,10 +8,9 @@
 package com.greazi.discordbotfoundation.handlers.commands;
 
 import com.google.gson.annotations.Since;
+import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.utils.annotations.Disabled;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -44,42 +43,6 @@ public abstract class SimpleSlashCommand {
      * Is the command bound to only the main guild of the bot
      */
     private boolean guildOnly = false;
-
-    /**
-     * Is the command bound to a NSFW channel
-     * (This means if it can only be used in a NSFW channel)
-     */
-    @Disabled(since = "2.0")
-    private boolean nsfwOnly = false;
-
-    /**
-     * The roles that can use this command
-     */
-    @Disabled(since = "2.0")
-    private List<Role> enabledRoles = new ArrayList<>();
-
-    /**
-     * The users that can use this command
-     */
-    @Disabled(since = "2.0")
-    private List<UserSnowflake> enabledUsers = new ArrayList<>();
-
-    /**
-     * The roles that can not use this command
-     */
-    @Disabled(since = "2.0")
-    private List<Role> disabledRoles = new ArrayList<>();
-
-    /**
-     * The users that can not use this command
-     */
-    @Disabled(since = "2.0")
-    private List<User> disabledUsers = new ArrayList<>();
-
-    /**
-     * Is the command enabled by default
-     */
-    private boolean defaultEnabled = true;
 
     /**
      * The subcommands
@@ -136,92 +99,6 @@ public abstract class SimpleSlashCommand {
      */
     public void mainGuildOnly() {
         this.guildOnly = true;
-    }
-
-    /**
-     * Set whether the command can only be used inside a NSFW channel
-     */
-    @Disabled(since = "2.0")
-    public void nsfwOnly() {
-        this.nsfwOnly = true;
-    }
-
-    /**
-     * Set the list of roles that can use this command
-     */
-    @Disabled(since = "2.0")
-    public void enabledRoles(List<Role> roles) {
-        this.enabledRoles = roles;
-    }
-
-    /**
-     * Set the list of roles that can use this command
-     */
-    @Disabled(since = "2.0")
-    public void enabledRoles(Role... roles) {
-        this.enabledRoles = Arrays.asList(roles);
-    }
-
-    /**
-     * Set the list of users that can use this command
-     */
-    @Disabled(since = "2.0")
-    public void enabledUsers(List<UserSnowflake> users) {
-        this.enabledUsers = users;
-    }
-
-    /**
-     * Set the list users that can use this command
-     */
-    @Disabled(since = "2.0")
-    public void enabledUsers(UserSnowflake... users) {
-        this.enabledUsers = Arrays.asList(users);
-    }
-
-    /**
-     * Set the list of roles that can not use the command
-     */
-    @Disabled(since = "2.0")
-    public void disabledRoles(Role... roles) {
-        this.disabledRoles = Arrays.asList(roles);
-    }
-
-    /**
-     * Set the list of roles that can not use the command
-     */
-    @Disabled(since = "2.0")
-    public void disabledRoles(List<Role> roles) {
-        this.disabledRoles = roles;
-    }
-
-    /**
-     * Set the list of users that can not use the command
-     */
-    @Disabled(since = "2.0")
-    public void disabledUsers(User... users) {
-        this.disabledUsers = Arrays.asList(users);
-    }
-
-    /**
-     * Set the list of users that can not use the command
-     */
-    @Disabled(since = "2.0")
-    public void disabledUsers(List<User> users) {
-        this.disabledUsers = users;
-    }
-
-    /**
-     * Set whether the command is enabled by default
-     */
-    public void defaultEnabled() {
-        this.defaultEnabled = true;
-    }
-
-    /**
-     * Set whether the command is enabled by default
-     */
-    public void defaultEnabled(boolean defaultEnabled) {
-        this.defaultEnabled = defaultEnabled;
     }
 
     /**
@@ -305,65 +182,6 @@ public abstract class SimpleSlashCommand {
      */
     public boolean getGuildOnly() {
         return guildOnly;
-    }
-
-    /**
-     * Whether the command can only be used inside a NSFW channel
-     *
-     * @return the restriction to a NSFW channel
-     */
-    @Disabled(since = "2.0")
-    public boolean getNsfwOnly() {
-        return nsfwOnly;
-    }
-
-    /**
-     * Returns a list of the roles that can use this command
-     *
-     * @return the allowed roles
-     */
-    @Disabled(since = "2.0")
-    public List<Role> getEnabledRoles() {
-        return enabledRoles;
-    }
-
-    /**
-     * Returns a list of users that can use this command
-     *
-     * @return the allowed users
-     */
-    @Disabled(since = "2.0")
-    public List<UserSnowflake> getEnabledUsers() {
-        return enabledUsers;
-    }
-
-    /**
-     * Returns a list of roles that can not use the command
-     *
-     * @return the disallowed roles
-     */
-    @Disabled(since = "2.0")
-    public List<Role> getDisabledRoles() {
-        return disabledRoles;
-    }
-
-    /**
-     * Returns a list of users that can not use the command
-     *
-     * @return the disallowed users
-     */
-    @Disabled(since = "2.0")
-    public List<User> getDisabledUsers() {
-        return disabledUsers;
-    }
-
-    /**
-     * Whether the command is enabled by default
-     *
-     * @return the default enabled
-     */
-    public boolean getDefaultEnabled() {
-        return defaultEnabled;
     }
 
     /**
