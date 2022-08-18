@@ -268,22 +268,39 @@ public abstract class SimpleBot {
         Thread t = new Thread(() -> {
             System.out.println(ConsoleColor.RED+"Stopping JDA..."+ConsoleColor.RESET);
             jda.shutdown();
-            while(jda != null){
+
+            int jdaShutdownTimeout = 0;
+            while(jda.getStatus() != JDA.Status.SHUTDOWN){
+                if(jdaShutdownTimeout > 15){
+                    System.out.println(ConsoleColor.RED+"Killing JDA..."+ConsoleColor.RESET);
+                    jda.shutdownNow();
+                    break;
+                }
+
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                jdaShutdownTimeout++;
             }
 
             System.out.println(ConsoleColor.RED+"Stopping cron jobs..."+ConsoleColor.RESET);
             cronHandler.stop();
+
+            int cronShutdownTimeout = 0;
             while(!cronHandler.isShutdown()){
+                if(cronShutdownTimeout > 15){
+                    System.out.println(ConsoleColor.RED+"Killing cron jobs..."+ConsoleColor.RESET);
+                    break;
+                }
+
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                cronShutdownTimeout++;
             }
 
             try {
