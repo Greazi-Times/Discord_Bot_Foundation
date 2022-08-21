@@ -68,7 +68,7 @@ Console:
     Enabled: true
 
     # Commands that are disabled
-    Disabled: []
+    Disabled: [ ]
 
 # -------------------------------------------------------------------------------------------------
 # Configure the database settings here
@@ -81,7 +81,7 @@ Database:
   # The database information
   Host: "localhost"
   Port: 3306
-  Databas: "Foundation"
+  Database: "Foundation"
   Username: "Foundation_User"
   Password: "Foundation_Password"
 
@@ -90,4 +90,4 @@ Database:
 # If you have issues, try enabling either of these sections to self-diagnose:
 # [Startup, Database, SlashCommandHandler]
 # -------------------------------------------------------------------------------------------------
-Debug: []
+Debug: [ ]
