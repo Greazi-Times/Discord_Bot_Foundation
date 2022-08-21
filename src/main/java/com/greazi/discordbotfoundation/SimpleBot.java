@@ -20,6 +20,8 @@ import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.modals.SimpleModal;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SimpleSelectMenu;
+import com.greazi.discordbotfoundation.mysql.Database;
+import com.greazi.discordbotfoundation.mysql.SqlManager;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.JDA;
@@ -61,6 +63,7 @@ public abstract class SimpleBot {
     private static SelectMenuHandler menuHandler;
     private static ConsoleCommandHandler consoleCommandHandler;
     private static CronHandler cronHandler;
+    private static SqlManager sqlManager;
 
     private boolean enabled;
 
@@ -151,6 +154,9 @@ public abstract class SimpleBot {
 
         // Load after the bot has been initialized
         onBotLoad();
+
+        // Load the sql manager
+        sqlManager = new SqlManager();
 
         // Set up the command manager that handles slash commands
         setupCommandManager();
@@ -589,6 +595,15 @@ public abstract class SimpleBot {
      */
     public static CronHandler getCronHandler() {
         return cronHandler;
+    }
+
+    /**
+     * Retrieve the sql manager
+     *
+     * @return Sql manager
+     */
+    public static SqlManager getSqlManager() {
+        return sqlManager;
     }
 
     /**

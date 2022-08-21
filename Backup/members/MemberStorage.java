@@ -2,8 +2,8 @@ package com.greazi.discordbotfoundation.managers.members;
 
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
-import com.greazi.discordbotfoundation.mysql.query.*;
-import com.greazi.discordbotfoundation.mysql.table.ITable;
+import com.greazi.discordbotfoundation.mysql_old.query.*;
+import com.greazi.discordbotfoundation.mysql_old.table.ITable;
 import com.greazi.discordbotfoundation.objects.mysql.MysqlMember;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.entities.Guild;
