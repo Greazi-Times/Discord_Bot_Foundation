@@ -27,20 +27,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Setup JDK 11 to build the project
+      # Setup JDK 18 to build the project
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: '18'
 
-      # Granting acces to gradle
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # Build the gradle project
-      - name: Build with Gradle
-        run: ./gradlew build
+      # Build the maven project
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots package
       
       # Check the commit and see what version needs to be changed
       - name: conventional Changelog Action
