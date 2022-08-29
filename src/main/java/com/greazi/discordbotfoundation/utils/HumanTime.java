@@ -1,23 +1,23 @@
 /*
  * HumanTime.java
- * 
+ *
  * Created on 06.10.2008
- * 
+ *
  * Copyright (c) 2008 Johann Burkard (<mailto:jb@eaio.com>) <http://eaio.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
  * Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 package com.greazi.discordbotfoundation.utils;
 
@@ -58,7 +58,7 @@ import java.util.Iterator;
  * languages like OGNL. See {@link #getApproximately()} and {@link #getExactly()}.</li>
  * <li>To keep things simple, a year consists of 365 days.</li>
  * </ul>
- * 
+ *
  * @author <a href="mailto:jb@eaio.com">Johann Burkard</a>
  * @version $Id: HumanTime.java 3906 2011-05-21 13:56:05Z johann $
  * @see #eval(CharSequence)
@@ -67,119 +67,121 @@ import java.util.Iterator;
  */
 public class HumanTime implements Externalizable, Comparable<HumanTime>, Cloneable {
 
-    /**
-     * The serial version UID.
-     */
-    private static final long serialVersionUID = 5179328390732826722L;
+	/**
+	 * The serial version UID.
+	 */
+	private static final long serialVersionUID = 5179328390732826722L;
 
-    /**
-     * One second.
-     */
-    private static final long SECOND = 1000;
+	/**
+	 * One second.
+	 */
+	private static final long SECOND = 1000;
 
-    /**
-     * One minute.
-     */
-    private static final long MINUTE = SECOND * 60;
+	/**
+	 * One minute.
+	 */
+	private static final long MINUTE = SECOND * 60;
 
-    /**
-     * One hour.
-     */
-    private static final long HOUR = MINUTE * 60;
+	/**
+	 * One hour.
+	 */
+	private static final long HOUR = MINUTE * 60;
 
-    /**
-     * One day.
-     */
-    private static final long DAY = HOUR * 24;
+	/**
+	 * One day.
+	 */
+	private static final long DAY = HOUR * 24;
 
-    /**
-     * One week.
-     */
-    private static final long WEEK = DAY * 7;
+	/**
+	 * One week.
+	 */
+	private static final long WEEK = DAY * 7;
 
-    /**
-     * One year.
-     */
-    private static final long YEAR = DAY * 365;
+	/**
+	 * One year.
+	 */
+	private static final long YEAR = DAY * 365;
 
-    /**
-     * Percentage of what is round up or down.
-     */
-    private static final int CEILING_PERCENTAGE = 15;
+	/**
+	 * Percentage of what is round up or down.
+	 */
+	private static final int CEILING_PERCENTAGE = 15;
 
-    /**
-     * Parsing state.
-     */
-    static enum State {
+	/**
+	 * Parsing state.
+	 */
+	enum State {
 
-        NUMBER, IGNORED, UNIT
+		NUMBER, IGNORED, UNIT
 
-    }
+	}
 
-    static State getState(char c) {
-        State out;
-        switch (c) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                out = State.NUMBER;
-                break;
-            case 's':
-            case 'm':
-            case 'h':
-            case 'd':
-            case 'w':
-            case 'y':
-            case 'S':
-            case 'M':
-            case 'H':
-            case 'D':
-            case 'W':
-            case 'Y':
-                out = State.UNIT;
-                break;
-            default:
-                out = State.IGNORED;
-        }
-        return out;
-    }
+	static State getState(final char c) {
+		final State out;
+		switch (c) {
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				out = State.NUMBER;
+				break;
+			case 's':
+			case 'm':
+			case 'h':
+			case 'd':
+			case 'w':
+			case 'y':
+			case 'S':
+			case 'M':
+			case 'H':
+			case 'D':
+			case 'W':
+			case 'Y':
+				out = State.UNIT;
+				break;
+			default:
+				out = State.IGNORED;
+		}
+		return out;
+	}
 
-    /**
-     * Parses a {@link CharSequence} argument and returns a {@link HumanTime} instance.
-     * 
-     * @param s the char sequence, may not be <code>null</code>
-     * @return an instance, never <code>null</code>
-     */
-    public static HumanTime eval(final CharSequence s) {
-        HumanTime out = new HumanTime(0L);
+	/**
+	 * Parses a {@link CharSequence} argument and returns a {@link HumanTime} instance.
+	 *
+	 * @param s the char sequence, may not be <code>null</code>
+	 * @return an instance, never <code>null</code>
+	 */
+	public static HumanTime eval(final CharSequence s) {
+		final HumanTime out = new HumanTime(0L);
 
-        int num = 0;
+		int num = 0;
 
-        int start = 0;
-        int end = 0;
+		int start = 0;
+		int end = 0;
 
-        State oldState = State.IGNORED;
+		State oldState = State.IGNORED;
 
-        for (char c : new Iterable<Character>() {
+		for (final char c : new Iterable<Character>() {
 
-            /**
-             * @see Iterable#iterator()
-             */
+			/**
+			 * @see Iterable#iterator()
+			 */
+			@Override
             public Iterator<Character> iterator() {
-                return new Iterator<Character>() {
+				return new Iterator<>() {
 
                     private int p = 0;
 
                     /**
                      * @see Iterator#hasNext()
                      */
+                    @Override
                     public boolean hasNext() {
                         return p < s.length();
                     }
@@ -187,6 +189,7 @@ public class HumanTime implements Externalizable, Comparable<HumanTime>, Cloneab
                     /**
                      * @see Iterator#next()
                      */
+                    @Override
                     public Character next() {
                         return s.charAt(p++);
                     }
@@ -194,626 +197,623 @@ public class HumanTime implements Externalizable, Comparable<HumanTime>, Cloneab
                     /**
                      * @see Iterator#remove()
                      */
+                    @Override
                     public void remove() {
                         throw new UnsupportedOperationException();
                     }
 
                 };
-            }
+			}
 
-        }) {
-            State newState = getState(c);
-            if (oldState != newState) {
-                if (oldState == State.NUMBER && (newState == State.IGNORED || newState == State.UNIT)) {
-                    num = Integer.parseInt(s.subSequence(start, end).toString());
-                }
-                else if (oldState == State.UNIT && (newState == State.IGNORED || newState == State.NUMBER)) {
-                    out.nTimes(s.subSequence(start, end).toString(), num);
-                    num = 0;
-                }
-                start = end;
-            }
-            ++end;
-            oldState = newState;
-        }
-        if (oldState == State.UNIT) {
-            out.nTimes(s.subSequence(start, end).toString(), num);
-        }
+		}) {
+			final State newState = getState(c);
+			if (oldState != newState) {
+				if (oldState == State.NUMBER && (newState == State.IGNORED || newState == State.UNIT)) {
+					num = Integer.parseInt(s.subSequence(start, end).toString());
+				} else if (oldState == State.UNIT && (newState == State.IGNORED || newState == State.NUMBER)) {
+					out.nTimes(s.subSequence(start, end).toString(), num);
+					num = 0;
+				}
+				start = end;
+			}
+			++end;
+			oldState = newState;
+		}
+		if (oldState == State.UNIT) {
+			out.nTimes(s.subSequence(start, end).toString(), num);
+		}
 
-        return out;
-    }
+		return out;
+	}
 
-    /**
-     * Parses and formats the given char sequence, preserving all data.
-     * <p>
-     * Equivalent to <code>eval(in).getExactly()</code>
-     * 
-     * @param in the char sequence, may not be <code>null</code>
-     * @return a formatted String, never <code>null</code>
-     */
-    public static String exactly(CharSequence in) {
-        return eval(in).getExactly();
-    }
+	/**
+	 * Parses and formats the given char sequence, preserving all data.
+	 * <p>
+	 * Equivalent to <code>eval(in).getExactly()</code>
+	 *
+	 * @param in the char sequence, may not be <code>null</code>
+	 * @return a formatted String, never <code>null</code>
+	 */
+	public static String exactly(final CharSequence in) {
+		return eval(in).getExactly();
+	}
 
-    /**
-     * Formats the given time delta, preserving all data.
-     * <p>
-     * Equivalent to <code>new HumanTime(in).getExactly()</code>
-     * 
-     * @param l the time delta
-     * @return a formatted String, never <code>null</code>
-     */
-    public static String exactly(long l) {
-        return new HumanTime(l).getExactly();
-    }
+	/**
+	 * Formats the given time delta, preserving all data.
+	 * <p>
+	 * Equivalent to <code>new HumanTime(in).getExactly()</code>
+	 *
+	 * @param l the time delta
+	 * @return a formatted String, never <code>null</code>
+	 */
+	public static String exactly(final long l) {
+		return new HumanTime(l).getExactly();
+	}
 
-    /**
-     * Parses and formats the given char sequence, potentially removing some data to make the output easier to
-     * understand.
-     * <p>
-     * Equivalent to <code>eval(in).getApproximately()</code>
-     * 
-     * @param in the char sequence, may not be <code>null</code>
-     * @return a formatted String, never <code>null</code>
-     */
-    public static String approximately(CharSequence in) {
-        return eval(in).getApproximately();
-    }
+	/**
+	 * Parses and formats the given char sequence, potentially removing some data to make the output easier to
+	 * understand.
+	 * <p>
+	 * Equivalent to <code>eval(in).getApproximately()</code>
+	 *
+	 * @param in the char sequence, may not be <code>null</code>
+	 * @return a formatted String, never <code>null</code>
+	 */
+	public static String approximately(final CharSequence in) {
+		return eval(in).getApproximately();
+	}
 
-    /**
-     * Formats the given time delta, preserving all data.
-     * <p>
-     * Equivalent to <code>new HumanTime(l).getApproximately()</code>
-     * 
-     * @param l the time delta
-     * @return a formatted String, never <code>null</code>
-     */
-    public static String approximately(long l) {
-        return new HumanTime(l).getApproximately();
-    }
+	/**
+	 * Formats the given time delta, preserving all data.
+	 * <p>
+	 * Equivalent to <code>new HumanTime(l).getApproximately()</code>
+	 *
+	 * @param l the time delta
+	 * @return a formatted String, never <code>null</code>
+	 */
+	public static String approximately(final long l) {
+		return new HumanTime(l).getApproximately();
+	}
 
-    /**
-     * The time delta.
-     */
-    private long delta;
+	/**
+	 * The time delta.
+	 */
+	private long delta;
 
-    /**
-     * No-argument Constructor for HumanTime.
-     * <p>
-     * Equivalent to calling <code>new HumanTime(0L)</code>.
-     */
-    public HumanTime() {
-        this(0L);
-    }
+	/**
+	 * No-argument Constructor for HumanTime.
+	 * <p>
+	 * Equivalent to calling <code>new HumanTime(0L)</code>.
+	 */
+	public HumanTime() {
+		this(0L);
+	}
 
-    /**
-     * Constructor for HumanTime.
-     * 
-     * @param delta the initial time delta, interpreted as a positive number
-     */
-    public HumanTime(long delta) {
-        super();
-        this.delta = Math.abs(delta);
-    }
+	/**
+	 * Constructor for HumanTime.
+	 *
+	 * @param delta the initial time delta, interpreted as a positive number
+	 */
+	public HumanTime(final long delta) {
+		super();
+		this.delta = Math.abs(delta);
+	}
 
-    private void nTimes(String unit, int n) {
-        if ("s".equalsIgnoreCase(unit)) {
-            s(n);
-        }
-        else if ("m".equalsIgnoreCase(unit)) {
-            m(n);
-        }
-        else if ("h".equalsIgnoreCase(unit)) {
-            h(n);
-        }
-        else if ("d".equalsIgnoreCase(unit)) {
-            d(n);
-        }
-        else if ("w".equalsIgnoreCase(unit)) {
-            w(n);
-        }
-        else if ("y".equalsIgnoreCase(unit)) {
-            y(n);
-        }
-    }
+	private void nTimes(final String unit, final int n) {
+		if ("s".equalsIgnoreCase(unit)) {
+			s(n);
+		} else if ("m".equalsIgnoreCase(unit)) {
+			m(n);
+		} else if ("h".equalsIgnoreCase(unit)) {
+			h(n);
+		} else if ("d".equalsIgnoreCase(unit)) {
+			d(n);
+		} else if ("w".equalsIgnoreCase(unit)) {
+			w(n);
+		} else if ("y".equalsIgnoreCase(unit)) {
+			y(n);
+		}
+	}
 
-    private long upperCeiling(long x) {
-        return (x / 100) * (100 - CEILING_PERCENTAGE);
-    }
+	private long upperCeiling(final long x) {
+		return (x / 100) * (100 - CEILING_PERCENTAGE);
+	}
 
-    private long lowerCeiling(long x) {
-        return (x / 100) * CEILING_PERCENTAGE;
-    }
+	private long lowerCeiling(final long x) {
+		return (x / 100) * CEILING_PERCENTAGE;
+	}
 
-    private String ceil(long d, long n) {
-        return Integer.toString((int) Math.ceil((double) d / n));
-    }
+	private String ceil(final long d, final long n) {
+		return Integer.toString((int) Math.ceil((double) d / n));
+	}
 
-    private String floor(long d, long n) {
-        return Integer.toString((int) Math.floor((double) d / n));
-    }
+	private String floor(final long d, final long n) {
+		return Integer.toString((int) Math.floor((double) d / n));
+	}
 
-    /**
-     * Adds one year to the time delta.
-     * 
-     * @return this HumanTime object
-     */
-    public HumanTime y() {
-        return y(1);
-    }
+	/**
+	 * Adds one year to the time delta.
+	 *
+	 * @return this HumanTime object
+	 */
+	public HumanTime y() {
+		return y(1);
+	}
 
-    /**
-     * Adds n years to the time delta.
-     * 
-     * @param n n
-     * @return this HumanTime object
-     */
-    public HumanTime y(int n) {
-        delta += YEAR * Math.abs(n);
-        return this;
-    }
+	/**
+	 * Adds n years to the time delta.
+	 *
+	 * @param n n
+	 * @return this HumanTime object
+	 */
+	public HumanTime y(final int n) {
+		delta += YEAR * Math.abs(n);
+		return this;
+	}
 
-    /**
-     * Adds one week to the time delta.
-     *
-     * @return this HumanTime object
-     */
-    public HumanTime w() {
-        return w(1);
-    }
+	/**
+	 * Adds one week to the time delta.
+	 *
+	 * @return this HumanTime object
+	 */
+	public HumanTime w() {
+		return w(1);
+	}
 
-    /**
-     * Adds n weeks to the time delta.
-     *
-     * @param n n
-     * @return this HumanTime object
-     */
-    public HumanTime w(int n) {
-        delta += WEEK * Math.abs(n);
-        return this;
-    }
+	/**
+	 * Adds n weeks to the time delta.
+	 *
+	 * @param n n
+	 * @return this HumanTime object
+	 */
+	public HumanTime w(final int n) {
+		delta += WEEK * Math.abs(n);
+		return this;
+	}
 
-    /**
-     * Adds one day to the time delta.
-     * 
-     * @return this HumanTime object
-     */
-    public HumanTime d() {
-        return d(1);
-    }
+	/**
+	 * Adds one day to the time delta.
+	 *
+	 * @return this HumanTime object
+	 */
+	public HumanTime d() {
+		return d(1);
+	}
 
-    /**
-     * Adds n days to the time delta.
-     * 
-     * @param n n
-     * @return this HumanTime object
-     */
-    public HumanTime d(int n) {
-        delta += DAY * Math.abs(n);
-        return this;
-    }
+	/**
+	 * Adds n days to the time delta.
+	 *
+	 * @param n n
+	 * @return this HumanTime object
+	 */
+	public HumanTime d(final int n) {
+		delta += DAY * Math.abs(n);
+		return this;
+	}
 
-    /**
-     * Adds one hour to the time delta.
-     * 
-     * @return this HumanTime object
-     */
-    public HumanTime h() {
-        return h(1);
-    }
+	/**
+	 * Adds one hour to the time delta.
+	 *
+	 * @return this HumanTime object
+	 */
+	public HumanTime h() {
+		return h(1);
+	}
 
-    /**
-     * Adds n hours to the time delta.
-     * 
-     * @param n n
-     * @return this HumanTime object
-     */
-    public HumanTime h(int n) {
-        delta += HOUR * Math.abs(n);
-        return this;
-    }
+	/**
+	 * Adds n hours to the time delta.
+	 *
+	 * @param n n
+	 * @return this HumanTime object
+	 */
+	public HumanTime h(final int n) {
+		delta += HOUR * Math.abs(n);
+		return this;
+	}
 
-    /**
-     * Adds one month to the time delta.
-     * 
-     * @return this HumanTime object
-     */
-    public HumanTime m() {
-        return m(1);
-    }
+	/**
+	 * Adds one month to the time delta.
+	 *
+	 * @return this HumanTime object
+	 */
+	public HumanTime m() {
+		return m(1);
+	}
 
-    /**
-     * Adds n months to the time delta.
-     * 
-     * @param n n
-     * @return this HumanTime object
-     */
-    public HumanTime m(int n) {
-        delta += MINUTE * Math.abs(n);
-        return this;
-    }
+	/**
+	 * Adds n months to the time delta.
+	 *
+	 * @param n n
+	 * @return this HumanTime object
+	 */
+	public HumanTime m(final int n) {
+		delta += MINUTE * Math.abs(n);
+		return this;
+	}
 
-    /**
-     * Adds one second to the time delta.
-     * 
-     * @return this HumanTime object
-     */
-    public HumanTime s() {
-        return s(1);
-    }
+	/**
+	 * Adds one second to the time delta.
+	 *
+	 * @return this HumanTime object
+	 */
+	public HumanTime s() {
+		return s(1);
+	}
 
-    /**
-     * Adds n seconds to the time delta.
-     * 
-     * @param n seconds
-     * @return this HumanTime object
-     */
-    public HumanTime s(int n) {
-        delta += SECOND * Math.abs(n);
-        return this;
-    }
+	/**
+	 * Adds n seconds to the time delta.
+	 *
+	 * @param n seconds
+	 * @return this HumanTime object
+	 */
+	public HumanTime s(final int n) {
+		delta += SECOND * Math.abs(n);
+		return this;
+	}
 
-    /**
-     * Returns a human-formatted representation of the time delta.
-     * 
-     * @return a formatted representation of the time delta, never <code>null</code>
-     */
-    public String getExactly() {
-        return getExactly(new StringBuilder()).toString();
-    }
+	/**
+	 * Returns a human-formatted representation of the time delta.
+	 *
+	 * @return a formatted representation of the time delta, never <code>null</code>
+	 */
+	public String getExactly() {
+		return getExactly(new StringBuilder()).toString();
+	}
 
-    /**
-     * Appends a human-formatted representation of the time delta to the given {@link Appendable} object.
-     * 
-     * @param <T> the return type
-     * @param a the Appendable object, may not be <code>null</code>
-     * @return the given Appendable object, never <code>null</code>
-     */
-    public <T extends Appendable> T getExactly(T a) {
-        try {
-            boolean prependBlank = false;
-            long d = delta;
-            if (d >= YEAR) {
-                a.append(floor(d, YEAR));
-                a.append(' ');
-                a.append('y');
-                prependBlank = true;
-            }
-            d %= YEAR;
-            if (d >= WEEK) {
-                if (prependBlank) {
-                    a.append(' ');
-                }
-                a.append(floor(d, WEEK));
-                a.append(' ');
-                a.append('w');
-                prependBlank = true;
-            }
-            d %= WEEK;
-            if (d >= DAY) {
-                if (prependBlank) {
-                    a.append(' ');
-                }
-                a.append(floor(d, DAY));
-                a.append(' ');
-                a.append('d');
-                prependBlank = true;
-            }
-            d %= DAY;
-            if (d >= HOUR) {
-                if (prependBlank) {
-                    a.append(' ');
-                }
-                a.append(floor(d, HOUR));
-                a.append(' ');
-                a.append('h');
-                prependBlank = true;
-            }
-            d %= HOUR;
-            if (d >= MINUTE) {
-                if (prependBlank) {
-                    a.append(' ');
-                }
-                a.append(floor(d, MINUTE));
-                a.append(' ');
-                a.append('m');
-                prependBlank = true;
-            }
-            d %= MINUTE;
-            if (d >= SECOND) {
-                if (prependBlank) {
-                    a.append(' ');
-                }
-                a.append(floor(d, SECOND));
-                a.append(' ');
-                a.append('s');
-                prependBlank = true;
-            }
-        }
-        catch (IOException ex) {
-            // What were they thinking...
-        }
-        return a;
-    }
+	/**
+	 * Appends a human-formatted representation of the time delta to the given {@link Appendable} object.
+	 *
+	 * @param <T> the return type
+	 * @param a   the Appendable object, may not be <code>null</code>
+	 * @return the given Appendable object, never <code>null</code>
+	 */
+	public <T extends Appendable> T getExactly(final T a) {
+		try {
+			boolean prependBlank = false;
+			long d = delta;
+			if (d >= YEAR) {
+				a.append(floor(d, YEAR));
+				a.append(' ');
+				a.append('y');
+				prependBlank = true;
+			}
+			d %= YEAR;
+			if (d >= WEEK) {
+				if (prependBlank) {
+					a.append(' ');
+				}
+				a.append(floor(d, WEEK));
+				a.append(' ');
+				a.append('w');
+				prependBlank = true;
+			}
+			d %= WEEK;
+			if (d >= DAY) {
+				if (prependBlank) {
+					a.append(' ');
+				}
+				a.append(floor(d, DAY));
+				a.append(' ');
+				a.append('d');
+				prependBlank = true;
+			}
+			d %= DAY;
+			if (d >= HOUR) {
+				if (prependBlank) {
+					a.append(' ');
+				}
+				a.append(floor(d, HOUR));
+				a.append(' ');
+				a.append('h');
+				prependBlank = true;
+			}
+			d %= HOUR;
+			if (d >= MINUTE) {
+				if (prependBlank) {
+					a.append(' ');
+				}
+				a.append(floor(d, MINUTE));
+				a.append(' ');
+				a.append('m');
+				prependBlank = true;
+			}
+			d %= MINUTE;
+			if (d >= SECOND) {
+				if (prependBlank) {
+					a.append(' ');
+				}
+				a.append(floor(d, SECOND));
+				a.append(' ');
+				a.append('s');
+				prependBlank = true;
+			}
+		} catch (final IOException ex) {
+			// What were they thinking...
+		}
+		return a;
+	}
 
-    /**
-     * Returns an approximate, human-formatted representation of the time delta.
-     * 
-     * @return a formatted representation of the time delta, never <code>null</code>
-     */
-    public String getApproximately() {
-        return getApproximately(new StringBuilder()).toString();
-    }
+	/**
+	 * Returns an approximate, human-formatted representation of the time delta.
+	 *
+	 * @return a formatted representation of the time delta, never <code>null</code>
+	 */
+	public String getApproximately() {
+		return getApproximately(new StringBuilder()).toString();
+	}
 
-    /**
-     * Appends an approximate, human-formatted representation of the time delta to the given {@link Appendable} object.
-     * 
-     * @param <T> the return type
-     * @param a the Appendable object, may not be <code>null</code>
-     * @return the given Appendable object, never <code>null</code>
-     */
-    public <T extends Appendable> T getApproximately(T a) {
+	/**
+	 * Appends an approximate, human-formatted representation of the time delta to the given {@link Appendable} object.
+	 *
+	 * @param <T> the return type
+	 * @param a   the Appendable object, may not be <code>null</code>
+	 * @return the given Appendable object, never <code>null</code>
+	 */
+	public <T extends Appendable> T getApproximately(final T a) {
 
-        try {
-            int parts = 0;
-            boolean rounded = false;
-            boolean prependBlank = false;
-            long d = delta;
-            long mod = d % YEAR;
+		try {
+			int parts = 0;
+			boolean rounded = false;
+			boolean prependBlank = false;
+			long d = delta;
+			long mod = d % YEAR;
 
-            if (mod >= upperCeiling(YEAR)) {
-                a.append(ceil(d, YEAR));
-                a.append(' ');
-                a.append('y');
-                ++parts;
-                rounded = true;
-                prependBlank = true;
-            }
-            else if (d >= YEAR) {
-                a.append(floor(d, YEAR));
-                a.append(' ');
-                a.append('y');
-                ++parts;
-                rounded = mod <= lowerCeiling(YEAR);
-                prependBlank = true;
-            }
+			if (mod >= upperCeiling(YEAR)) {
+				a.append(ceil(d, YEAR));
+				a.append(' ');
+				a.append('y');
+				++parts;
+				rounded = true;
+				prependBlank = true;
+			} else if (d >= YEAR) {
+				a.append(floor(d, YEAR));
+				a.append(' ');
+				a.append('y');
+				++parts;
+				rounded = mod <= lowerCeiling(YEAR);
+				prependBlank = true;
+			}
 
-            if (!rounded) {
-                d %= YEAR;
-                mod = d % WEEK;
+			if (!rounded) {
+				d %= YEAR;
+				mod = d % WEEK;
 
-                if (mod >= upperCeiling(WEEK)) {
-                    if (prependBlank) {
-                        a.append(' ');
-                    }
-                    a.append(ceil(d, WEEK));
-                    a.append(' ');
-                    a.append('w');
-                    ++parts;
-                    rounded = true;
-                    prependBlank = true;
-                }
-                else if (d >= WEEK) {
-                    if (prependBlank) {
-                        a.append(' ');
-                    }
-                    a.append(floor(d, WEEK));
-                    a.append(' ');
-                    a.append('w');
-                    ++parts;
-                    rounded = mod <= lowerCeiling(WEEK);
-                    prependBlank = true;
-                }
+				if (mod >= upperCeiling(WEEK)) {
+					if (prependBlank) {
+						a.append(' ');
+					}
+					a.append(ceil(d, WEEK));
+					a.append(' ');
+					a.append('w');
+					++parts;
+					rounded = true;
+					prependBlank = true;
+				} else if (d >= WEEK) {
+					if (prependBlank) {
+						a.append(' ');
+					}
+					a.append(floor(d, WEEK));
+					a.append(' ');
+					a.append('w');
+					++parts;
+					rounded = mod <= lowerCeiling(WEEK);
+					prependBlank = true;
+				}
 
-                if (parts < 2) {
-                    d %= WEEK;
-                    mod = d % DAY;
+				if (parts < 2) {
+					d %= WEEK;
+					mod = d % DAY;
 
-                    if (mod >= upperCeiling(DAY)) {
-                        if (prependBlank) {
-                            a.append(' ');
-                        }
-                        a.append(ceil(d, DAY));
-                        a.append(' ');
-                        a.append('d');
-                        ++parts;
-                        rounded = true;
-                        prependBlank = true;
-                    }
-                    else if (d >= DAY) {
-                        if (prependBlank) {
-                            a.append(' ');
-                        }
-                        a.append(floor(d, DAY));
-                        a.append(' ');
-                        a.append('d');
-                        ++parts;
-                        rounded = mod <= lowerCeiling(DAY);
-                        prependBlank = true;
-                    }
+					if (mod >= upperCeiling(DAY)) {
+						if (prependBlank) {
+							a.append(' ');
+						}
+						a.append(ceil(d, DAY));
+						a.append(' ');
+						a.append('d');
+						++parts;
+						rounded = true;
+						prependBlank = true;
+					} else if (d >= DAY) {
+						if (prependBlank) {
+							a.append(' ');
+						}
+						a.append(floor(d, DAY));
+						a.append(' ');
+						a.append('d');
+						++parts;
+						rounded = mod <= lowerCeiling(DAY);
+						prependBlank = true;
+					}
 
-                    if (parts < 2) {
-                        d %= DAY;
-                        mod = d % HOUR;
+					if (parts < 2) {
+						d %= DAY;
+						mod = d % HOUR;
 
-                        if (mod >= upperCeiling(HOUR)) {
-                            if (prependBlank) {
-                                a.append(' ');
-                            }
-                            a.append(ceil(d, HOUR));
-                            a.append(' ');
-                            a.append('h');
-                            ++parts;
-                            rounded = true;
-                            prependBlank = true;
-                        } else if (d >= HOUR && !rounded) {
-                            if (prependBlank) {
-                                a.append(' ');
-                            }
-                            a.append(floor(d, HOUR));
-                            a.append(' ');
-                            a.append('h');
-                            ++parts;
-                            rounded = mod <= lowerCeiling(HOUR);
-                            prependBlank = true;
-                        }
+						if (mod >= upperCeiling(HOUR)) {
+							if (prependBlank) {
+								a.append(' ');
+							}
+							a.append(ceil(d, HOUR));
+							a.append(' ');
+							a.append('h');
+							++parts;
+							rounded = true;
+							prependBlank = true;
+						} else if (d >= HOUR && !rounded) {
+							if (prependBlank) {
+								a.append(' ');
+							}
+							a.append(floor(d, HOUR));
+							a.append(' ');
+							a.append('h');
+							++parts;
+							rounded = mod <= lowerCeiling(HOUR);
+							prependBlank = true;
+						}
 
-                        if (parts < 2) {
-                            d %= HOUR;
-                            mod = d % MINUTE;
+						if (parts < 2) {
+							d %= HOUR;
+							mod = d % MINUTE;
 
-                            if (mod >= upperCeiling(MINUTE)) {
-                                if (prependBlank) {
-                                    a.append(' ');
-                                }
-                                a.append(ceil(d, MINUTE));
-                                a.append(' ');
-                                a.append('m');
-                                ++parts;
-                                rounded = true;
-                                prependBlank = true;
-                            } else if (d >= MINUTE && !rounded) {
-                                if (prependBlank) {
-                                    a.append(' ');
-                                }
-                                a.append(floor(d, MINUTE));
-                                a.append(' ');
-                                a.append('m');
-                                ++parts;
-                                rounded = mod <= lowerCeiling(MINUTE);
-                                prependBlank = true;
-                            }
+							if (mod >= upperCeiling(MINUTE)) {
+								if (prependBlank) {
+									a.append(' ');
+								}
+								a.append(ceil(d, MINUTE));
+								a.append(' ');
+								a.append('m');
+								++parts;
+								rounded = true;
+								prependBlank = true;
+							} else if (d >= MINUTE && !rounded) {
+								if (prependBlank) {
+									a.append(' ');
+								}
+								a.append(floor(d, MINUTE));
+								a.append(' ');
+								a.append('m');
+								++parts;
+								rounded = mod <= lowerCeiling(MINUTE);
+								prependBlank = true;
+							}
 
-                            if (parts < 2) {
-                                d %= MINUTE;
-                                mod = d % SECOND;
+							if (parts < 2) {
+								d %= MINUTE;
+								mod = d % SECOND;
 
-                                if (mod >= upperCeiling(SECOND)) {
-                                    if (prependBlank) {
-                                        a.append(' ');
-                                    }
-                                    a.append(ceil(d, SECOND));
-                                    a.append(' ');
-                                    a.append('s');
-                                    ++parts;
-                                    rounded = true;
-                                    prependBlank = true;
-                                } else if (d >= SECOND && !rounded) {
-                                    if (prependBlank) {
-                                        a.append(' ');
-                                    }
-                                    a.append(floor(d, SECOND));
-                                    a.append(' ');
-                                    a.append('s');
-                                    ++parts;
-                                    rounded = mod <= lowerCeiling(SECOND);
-                                    prependBlank = true;
-                                }
+								if (mod >= upperCeiling(SECOND)) {
+									if (prependBlank) {
+										a.append(' ');
+									}
+									a.append(ceil(d, SECOND));
+									a.append(' ');
+									a.append('s');
+									++parts;
+									rounded = true;
+									prependBlank = true;
+								} else if (d >= SECOND && !rounded) {
+									if (prependBlank) {
+										a.append(' ');
+									}
+									a.append(floor(d, SECOND));
+									a.append(' ');
+									a.append('s');
+									++parts;
+									rounded = mod <= lowerCeiling(SECOND);
+									prependBlank = true;
+								}
 
-                                if (parts < 2) {
-                                    d %= SECOND;
+								if (parts < 2) {
+									d %= SECOND;
 
-                                    if (d > 0 && !rounded) {
-                                        if (prependBlank) {
-                                            a.append(' ');
-                                        }
-                                        a.append(Integer.toString((int) d));
-                                        a.append(' ');
-                                        a.append('m');
-                                        a.append('s');
-                                    }
-                                }
+									if (d > 0 && !rounded) {
+										if (prependBlank) {
+											a.append(' ');
+										}
+										a.append(Integer.toString((int) d));
+										a.append(' ');
+										a.append('m');
+										a.append('s');
+									}
+								}
 
-                            }
+							}
 
-                        }
-                    }
-                }
-            }
-        }
-        catch (IOException ex) {
-            // What were they thinking...
-        }
+						}
+					}
+				}
+			}
+		} catch (final IOException ex) {
+			// What were they thinking...
+		}
 
-        return a;
-    }
+		return a;
+	}
 
-    /**
-     * Returns the time delta.
-     * 
-     * @return the time delta
-     */
-    public long getDelta() {
-        return delta;
-    }
+	/**
+	 * Returns the time delta.
+	 *
+	 * @return the time delta
+	 */
+	public long getDelta() {
+		return delta;
+	}
 
-    /**
-     * @see Object#equals(Object)
-     */
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof HumanTime)) {
-            return false;
-        }
-        return delta == ((HumanTime) obj).delta;
-    }
+	/**
+	 * @see Object#equals(Object)
+	 */
+	@Override
+    public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof HumanTime)) {
+			return false;
+		}
+		return delta == ((HumanTime) obj).delta;
+	}
 
-    /**
-     * Returns a 32-bit representation of the time delta.
-     * 
-     * @see Object#hashCode()
-     */
+	/**
+	 * Returns a 32-bit representation of the time delta.
+	 *
+	 * @see Object#hashCode()
+	 */
+	@Override
     public int hashCode() {
-        return (int) (delta ^ (delta >> 32));
-    }
+		return (int) (delta ^ (delta >> 32));
+	}
 
-    /**
-     * Returns a String representation of this.
-     * <p>
-     * The output is identical to {@link #getExactly()}.
-     * 
-     * @see Object#toString()
-     * @see #getExactly()
-     * @return a String, never <code>null</code>
-     */
+	/**
+	 * Returns a String representation of this.
+	 * <p>
+	 * The output is identical to {@link #getExactly()}.
+	 *
+	 * @return a String, never <code>null</code>
+	 * @see Object#toString()
+	 * @see #getExactly()
+	 */
+	@Override
     public String toString() {
-        return getExactly();
-    }
+		return getExactly();
+	}
 
-    /**
-     * Compares this HumanTime to another HumanTime.
-     * 
-     * @param t the other instance, may not be <code>null</code>
-     * @return which one is greater
-     */
-    public int compareTo(HumanTime t) {
-        return delta == t.delta ? 0 : (delta < t.delta ? -1 : 1);
-    }
+	/**
+	 * Compares this HumanTime to another HumanTime.
+	 *
+	 * @param t the other instance, may not be <code>null</code>
+	 * @return which one is greater
+	 */
+	@Override
+    public int compareTo(final HumanTime t) {
+		return delta == t.delta ? 0 : (delta < t.delta ? -1 : 1);
+	}
 
-    /**
-     * Deep-clones this object.
-     * 
-     * @see Object#clone()
-     * @throws CloneNotSupportedException
-     */
+	/**
+	 * Deep-clones this object.
+	 *
+	 * @throws CloneNotSupportedException
+	 * @see Object#clone()
+	 */
+	@Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+		return super.clone();
+	}
 
-    /**
-     * @see Externalizable#readExternal(ObjectInput)
-     */
-    public void readExternal(ObjectInput in) throws IOException {
-        delta = in.readLong();
-    }
+	/**
+	 * @see Externalizable#readExternal(ObjectInput)
+	 */
+	@Override
+    public void readExternal(final ObjectInput in) throws IOException {
+		delta = in.readLong();
+	}
 
-    /**
-     * @see Externalizable#writeExternal(ObjectOutput)
-     */
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeLong(delta);
-    }
+	/**
+	 * @see Externalizable#writeExternal(ObjectOutput)
+	 */
+	@Override
+    public void writeExternal(final ObjectOutput out) throws IOException {
+		out.writeLong(delta);
+	}
 
 }

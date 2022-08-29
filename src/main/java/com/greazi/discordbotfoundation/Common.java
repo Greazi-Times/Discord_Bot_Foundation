@@ -8,7 +8,6 @@ import lombok.Getter;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
 
 /**
  * This class holds some pre-made log and message send modules
@@ -114,7 +113,7 @@ public final class Common {
 	 *
 	 * @param message
 	 */
-	public static void success(String message) {
+	public static void success(final String message) {
 		logNoPrefix(ConsoleColor.GREEN + "[SUCCESS] " + message);
 	}
 
@@ -124,7 +123,7 @@ public final class Common {
 	 *
 	 * @param message
 	 */
-	public static void warning(String message) {
+	public static void warning(final String message) {
 		logNoPrefix(ConsoleColor.RED + "[WARNING] " + message);
 	}
 
@@ -164,16 +163,16 @@ public final class Common {
 		if (messages == null)
 			return;
 
-		for (String message : messages) {
+		for (final String message : messages) {
 			if (message.equals("none"))
 				continue;
 
 			for (final String part : splitNewline(message)) {
 
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-				LocalTime localTime = LocalTime.now();
+				final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+				final LocalTime localTime = LocalTime.now();
 
-				if(addLogPrefix && ADD_LOG_PREFIX){
+				if (addLogPrefix && ADD_LOG_PREFIX) {
 					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.GREEN + logPrefix + ConsoleColor.RESET + " " + part + ConsoleColor.RESET);
 				} else {
 					System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.RESET + part + ConsoleColor.RESET);
@@ -409,7 +408,7 @@ public final class Common {
 class SneakyThrow {
 
 	public static void sneaky(final Throwable t) {
-		throw SneakyThrow.<RuntimeException>superSneaky(t);
+		throw SneakyThrow.superSneaky(t);
 	}
 
 	private static <T extends Throwable> T superSneaky(final Throwable t) throws T {

@@ -8,13 +8,11 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.jooq.meta.jaxb.*;
-import org.jooq.meta.jaxb.Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class SqlManager {
+public abstract class SqlManager {
 
     private static HikariDataSource dataSource;
     private DSLContext dslContext = null;
@@ -24,12 +22,7 @@ public class SqlManager {
     private final String userName = SimpleSettings.Database.Username();
     private final String password = SimpleSettings.Database.Password();
 
-    public SqlManager(){
-        if (!SimpleSettings.Database.Enabled()) {
-            Common.log("MySQL system Disabled!");
-            return;
-        }
-        Common.log("MYSQL system Enabled! Starting up MYSQL system");
+		Debugger.debug("Database", url + " " + userName + " " + password + " || " + SimpleSettings.Database.Link());
 
         final HikariConfig config = new HikariConfig();
         config.setMinimumIdle(5);
@@ -53,36 +46,11 @@ public class SqlManager {
         }
     }
 
-    public void codeGenerator(){
-        new org.jooq.meta.jaxb.Configuration()
-                .withJdbc(new Jdbc()
-                        .withDriver("com.mysql.jdbc.Driver")
-                        .withUrl(url)
-                        .withUser(userName)
-                        .withPassword(password)
-                )
-                .withGenerator(
-                        new Generator()
-                                .withDatabase(
-                                        new Database()
-                                                .withName(db)
-                                                .withIncludes(".*")
-                                                .withExcludes("" +
-                                                        "UNUSED_TABLE                # This table (unqualified name) should not be generated" +
-                                                        "| PREFIX_.*                   # Objects with a given prefix should not be generated" +
-                                                        "| SECRET_SCHEMA\\.SECRET_TABLE # This table (qualified name) should not be generated" +
-                                                        "| SECRET_ROUTINE              # This routine (unqualified name) ..." +
-                                                        ""
-                                                )
-                                                .withInputSchema("[your database schema / owner / name]")
-                                )
-                                .withTarget(
-                                        new Target()
-                                                .withPackageName("com.greazi.discordbotfoundation.mysql")
-                                                .withDirectory("src/main/java/com/greazi/discordbotfoundation/mysql/generated")
-                                )
-                );
-    }
+			Debugger.debug("Database", "Database information; " + tempConn.getClientInfo());
+		} catch (final Exception e) {
+			Common.throwError(e, "Error while getting the connection to the database");
+		}
+	}
 
     public static HikariDataSource getDataSource() {
         return dataSource;

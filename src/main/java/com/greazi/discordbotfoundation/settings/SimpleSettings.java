@@ -16,7 +16,8 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -33,13 +34,13 @@ public class SimpleSettings {
 	 */
 	public static void init() {
 		// The settings file
-		File file = new File(Constants.File.SETTINGS);
+		final File file = new File(Constants.File.SETTINGS);
 
 		// If the file doesn't exist it will create a new file
-		if(!file.exists()) {
-			try{
+		if (!file.exists()) {
+			try {
 				new ResourceCopier().saveResource(Constants.File.SETTINGS);
-			}catch (Exception e){
+			} catch (final Exception e) {
 				e.printStackTrace();
 				System.exit(0);
 			}
@@ -47,39 +48,40 @@ public class SimpleSettings {
 
 		// Set up the Yaml handler
 		try {
-			InputStream inputStream = Files.newInputStream(file.toPath());
-			Yaml yaml = new Yaml();
+			final InputStream inputStream = Files.newInputStream(file.toPath());
+			final Yaml yaml = new Yaml();
 			settings = yaml.load(inputStream);
-		}catch (Exception e){
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Retrieve an Object from the settings
+	 *
 	 * @param key The settings path
 	 * @return The settings value
 	 */
-	private static Object getObject(String key) {
+	private static Object getObject(final String key) {
 		if (cachedSettings.containsKey(key)) {
 			return cachedSettings.get(key);
 		}
 		if (!key.contains(".")) {
-			if(!settings.containsKey(key)) {
+			if (!settings.containsKey(key)) {
 				return "Unknown key";
 			}
-			Object returnValue = settings.get(key);
+			final Object returnValue = settings.get(key);
 			cachedSettings.put(key, returnValue);
 			return returnValue;
 		}
 
 		Map<String, Object> map = settings;
-		String[] keys = key.split("\\.");
-		StringBuilder finalKey = new StringBuilder();
+		final String[] keys = key.split("\\.");
+		final StringBuilder finalKey = new StringBuilder();
 
 		for (int i = 0; i < keys.length; i++) {
-			String currentKey = keys[i];
-			if(!map.containsKey(currentKey)) {
+			final String currentKey = keys[i];
+			if (!map.containsKey(currentKey)) {
 				return "Unknown key";
 			}
 
@@ -97,24 +99,26 @@ public class SimpleSettings {
 
 	/**
 	 * Retrieve a String from the settings file
+	 *
 	 * @param key The settings path
 	 * @return The settings value
 	 */
-	protected static String getString(String key) {
-		Object returnValue = getObject(key);
+	protected static String getString(final String key) {
+		final Object returnValue = getObject(key);
 		return String.valueOf(returnValue);
 	}
 
 	/**
 	 * Retrieve a Boolean from the settings file
+	 *
 	 * @param key The settings path
 	 * @return The settings value
 	 */
-	protected static boolean getBoolean(String key) {
-		String returnValue = getString(key);
-		if(returnValue.equalsIgnoreCase("true") || returnValue.equalsIgnoreCase("false") || returnValue.equalsIgnoreCase("1") || returnValue.equalsIgnoreCase("0")) {
+	protected static boolean getBoolean(final String key) {
+		final String returnValue = getString(key);
+		if (returnValue.equalsIgnoreCase("true") || returnValue.equalsIgnoreCase("false") || returnValue.equalsIgnoreCase("1") || returnValue.equalsIgnoreCase("0")) {
 			return Boolean.parseBoolean(returnValue);
-		}else{
+		} else {
 			Common.error("Value from key: " + key + ", Is not of type boolean!!");
 			return false;
 		}
@@ -122,14 +126,15 @@ public class SimpleSettings {
 
 	/**
 	 * Retrieve an int from the settings file
+	 *
 	 * @param key The settings path
 	 * @return The settings value
 	 */
-	protected static int getInt(String key) {
-		String returnValue = getString(key);
+	protected static int getInt(final String key) {
+		final String returnValue = getString(key);
 		try {
 			return Integer.parseInt(returnValue);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			Common.error("Value from key: " + key + ", Is not of type int!!");
 			return 0;
 		}
@@ -137,11 +142,12 @@ public class SimpleSettings {
 
 	/**
 	 * Retrieve a Double from the settings file
+	 *
 	 * @param key The settings path
 	 * @return The settings value
 	 */
-	protected static double getDouble(String key) {
-		String returnValue = getString(key);
+	protected static double getDouble(final String key) {
+		final String returnValue = getString(key);
 		try {
 			return Double.parseDouble(returnValue);
 		} catch (NumberFormatException | NullPointerException e) {
@@ -152,14 +158,15 @@ public class SimpleSettings {
 
 	/**
 	 * Retrieve a Long from the settings file
+	 *
 	 * @param key The settings path
 	 * @return The settings value
 	 */
-	protected static long getLong(String key) {
-		String returnValue = getString(key);
+	protected static long getLong(final String key) {
+		final String returnValue = getString(key);
 		try {
 			return Long.parseLong(returnValue);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			Common.error("Value from key: " + key + ", Is not of type long!!");
 			return 0;
 		}
@@ -167,14 +174,15 @@ public class SimpleSettings {
 
 	/**
 	 * Retrieve a ArrayList from the settings file
+	 *
 	 * @param key The settings path
 	 * @return The settings value
 	 */
-	protected static ArrayList<String> getArray(String key) {
-		Object returnValue = getObject(key);
-		if(returnValue instanceof ArrayList) {
+	protected static ArrayList<String> getArray(final String key) {
+		final Object returnValue = getObject(key);
+		if (returnValue instanceof ArrayList) {
 			return (ArrayList<String>) returnValue;
-		}else{
+		} else {
 			Common.error("Value from key: " + key + ", Is not of type List!!");
 			return new ArrayList<>();
 		}
@@ -291,7 +299,7 @@ public class SimpleSettings {
 		// Set the main path of the settings values
 		private static final String consolePath = "Console.";
 
-		public static class Commands{
+		public static class Commands {
 
 			// Set the main path of the settings values
 			private static final String commandsPath = "Commands.";
@@ -330,40 +338,44 @@ public class SimpleSettings {
 		private static final String path = "Database.";
 
 		// Returns if the database system is enabled
-		public static boolean Enabled(){
+		public static boolean Enabled() {
 			return getBoolean(path + "Enabled");
 		}
 
 		// The database host
-		public static String Host(){
+		public static String Host() {
 			return getString(path + "Host");
 		}
 
 		// The database port
-		public static int Port(){
+		public static int Port() {
 			return getInt(path + "Port");
 		}
 
 		// The database name
-		public static String Database(){
+		public static String Database() {
 			return getString(path + "Database");
 		}
 
 		// The database username
-		public static String Username(){
+		public static String Username() {
 			return getString(path + "Username");
 		}
 
 		// The database password
-		public static String Password(){
+		public static String Password() {
 			return getString(path + "Password");
+		}
+
+		public static String Link() {
+			return getString(path + "Link");
 		}
 	}
 
 	/**
 	 * Retrieve all debug sections that are enabled
 	 */
-	public static String Debug(){
+	public static String Debug() {
 		return getString("Debug");
 	}
 }
