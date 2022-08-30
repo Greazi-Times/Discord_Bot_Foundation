@@ -10,6 +10,7 @@
 *.DS_Store
 *.bin
 *.lock
+target/
 
 # IntelliJ
 out/
