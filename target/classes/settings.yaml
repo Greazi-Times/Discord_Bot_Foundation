@@ -77,14 +77,10 @@ Database:
 
   # Should we store all the data on the database
   Enabled: false
-<<<<<<< Updated upstream
-  
-=======
 
   # Select your type of database [H2, MySQL, MariaDB, SQLite, SQLSERVER, SQLITE]
   Type: "MariaDB"
 
->>>>>>> Stashed changes
   # The database information
   Host: "localhost"
   Port: 3306

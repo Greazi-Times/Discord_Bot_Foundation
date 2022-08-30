@@ -1,3 +1,12 @@
+# [0.15.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.14.0...v0.15.0) (2022-08-30)
+
+
+### Features
+
+* added SQL system ([07bc901](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/07bc9013f801808825417390a75744eb6c617a2e))
+
+
+
 # [0.14.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.13.0...v0.14.0) (2022-08-25)
 
 
@@ -53,15 +62,6 @@
 ### Bug Fixes
 
 * **Console:** Added a check so the stop command can't be disabled ([f3a5652](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/f3a56520a4006fde0070685579b2062aea45ea49))
-
-
-
-## [0.11.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.0...v0.11.1) (2022-08-12)
-
-
-### Bug Fixes
-
-* Embed footer ([bb7a555](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/bb7a555d00b2c3f72fba65f40e20e9b1671fc1b5))
 
 
 
