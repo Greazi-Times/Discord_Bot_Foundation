@@ -76,7 +76,7 @@ public class SlashCommandHandler extends ListenerAdapter {
 
 		// Set description
 		command.setDescription(module.getDescription());
-		
+
 
 		// TODO: When api has an update for the slash command system update it to that system
 		//       Check it out here: https://github.com/DV8FromTheWorld/JDA/pull/2113
@@ -110,7 +110,7 @@ public class SlashCommandHandler extends ListenerAdapter {
 		Debugger.debug("SlashCommand", "Registering slash commands");
 
 		// Add all slash commands to the main guild
-		SimpleBot.getGuild().updateCommands()
+		SimpleBot.getMainGuild().updateCommands()
 				.addCommands(mainGuildSlashCommands)
 				.queue();
 

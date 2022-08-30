@@ -25,7 +25,7 @@ public class StopCommand extends SimpleSlashCommand {
 	private List<Role> roleList = new ArrayList<>();
 
 	private void getRoleList() {
-		roleList = SimpleBot.getGuild().getRolesByName(SimpleSettings.Stop.AllowedRoles().toString(), true);
+		roleList = SimpleBot.getMainGuild().getRolesByName(SimpleSettings.Stop.AllowedRoles().toString(), true);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class StopCommand extends SimpleSlashCommand {
 	 * @param event SlashCommandInteractionEvent
 	 */
 	@Override
-	protected void execute(SlashCommandInteractionEvent event) {
+	protected void execute(final SlashCommandInteractionEvent event) {
 		event.replyEmbeds(new SimpleEmbedBuilder("STOP")
 				.text("Do you really want to stop me?")
 				.error()
@@ -76,7 +76,7 @@ public class StopCommand extends SimpleSlashCommand {
 			 * @param event ButtonInteractionEvent
 			 */
 			@Override
-			protected void execute(ButtonInteractionEvent event) {
+			protected void execute(final ButtonInteractionEvent event) {
 				// Sending confirm message that the bot is being stopped
 				event.getMessage().editMessageEmbeds(
 						new SimpleEmbedBuilder("Stop | Confirmed")
@@ -109,7 +109,7 @@ public class StopCommand extends SimpleSlashCommand {
 			 * @param event ButtonInteractionEvent
 			 */
 			@Override
-			protected void execute(ButtonInteractionEvent event) {
+			protected void execute(final ButtonInteractionEvent event) {
 				event.getMessage().editMessageEmbeds(
 						new SimpleEmbedBuilder("Stop | Canceled")
 								.text("Canceled stopping the bot")

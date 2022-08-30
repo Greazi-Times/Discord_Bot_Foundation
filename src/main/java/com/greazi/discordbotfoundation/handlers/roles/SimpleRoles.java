@@ -21,50 +21,50 @@ import java.util.stream.Collectors;
 
 public class SimpleRoles {
 
-	public static void addRole(@NotNull Member member, @NotNull Role role) {
+	public static void addRole(@NotNull final Member member, @NotNull final Role role) {
 		member.getRoles().add(role);
 	}
 
-	public static void addRole(@NotNull Member member, Role @NotNull  ... roles) {
-		for (Role role : roles)
+	public static void addRole(@NotNull final Member member, final Role @NotNull ... roles) {
+		for (final Role role : roles)
 			member.getRoles().add(role);
 	}
 
-	public static void addRole(@NotNull Member member, @NotNull int role) {
+	public static void addRole(@NotNull final Member member, @NotNull final int role) {
 		member.getRoles().add(getRole(role));
 	}
 
-	public static void addRole(@NotNull Member member, int @NotNull ... role) {
-		for(int r : role) {
+	public static void addRole(@NotNull final Member member, final int @NotNull ... role) {
+		for (final int r : role) {
 			member.getRoles().add(getRole(r));
 		}
 	}
 
-	public static void addRole(@NotNull Member member, @NotNull String role) {
+	public static void addRole(@NotNull final Member member, @NotNull final String role) {
 		member.getRoles().add(getRole(role));
 	}
 
-	public static void addRole(@NotNull Member member, String @NotNull ... role) {
-		for(String r : role) {
+	public static void addRole(@NotNull final Member member, final String @NotNull ... role) {
+		for (final String r : role) {
 			member.getRoles().add(getRole(r));
 		}
 	}
 
-	public static Query<Role> getRoles(String... names) {
-		List<Role> roles = Arrays.stream(names).flatMap(name -> SimpleBot.getGuild().getRolesByName(name, true).stream()).collect(Collectors.toList());
+	public static Query<Role> getRoles(final String... names) {
+		final List<Role> roles = Arrays.stream(names).flatMap(name -> SimpleBot.getMainGuild().getRolesByName(name, true).stream()).collect(Collectors.toList());
 
 		return new Query<>(roles);
 	}
 
-	public static Role getRole(long id) {
-		return SimpleBot.getGuild().getRoleById(id);
+	public static Role getRole(final long id) {
+		return SimpleBot.getMainGuild().getRoleById(id);
 	}
 
-	public static Role getRole(String name) {
-		return SimpleBot.getGuild().getRolesByName(name, false).get(0);
+	public static Role getRole(final String name) {
+		return SimpleBot.getMainGuild().getRolesByName(name, false).get(0);
 	}
 
-	public static Role getRoleIgnoreCase(String name) {
-		return SimpleBot.getGuild().getRolesByName(name, true).get(0);
+	public static Role getRoleIgnoreCase(final String name) {
+		return SimpleBot.getMainGuild().getRolesByName(name, true).get(0);
 	}
 }

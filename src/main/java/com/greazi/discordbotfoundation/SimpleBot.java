@@ -19,6 +19,7 @@ import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.modals.SimpleModal;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
 import com.greazi.discordbotfoundation.handlers.selectmenu.SimpleSelectMenu;
+import com.greazi.discordbotfoundation.mysql.SqlManager;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.JDA;
@@ -41,6 +42,8 @@ import java.util.HashMap;
 
 // TODO: Create an events adder method that adds all events to the event manager
 
+// TODO: Fix the reload system
+
 /**
  * A basic discord bot that represents the discord bot library
  */
@@ -61,6 +64,7 @@ public abstract class SimpleBot {
 	private static SelectMenuHandler menuHandler;
 	private static ConsoleCommandHandler consoleCommandHandler;
 	private static CronHandler cronHandler;
+	private static SqlManager sqlManager;
 
 	private boolean enabled;
 
@@ -72,7 +76,7 @@ public abstract class SimpleBot {
 	 * Returns the instance of {@link SimpleBot}.
 	 * <p>
 	 * It is recommended to override this in your own {@link SimpleBot}
-	 * implementation so you will get the instance of that, directly.
+	 * implementation, so you will get the instance of that, directly.
 	 *
 	 * @return this instance
 	 */
@@ -114,6 +118,9 @@ public abstract class SimpleBot {
 
 		// Set the instance of the bot
 		instance = this;
+
+		// Load the sql manager
+		sqlManager = new SqlManager();
 
 		// Load way before the bot starts to avoid any issues
 		onPreLoad();
@@ -544,7 +551,7 @@ public abstract class SimpleBot {
 	 *
 	 * @return Main guild
 	 */
-	public static Guild getGuild() {
+	public static Guild getMainGuild() {
 		return mainGuild;
 	}
 
@@ -609,6 +616,15 @@ public abstract class SimpleBot {
 	 */
 	public static CronHandler getCronHandler() {
 		return cronHandler;
+	}
+
+	/**
+	 * Retrieve the sql manager
+	 *
+	 * @return Sql manager
+	 */
+	public static SqlManager getSqlManager() {
+		return sqlManager;
 	}
 
 	/**
