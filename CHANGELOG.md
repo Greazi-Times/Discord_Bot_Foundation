@@ -1,3 +1,13 @@
+# [0.16.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.15.0...v0.16.0) (2022-10-31)
+
+
+### Features
+
+* Fixed and change the roles system ([dc88d6d](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/dc88d6d64fefd266e4e5c482574d5959a380aa28))
+* Updated dependencies  ([a368180](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/a368180c3d8c90be0d669e7fd22ee469bb509a94))
+
+
+
 # [0.15.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.14.0...v0.15.0) (2022-08-30)
 
 
@@ -53,15 +63,6 @@
 ### Features
 
 * Updated the way buttons are registered ([4eb7bc1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/4eb7bc1a476b897c6ca142fce4505c604337d4c2))
-
-
-
-## [0.11.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.1...v0.11.2) (2022-08-12)
-
-
-### Bug Fixes
-
-* **Console:** Added a check so the stop command can't be disabled ([f3a5652](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/f3a56520a4006fde0070685579b2062aea45ea49))
 
 
 
