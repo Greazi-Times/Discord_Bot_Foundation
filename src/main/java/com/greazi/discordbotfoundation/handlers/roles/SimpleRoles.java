@@ -8,63 +8,98 @@
 package com.greazi.discordbotfoundation.handlers.roles;
 
 import com.greazi.discordbotfoundation.SimpleBot;
-import com.greazi.discordbotfoundation.objects.Query;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-// TODO: Finish this
-
 public class SimpleRoles {
 
-	public static void addRole(@NotNull final Member member, @NotNull final Role role) {
+	/**
+	 * Add a role to a member
+	 *
+	 * @param member The member to add the role to
+	 * @param role   The role to add
+	 */
+	public static void addRole(final @NotNull Member member, final Role role) {
 		member.getRoles().add(role);
 	}
 
-	public static void addRole(@NotNull final Member member, final Role @NotNull ... roles) {
-		for (final Role role : roles)
+	/**
+	 * Add multiple roles at once
+	 *
+	 * @param member The member to add the roles to
+	 * @param roles  The roles to add
+	 */
+	public static void addRoles(final Member member, final Role @NotNull ... roles) {
+		for (final Role role : roles) {
 			member.getRoles().add(role);
-	}
-
-	public static void addRole(@NotNull final Member member, @NotNull final int role) {
-		member.getRoles().add(getRole(role));
-	}
-
-	public static void addRole(@NotNull final Member member, final int @NotNull ... role) {
-		for (final int r : role) {
-			member.getRoles().add(getRole(r));
 		}
 	}
 
-	public static void addRole(@NotNull final Member member, @NotNull final String role) {
-		member.getRoles().add(getRole(role));
+	/**
+	 * Add a role from its ID to a member
+	 *
+	 * @param member The member to add the role to
+	 * @param roleId The ID of the role to add
+	 */
+	public static void addRole(@NotNull final Member member, final long roleId) {
+		member.getRoles().add(getRoleById(roleId));
 	}
 
-	public static void addRole(@NotNull final Member member, final String @NotNull ... role) {
-		for (final String r : role) {
-			member.getRoles().add(getRole(r));
+	/**
+	 * Add multiple roles from their IDs at once
+	 *
+	 * @param member  The member to add the roles to
+	 * @param roleIds The IDs of the roles to add
+	 */
+	public static void addRoles(final Member member, final long @NotNull ... roleIds) {
+		for (final long roleId : roleIds) {
+			member.getRoles().add(getRoleById(roleId));
 		}
 	}
 
-	public static Query<Role> getRoles(final String... names) {
-		final List<Role> roles = Arrays.stream(names).flatMap(name -> SimpleBot.getMainGuild().getRolesByName(name, true).stream()).collect(Collectors.toList());
-
-		return new Query<>(roles);
+	/**
+	 * Add a role by name to a member
+	 *
+	 * @param member   The member to add the role to
+	 * @param roleName The name of the role to add
+	 */
+	public static void addRole(final @NotNull Member member, final String roleName) {
+		member.getRoles().add(getRoleByName(roleName));
 	}
 
-	public static Role getRole(final long id) {
-		return SimpleBot.getMainGuild().getRoleById(id);
+	/**
+	 * Add multiple roles by name at once to a member
+	 *
+	 * @param member    The member to add the role to
+	 * @param roleNames The name of the role to add
+	 */
+	public static void addRoles(final Member member, final String @NotNull ... roleNames) {
+		for (final String role : roleNames) {
+			member.getRoles().add(getRoleByName(role));
+		}
 	}
 
-	public static Role getRole(final String name) {
-		return SimpleBot.getMainGuild().getRolesByName(name, false).get(0);
+	/**
+	 * Get a role from its ID
+	 *
+	 * @param member The member to get the role from
+	 * @param roleId The ID of the role to get
+	 * @return The role
+	 */
+	public static Role getRoleById(final long roleId) {
+		return SimpleBot.getMainGuild().getRoleById(roleId);
 	}
 
-	public static Role getRoleIgnoreCase(final String name) {
-		return SimpleBot.getMainGuild().getRolesByName(name, true).get(0);
+	/**
+	 * Get a role by name
+	 *
+	 * @param member   The member to get the role from
+	 * @param roleName The name of the role to get
+	 * @return The role
+	 */
+	public static Role getRoleByName(final String roleName) {
+		return SimpleBot.getMainGuild().getRolesByName(roleName, true).get(0);
 	}
+
 }
