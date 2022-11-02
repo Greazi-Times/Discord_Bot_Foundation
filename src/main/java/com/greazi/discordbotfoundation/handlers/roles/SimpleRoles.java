@@ -43,7 +43,7 @@ public class SimpleRoles {
 	 * @param roleId The ID of the role to add
 	 */
 	public static void addRole(@NotNull final Member member, final long roleId) {
-		member.getRoles().add(getRoleById(roleId));
+		member.getRoles().add(member.getGuild().getRoleById(roleId));
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class SimpleRoles {
 	 */
 	public static void addRoles(final Member member, final long @NotNull ... roleIds) {
 		for (final long roleId : roleIds) {
-			member.getRoles().add(getRoleById(roleId));
+			member.getRoles().add(member.getGuild().getRoleById(roleId));
 		}
 	}
 
@@ -65,7 +65,7 @@ public class SimpleRoles {
 	 * @param roleName The name of the role to add
 	 */
 	public static void addRole(final @NotNull Member member, final String roleName) {
-		member.getRoles().add(getRoleByName(roleName));
+		member.getRoles().add(member.getGuild().getRolesByName(roleName, true).get(0));
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class SimpleRoles {
 	 */
 	public static void addRoles(final Member member, final String @NotNull ... roleNames) {
 		for (final String role : roleNames) {
-			member.getRoles().add(getRoleByName(role));
+			member.getRoles().add(member.getGuild().getRolesByName(role, true).get(0));
 		}
 	}
 
