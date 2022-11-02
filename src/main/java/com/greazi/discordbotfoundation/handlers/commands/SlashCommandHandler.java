@@ -40,7 +40,7 @@ public class SlashCommandHandler extends ListenerAdapter {
 	 * The main slash command handler
 	 */
 	public SlashCommandHandler() {
-		Debugger.debug("SlashCommand", "Slash Command main method");
+		Common.log("Initializing slash command handler");
 		SimpleBot.getJDA().addEventListener(this);
 	}
 
@@ -83,10 +83,10 @@ public class SlashCommandHandler extends ListenerAdapter {
 		// Add the slash command
 		if (module.getGuildOnly()) {
 			mainGuildSlashCommands.add(command);
-			Debugger.debug("SlashCommand", "Guild only for: " + command.getName());
+			Debugger.debug("SlashCommandRegistration", "Guild only for: " + command.getName());
 		} else {
 			publicSlashCommands.add(command);
-			Debugger.debug("SlashCommand", "Public command for: " + command.getName());
+			Debugger.debug("SlashCommandRegistration", "Public command for: " + command.getName());
 		}
 
 		// Add it to our internal list

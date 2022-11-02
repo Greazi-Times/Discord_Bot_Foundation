@@ -53,11 +53,15 @@ public abstract class SimpleBot {
 	// Static
 	// ----------------------------------------------------------------------------------------
 
+	// Instances
 	private static volatile SimpleBot instance;
 	public static JDA jda;
 
+	// Important variables
 	private static Guild mainGuild;
 	private static SelfUser self;
+
+	// Handlers
 	private static SlashCommandHandler slashCommandHandler;
 	private static ButtonHandler buttonHandler;
 	private static ModalHandler modalHandler;
@@ -106,11 +110,11 @@ public abstract class SimpleBot {
 	public SimpleBot() {
 		this.enabled = false;
 
-		// A debugger that sends a message to the console when the bot is starting
-		Debugger.debug("Startup", "Starting the bot! SimpleBot();104");
-
 		if (getStartupLogo() != null) {
+			Debugger.debug("StartupLogo", "Startup logo isn't empty");
 			Common.logNoPrefix(getStartupLogo());
+		} else {
+			Debugger.debug("StartupLogo", "Startup logo is empty");
 		}
 
 		// Load the settings from the config file
@@ -148,11 +152,37 @@ public abstract class SimpleBot {
 		// Initialize the bot
 		registerJda(SimpleSettings.Bot.Token(), activityType);
 
+		// Get the main guild ID from the settings
+		final long mainGuildId = SimpleSettings.Bot.MainGuild();
+
 		// Set the main guild of the bot
-		if (SimpleSettings.Bot.MainGuild() != null) {
-			mainGuild = jda.getGuildById(SimpleSettings.Bot.MainGuild());
+		if (mainGuildId != 0) {
+			// Get the guild by ID
+			final Guild guild = jda.getGuildById(mainGuildId);
+			// Check if the guild could be found
+			if (guild != null) {
+				// Set the main guild
+				mainGuild = guild;
+				// Log that the main guild has been set
+				Common.log("Main guild set to: " + guild.getName() + " (" + guild.getId() + ") " + guild.getDescription());
+				// No guild by that ID could be found
+			} else {
+				// Error message that the guild could not be found
+				Common.error(
+						"The main guild ID is not valid! Please check the config file!",
+						"Now using the first guild as the main guild!"
+				);
+				// Set the main guild to the first guild in the list
+				mainGuild = jda.getGuilds().get(0);
+			}
+			// Guild option couldn't be found
 		} else {
-			Common.error("Main Guild not set in settings.yml");
+			// Error message that the guild could not be found
+			Common.error(
+					"The main guild ID is not configured! Please check the config file!",
+					"Now using the first guild as the main guild!"
+			);
+			// Set the main guild to the first guild in the list
 			mainGuild = jda.getGuilds().get(0);
 		}
 
@@ -179,7 +209,7 @@ public abstract class SimpleBot {
 		}
 
 		for (final Command command : getJDA().retrieveCommands().complete()) {
-			Common.log(command.getName() + " " + command.getDescription());
+			Debugger.debug("SlashCommand", command.getName() + "" + command.getDescription());
 		}
 	}
 
@@ -187,22 +217,20 @@ public abstract class SimpleBot {
 	 * The pre start of the bot. Register the bot and do some simple checks
 	 */
 	public final void setupCommandManager() {
-		Debugger.debug("Startup", "Starting the bot! onPreStart();105");
-
+		Common.log("Setting up the system managers");
 		slashCommandHandler = new SlashCommandHandler();
 		buttonHandler = new ButtonHandler();
 		modalHandler = new ModalHandler();
 		menuHandler = new SelectMenuHandler();
 		consoleCommandHandler = new ConsoleCommandHandler();
 		cronHandler = new CronHandler();
+		Common.log("System managers have been set up");
 	}
 
 	/**
 	 * A method that is called when the bot is reloaded
 	 */
 	public void onReload() {
-		Debugger.debug("Startup", "Starting the bot! onReload();167");
-
 		// Check if the bot is enabled before doing anything
 		if (enabled) {
 			Common.error("The bot is already enabled!");
@@ -262,7 +290,7 @@ public abstract class SimpleBot {
 	 * @param activity = The activity status of the bot
 	 */
 	private static void registerJda(final String token, final Activity activity) {
-		Debugger.debug("Startup", "Registering JDA! registerJda();189");
+		Common.log("Registering JDA...");
 		try {
 			jda = JDABuilder.createDefault(token)
 					.setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
@@ -276,20 +304,21 @@ public abstract class SimpleBot {
 
 			// Set self to the bot
 			self = jda.getSelfUser();
+			Common.log("JDA registered");
 		} catch (LoginException | InterruptedException ex) {
-			ex.printStackTrace();
+			Common.throwError(ex, "Failed to register JDA");
 		}
 	}
 
 	public void stop() {
-		final Thread t = new Thread(() -> {
-			System.out.println(ConsoleColor.RED + "Stopping JDA..." + ConsoleColor.RESET);
+		new Thread(() -> {
+			Common.log("Stopping JDA");
 			jda.shutdown();
 
 			int jdaShutdownTimeout = 0;
 			while (jda.getStatus() != JDA.Status.SHUTDOWN) {
 				if (jdaShutdownTimeout > 15) {
-					System.out.println(ConsoleColor.RED + "Killing JDA..." + ConsoleColor.RESET);
+					Common.warning("JDA shutdown timeout reached, forcing shutdown");
 					jda.shutdownNow();
 					break;
 				}
@@ -301,14 +330,14 @@ public abstract class SimpleBot {
 				}
 				jdaShutdownTimeout++;
 			}
+			Common.log("JDA stopped");
 
-			System.out.println(ConsoleColor.RED + "Stopping cron jobs..." + ConsoleColor.RESET);
 			cronHandler.stop();
 
 			int cronShutdownTimeout = 0;
 			while (!cronHandler.isShutdown()) {
 				if (cronShutdownTimeout > 15) {
-					System.out.println(ConsoleColor.RED + "Killing cron jobs..." + ConsoleColor.RESET);
+					Common.warning("Cron shutdown timeout reached, forcing shutdown");
 					break;
 				}
 
@@ -325,10 +354,10 @@ public abstract class SimpleBot {
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println(ConsoleColor.RED + "Stopping bot..." + ConsoleColor.RESET);
+
+			Common.log("Stopping bot it self");
 			System.exit(0);
-		});
-		t.start();
+		}).start();
 
 		onBotStop();
 	}
