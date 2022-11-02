@@ -28,11 +28,11 @@ jobs:
       - uses: actions/checkout@v2
 
       # Setup JDK 18 to build the project
-      - name: Set up JDK 18
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '18'
+          java-version: '17'
 
       # Build the maven project
       - name: Build with Maven
