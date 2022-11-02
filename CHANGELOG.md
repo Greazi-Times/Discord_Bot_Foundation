@@ -1,3 +1,20 @@
+# [0.17.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.16.0...v0.17.0) (2022-11-02)
+
+
+### Bug Fixes
+
+* Fixed main guild system ([5f8999c](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/5f8999c83fbcd174d4f4aabe3c5c7e3d3f900268))
+* Fixed selection menu handler ([08661ee](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/08661ee85cd9526f20d3e8d583deaf16d983a316))
+* Fixed some issues ([892414d](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/892414dca253946e8b505b847185b93b1d5abd90))
+
+
+### Features
+
+* Added some log messages ([eb071a9](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/eb071a94077aa0d708fb98f88994e0a114249f2c))
+* Improved roles system ([c01a867](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/c01a8679fbde5ccbb99a8d1902f09da86e9ea62c))
+
+
+
 # [0.16.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.15.0...v0.16.0) (2022-10-31)
 
 
@@ -48,21 +65,6 @@
 
 * Added cron job system & Added stop functions ([59a5060](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/59a50609919bed4c7aa30da5932830e233c04374))
 * Added temp file storage (BETA) ([60b0890](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/60b08900f36dfb8cf0bbc048c68681f415e09aab))
-
-
-
-# [0.12.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.11.2...v0.12.0) (2022-08-17)
-
-
-### Bug Fixes
-
-* Fixed JDA17 Emote -> Emoji issues ([42df9fc](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/42df9fcc3fe2757ecf74ccf0f30c45af1c35e466))
-* Fixed JDA17 Slash command issues ([97b65c7](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/97b65c763261dcd68ea6cdd858d026100fc23d20))
-
-
-### Features
-
-* Updated the way buttons are registered ([4eb7bc1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/4eb7bc1a476b897c6ca142fce4505c604337d4c2))
 
 
 
