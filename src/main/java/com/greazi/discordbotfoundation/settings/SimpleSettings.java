@@ -206,8 +206,8 @@ public class SimpleSettings {
 		}
 
 		// The main guild of the bot
-		public static String MainGuild() {
-			return getString(path + "MainGuild");
+		public static long MainGuild() {
+			return getLong(path + "MainGuild");
 		}
 
 		// The name of the bot
