@@ -1,3 +1,14 @@
+## [0.17.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.0...v0.17.1) (2022-11-02)
+
+
+### Bug Fixes
+
+* build.yml ([f2783e8](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/f2783e868b0e506931a44425fec893bf1f0598d2))
+* Changed version and cleaned up dependencies  ([62bc317](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/62bc317d30392921efc9dd2312f18e2e55091657))
+* Pom.xml update ([04ee27b](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/04ee27b35d14130eca7236e213dabbff5ab4d3f7))
+
+
+
 # [0.17.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.16.0...v0.17.0) (2022-11-02)
 
 
@@ -50,21 +61,6 @@
 * Added human time parser ([872cb7f](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/872cb7fa58e0d4e45ab4cc095932b3eb6c71142d))
 * Converted to MAVEN ([206203f](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/206203f9cfd637fde194d868cf4c2f8ce54a37fb))
 * Updated sql to use the JOOQ system ([38f476f](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/38f476f1a3062aee4a7d0e6b8e56c72512652697))
-
-
-
-# [0.13.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.12.0...v0.13.0) (2022-08-17)
-
-
-### Bug Fixes
-
-* Fixed modal deprication ([0b5dcae](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/0b5dcae7174247edc5ef734130afb79acbac3443))
-
-
-### Features
-
-* Added cron job system & Added stop functions ([59a5060](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/59a50609919bed4c7aa30da5932830e233c04374))
-* Added temp file storage (BETA) ([60b0890](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/60b08900f36dfb8cf0bbc048c68681f415e09aab))
 
 
 
