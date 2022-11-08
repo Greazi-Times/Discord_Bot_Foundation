@@ -50,14 +50,14 @@
         <dependency>
             <groupId>org.kohsuke</groupId>
             <artifactId>github-api</artifactId>
-            <version>1.307</version>
+            <version>1.313</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
+            <version>8.0.31</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
@@ -100,21 +100,21 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
-            <version>3.17.4</version>
+            <version>3.17.5</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jooq/jooq-meta -->
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-meta</artifactId>
-            <version>3.17.4</version>
+            <version>3.17.5</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jooq/jooq-codegen -->
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
-            <version>3.17.4</version>
+            <version>3.17.5</version>
         </dependency>
 
     </dependencies>
@@ -141,123 +141,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.4.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>club.minnced.opus.util</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>com.*</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>com.greazi.discordbotfoundation.*</exclude>
-                                    </excludes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>org.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>okio</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>okio.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>tomp2p</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>tomp2p.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>okhttp3</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>okhttp3.*</include>
-                                    </includes>
-                                </relocation>
-                                <!--relocation>
-                                    <pattern>net</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>net.*</include>
-                                    </includes>
-                                </relocation-->
-                                <relocation>
-                                    <pattern>natives</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>natives.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>migrations</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>migrations.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>kotlin</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>kotlin.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>javax</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>javax.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>jakarta</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>jakarta.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>io</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>io.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>google</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>google.*</include>
-                                    </includes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>gnu</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.libs</shadedPattern>
-                                    <includes>
-                                        <include>gnu.*</include>
-                                    </includes>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
