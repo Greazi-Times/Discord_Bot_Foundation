@@ -1,3 +1,12 @@
+## [0.17.3](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.2...v0.17.3) (2022-11-08)
+
+
+### Bug Fixes
+
+* **github:** fixed auto upload system ([5f695e2](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/5f695e212e07ec69ebfa8e25e8433e5a0960a06c))
+
+
+
 ## [0.17.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.1...v0.17.2) (2022-11-08)
 
 
@@ -50,15 +59,6 @@
 
 * Fixed and change the roles system ([dc88d6d](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/dc88d6d64fefd266e4e5c482574d5959a380aa28))
 * Updated dependencies  ([a368180](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/a368180c3d8c90be0d669e7fd22ee469bb509a94))
-
-
-
-# [0.15.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.14.0...v0.15.0) (2022-08-30)
-
-
-### Features
-
-* added SQL system ([07bc901](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/07bc9013f801808825417390a75744eb6c617a2e))
 
 
 
