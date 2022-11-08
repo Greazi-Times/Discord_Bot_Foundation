@@ -3,6 +3,8 @@
 
 ### Bug Fixes
 
+* **github:** another try to fix it ([1443bd0](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1443bd09983c3296eec8e8b1cd1a486c8c86247b))
+* **github:** fixed some issues within github ([afa6658](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/afa66587163e0946acd91f452c73788332ef8e71))
 * fixed vulnerability issues ([727e993](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/727e993d34bc1f7ed49fc0f8b3b544b21de343cc))
 
 
