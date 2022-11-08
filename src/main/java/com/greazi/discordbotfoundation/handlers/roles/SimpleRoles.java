@@ -83,7 +83,6 @@ public class SimpleRoles {
 	/**
 	 * Get a role from its ID
 	 *
-	 * @param member The member to get the role from
 	 * @param roleId The ID of the role to get
 	 * @return The role
 	 */
@@ -94,7 +93,6 @@ public class SimpleRoles {
 	/**
 	 * Get a role by name
 	 *
-	 * @param member   The member to get the role from
 	 * @param roleName The name of the role to get
 	 * @return The role
 	 */
