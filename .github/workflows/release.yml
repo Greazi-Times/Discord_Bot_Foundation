@@ -11,9 +11,9 @@ on:
 # Enviremental variables
 env:
   # The path of the .jar
-  path: build/DiscordBotFoundation.jar
+  path: build/*.jar
   # The name of the .jar
-  name: DiscordBotFoundation.jar
+  name: *.jar
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
