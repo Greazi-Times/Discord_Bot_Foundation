@@ -11,7 +11,7 @@ on:
 # Enviremental variables
 env:
   # The path of the .jar
-  path: build/*.jar
+  path: build/DiscordBotFoundation-*
   # The name of the .jar
   name: DiscordBotFoundation-*
 
