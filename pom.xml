@@ -8,7 +8,7 @@
     <artifactId>discordbotfoundation</artifactId>
 
     <name>DiscordBotFoundation</name>
-    <version>0.17.2</version>
+    <version>0.17.4</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.17</version>
+            <version>5.0.0-alpha.22</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
@@ -53,12 +53,13 @@
             <version>1.313</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <version>8.0.31</version>
         </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
@@ -123,6 +124,11 @@
     <build>
         <finalName>${project.name}-${project.version}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
