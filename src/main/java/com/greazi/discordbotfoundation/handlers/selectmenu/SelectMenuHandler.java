@@ -5,7 +5,7 @@ import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -56,9 +56,8 @@ public class SelectMenuHandler extends ListenerAdapter {
 	 *
 	 * @param event SelectMenuInteractionEvent
 	 */
-	@Override
 	@SubscribeEvent
-	public void onSelectMenuInteraction(@NotNull final SelectMenuInteractionEvent event) {
+	public void onSelectMenuInteraction(@NotNull final StringSelectInteractionEvent event) {
 		Debugger.debug("SelectMenu", "A menu has been filled in");
 
 		// Get the list of menus

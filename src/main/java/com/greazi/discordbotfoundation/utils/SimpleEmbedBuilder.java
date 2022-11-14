@@ -1,13 +1,12 @@
 package com.greazi.discordbotfoundation.utils;
 
 import com.greazi.discordbotfoundation.Common;
-import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.awt.*;
@@ -29,10 +28,11 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Create a embed with a title
+     *
      * @param title
      */
-    public SimpleEmbedBuilder(String title) {
-        if(title != null)
+    public SimpleEmbedBuilder(final String title) {
+        if (title != null)
             setAuthor(title, SimpleSettings.Embed.Link(), SimpleSettings.Embed.Image.Author());
 
         color(new Color(47, 49, 54));
@@ -41,13 +41,14 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Create an embed with a title and if needed disable the footer
+     *
      * @param title
      * @param footer
      */
-    public SimpleEmbedBuilder(String title, boolean footer) {
-        if(title != null)
+    public SimpleEmbedBuilder(final String title, final boolean footer) {
+        if (title != null)
             setAuthor(title, SimpleSettings.Embed.Link(), SimpleSettings.Embed.Image.Author());
-        if(footer)
+        if (footer)
             footer(SimpleSettings.Developer.Name());
 
         color(new Color(47, 49, 54));
@@ -55,10 +56,11 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Create an embed with a disabled footer
+     *
      * @param footer
      */
-    public SimpleEmbedBuilder(boolean footer) {
-        if(footer)
+    public SimpleEmbedBuilder(final boolean footer) {
+        if (footer)
             footer(SimpleSettings.Developer.Name());
 
         color(new Color(47, 49, 54));
@@ -66,9 +68,10 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Set the footer of the embed
+     *
      * @param text
      */
-    public SimpleEmbedBuilder footer(String text) {
+    public SimpleEmbedBuilder footer(final String text) {
         setFooter(text + " • " + SimpleSettings.Embed.Footer(), SimpleSettings.Embed.Image.Footer());
 
         return this;
@@ -78,7 +81,7 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      * Set the embed color to red
      */
     public SimpleEmbedBuilder error() {
-        color(new Color(255,67,67));
+        color(new Color(255, 67, 67));
 
         return this;
     }
@@ -87,16 +90,17 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
      * Set the embed color to green
      */
     public SimpleEmbedBuilder success() {
-        color(new Color(140,255,142));
+        color(new Color(140, 255, 142));
 
         return this;
     }
 
     /**
      * Set the text of the embed
+     *
      * @param text
      */
-    public SimpleEmbedBuilder text(String text) {
+    public SimpleEmbedBuilder text(final String text) {
         setDescription(text);
 
         return this;
@@ -104,9 +108,10 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Set the text with multiple lines
+     *
      * @param text
      */
-    public SimpleEmbedBuilder text(String... text) {
+    public SimpleEmbedBuilder text(final String... text) {
         setDescription(String.join("\n", text));
 
         return this;
@@ -114,9 +119,10 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Set the thumbnail of the gui
+     *
      * @param url
      */
-    public SimpleEmbedBuilder thumbnail(String url) {
+    public SimpleEmbedBuilder thumbnail(final String url) {
         super.setThumbnail(url);
 
         return this;
@@ -124,11 +130,12 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Set the color of the gui requires a `new Color()`
+     *
      * @param color
      * @return
      */
-    public SimpleEmbedBuilder color(Color color) {
-        if(color == null)
+    public SimpleEmbedBuilder color(final Color color) {
+        if (color == null)
             return this;
 
         super.setColor(color);
@@ -137,9 +144,10 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Set the image of the embed
+     *
      * @param url
      */
-    public SimpleEmbedBuilder image(String url) {
+    public SimpleEmbedBuilder image(final String url) {
         super.setImage(url);
 
         return this;
@@ -147,11 +155,12 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Add a field on the embed
+     *
      * @param name
      * @param value
      * @param inline
      */
-    public SimpleEmbedBuilder field(String name, String value, boolean inline) {
+    public SimpleEmbedBuilder field(final String name, final String value, final boolean inline) {
         super.addField(name, value, inline);
 
         return this;
@@ -159,9 +168,10 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Add a blank field on the embed
+     *
      * @param inline
      */
-    public SimpleEmbedBuilder blankField(boolean inline) {
+    public SimpleEmbedBuilder blankField(final boolean inline) {
         super.addBlankField(inline);
 
         return this;
@@ -176,175 +186,195 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
 
     /**
      * Send the embed to a specific channel
+     *
      * @param textChannel
      */
-    public void queue(TextChannel textChannel) {
+    public void queue(final TextChannel textChannel) {
         textChannel.sendMessageEmbeds(build()).queue();
     }
 
     /**
      * Send the embed to a user
+     *
      * @param member
      */
-    public void queue(Member member) {
+    public void queue(final Member member) {
         queue(member.getUser());
     }
 
     /**
      * Send the embed to a user
+     *
      * @param member
      * @param consumer
      */
-    public void queue(Member member, Consumer<Message> consumer) {
+    public void queue(final Member member, final Consumer<Message> consumer) {
         queue(member.getUser(), consumer);
     }
 
     /**
      * Send an embed to a user
+     *
      * @param user
      */
-    public void queue(User user) {
+    public void queue(final User user) {
         try {
             user.openPrivateChannel().submit()
                     .thenCompose(channel -> channel.sendMessageEmbeds(build()).submit())
                     .whenComplete((message, error) -> {
-                        if (error != null){
-                            Common.warning("Could not send pm to "+user.getName());
+                        if (error != null) {
+                            Common.warning("Could not send pm to " + user.getName());
                         }
                     });
-        } catch (Exception ignore) { }
+        } catch (final Exception ignore) {
+        }
     }
 
     /**
      * Send an embed to a user
+     *
      * @param user
      * @param consumer
      */
-    public void queue(User user, Consumer<Message> consumer) {
+    public void queue(final User user, final Consumer<Message> consumer) {
         try {
             user.openPrivateChannel().queue(c -> c.sendMessageEmbeds(build()).queue(consumer));
-        } catch (Exception ignore) { }
+        } catch (final Exception ignore) {
+        }
     }
 
     /**
      * Send an embed
+     *
      * @param textChannel
      * @param consumer
      */
-    public void queue(TextChannel textChannel, Consumer<Message> consumer) {
+    public void queue(final TextChannel textChannel, final Consumer<Message> consumer) {
         textChannel.sendMessageEmbeds(build()).queue(consumer);
     }
 
     /**
      * Send the embed with a delay
+     *
      * @param textChannel
      * @param delay
      * @param unit
      */
-    public void queueAfter(TextChannel textChannel, int delay, TimeUnit unit) {
+    public void queueAfter(final TextChannel textChannel, final int delay, final TimeUnit unit) {
         textChannel.sendMessageEmbeds(build()).queueAfter(delay, unit);
     }
 
     /**
      * Send the embed with a delay
+     *
      * @param textChannel
      * @param delay
      * @param unit
      * @param success
      */
-    public void queueAfter(TextChannel textChannel, int delay, TimeUnit unit, Consumer<Message> success) {
+    public void queueAfter(final TextChannel textChannel, final int delay, final TimeUnit unit, final Consumer<Message> success) {
         textChannel.sendMessageEmbeds(build()).queueAfter(delay, unit, success);
     }
 
     /**
      * Send the embed with a delay
+     *
      * @param user
      * @param delay
      * @param time
      */
-    public void queueAfter(User user, int delay, TimeUnit time) {
+    public void queueAfter(final User user, final int delay, final TimeUnit time) {
         try {
             user.openPrivateChannel().complete().sendMessageEmbeds(build()).queueAfter(delay, time);
-        } catch (ErrorResponseException ignore) { }
+        } catch (final ErrorResponseException ignore) {
+        }
     }
 
     /**
      * Reply with a message
+     *
      * @param message
      * @return
      */
-    public Message reply(Message message) {
+    /*public Message reply(final Message message) {
         return reply(message, true);
-    }
+    }*/
 
     /**
      * Reply with a message and mention teh user
+     *
      * @param message
      * @param mention
      * @return
      */
-    public Message reply(Message message, boolean mention) {
+    /*public Message reply(final Message message, final boolean mention) {
         return message.reply(message).mentionRepliedUser(mention).complete();
-    }
+    }*/
 
     /**
      * Reply to a message only for a limited time
+     *
      * @param message
      * @param duration
      * @param timeUnit
      */
-    public void replyTemporary(Message message, int duration, TimeUnit timeUnit) {
+    public void replyTemporary(final Message message, final int duration, final TimeUnit timeUnit) {
         replyTemporary(message, true, duration, timeUnit);
     }
 
     /**
      * Reply to a message only for a limited time
+     *
      * @param message
      * @param mention
      * @param duration
      * @param timeUnit
      */
-    public void replyTemporary(Message message, boolean mention, int duration, TimeUnit timeUnit) {
+    public void replyTemporary(final Message message, final boolean mention, final int duration, final TimeUnit timeUnit) {
         message.replyEmbeds(build()).mentionRepliedUser(mention).queue((msg -> msg.delete().submitAfter(duration, timeUnit)));
     }
 
     /**
      * Send the message temporarily
+     *
      * @param textChannel
      * @param duration
      * @param timeUnit
      */
-    public void sendTemporary(TextChannel textChannel, int duration, TimeUnit timeUnit) {
+    public void sendTemporary(final TextChannel textChannel, final int duration, final TimeUnit timeUnit) {
         queue(textChannel, (msg) -> msg.delete().submitAfter(duration, timeUnit));
     }
 
     /**
      * Send the message temporarily
+     *
      * @param textChannel
      * @param duration
      */
-    public void sendTemporary(TextChannel textChannel, int duration) {
+    public void sendTemporary(final TextChannel textChannel, final int duration) {
         sendTemporary(textChannel, duration, TimeUnit.SECONDS);
     }
 
     /**
      * Send the message after a period of time
+     *
      * @param textChannel
      * @param duration
      * @param onSuccess
      */
-    public ScheduledFuture<?> sendAfter(TextChannel textChannel, int duration, Consumer<Message> onSuccess) {
+    public ScheduledFuture<?> sendAfter(final TextChannel textChannel, final int duration, final Consumer<Message> onSuccess) {
         return textChannel.sendMessageEmbeds(build()).queueAfter(duration, TimeUnit.SECONDS, onSuccess);
     }
 
     /**
      * Send the message after a period of time
+     *
      * @param textChannel
      * @param duration
      * @param timeUnit
      * @param onSuccess
      */
-    public ScheduledFuture<?> sendAfter(TextChannel textChannel, int duration, TimeUnit timeUnit, Consumer<Message> onSuccess) {
+    public ScheduledFuture<?> sendAfter(final TextChannel textChannel, final int duration, final TimeUnit timeUnit, final Consumer<Message> onSuccess) {
         return textChannel.sendMessageEmbeds(build()).queueAfter(duration, timeUnit, onSuccess);
     }
 }

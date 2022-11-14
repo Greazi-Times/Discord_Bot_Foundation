@@ -34,7 +34,6 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-import javax.security.auth.login.LoginException;
 import java.util.HashMap;
 
 // TODO: ALL FILES!!!!
@@ -164,7 +163,7 @@ public abstract class SimpleBot {
 				// Set the main guild
 				mainGuild = guild;
 				// Log that the main guild has been set
-				Common.log("Main guild set to: " + guild.getName() + " (" + guild.getId() + ") " + guild.getDescription());
+				Common.log("Main guild set to: " + ConsoleColor.CYAN + guild.getName() + ConsoleColor.BLACK_BRIGHT + " (" + guild.getId() + ")");
 				// No guild by that ID could be found
 			} else {
 				// Error message that the guild could not be found
@@ -305,7 +304,7 @@ public abstract class SimpleBot {
 			// Set self to the bot
 			self = jda.getSelfUser();
 			Common.log("JDA registered");
-		} catch (LoginException | InterruptedException ex) {
+		} catch (final InterruptedException ex) {
 			Common.throwError(ex, "Failed to register JDA");
 		}
 	}

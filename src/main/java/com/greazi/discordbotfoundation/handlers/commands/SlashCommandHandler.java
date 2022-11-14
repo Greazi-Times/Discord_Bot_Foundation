@@ -10,9 +10,9 @@ package com.greazi.discordbotfoundation.handlers.commands;
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.debug.Debugger;
-import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -147,8 +146,21 @@ public class SlashCommandHandler extends ListenerAdapter {
 			return;
 		}
 
-		// Check if main guild is enabled
-		if (!Objects.requireNonNull(event.getGuild()).getId().equals(SimpleSettings.Bot.MainGuild()) && module.getGuildOnly()) {
+		// Get the guild of the button and the main guild of the bot
+		final Guild guild = event.getGuild();
+		final Guild mainGuild = SimpleBot.getMainGuild();
+		assert guild != null : "Event guild is null!";
+
+		// Check if the button is for the main guild only
+		if (!guild.getId().equals(mainGuild.getId()) && module.getGuildOnly()) {
+			event.replyEmbeds(new SimpleEmbedBuilder("ERROR - Button main guild only")
+					.text(
+							"The button you used is only usable in the main guild of this bot!",
+							"If you feel like this is a problem please contact a admin!"
+					)
+					.error()
+					.setFooter("")
+					.build()).setEphemeral(true).queue();
 			return;
 		}
 
