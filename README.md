@@ -62,6 +62,9 @@ DiscordBot even faster.
 It is based on the Discord JDA API and is written in Java. This system brings a lot of system pre-made allowing you to
 code your bot faster.
 
+We are working hard on getting the api docs and a wiki online. Because this project has just started and is only maintaned by 2 individuals
+at this moment we are working as hard as we can on these things.
+
 ***
 
 # How to import
@@ -74,7 +77,6 @@ You can eitehr use Jitpack or download and import the project manually.
 **Step 1.** Add the JitPack repository to your build file
 
 ```xml
-
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -86,7 +88,6 @@ You can eitehr use Jitpack or download and import the project manually.
 **Step 2.** Add the dependency
 
 ```xml
-
 <dependency>
     <groupId>com.github.Greazi-Times</groupId>
     <artifactId>Discord_Bot_Foundation</artifactId>
@@ -102,7 +103,6 @@ This way all changes you make will be directly visible and usable in your projec
 You will need to add the following lines to your maven file:
 
 ```xml
-
 <dependency>
     <groupId>com.greazi</groupId>
     <artifactId>DiscordBotFoundation</artifactId>
