@@ -52,18 +52,8 @@
 - [How to import](#How-to-import)
     - [Jitpack](#Jitpack)
     - [Locally](#Locally)
-- [Top Languages Card](#top-languages-card)
-- [Wakatime Week Stats](#wakatime-week-stats)
-- [Themes](#themes)
-    - [Responsive Card Theme](#responsive-card-theme)
-- [Customization](#customization)
-    - [Common Options](#common-options)
-    - [Stats Card Exclusive Options](#stats-card-exclusive-options)
-    - [Repo Card Exclusive Options](#repo-card-exclusive-options)
-    - [Language Card Exclusive Options](#language-card-exclusive-options)
-    - [Wakatime Card Exclusive Option](#wakatime-card-exclusive-options)
-- [Deploy Yourself](#deploy-on-your-own-vercel-instance)
-    - [Keep your fork up to date](#keep-your-fork-up-to-date)
+- [Keep your fork up to date](#Keep-your-fork-up-to-date)
+- [Support the project](#Support-the-project)
 
 # About this project
 
