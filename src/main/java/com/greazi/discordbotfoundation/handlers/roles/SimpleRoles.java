@@ -21,7 +21,7 @@ public class SimpleRoles {
      * @param role   The role to add
      */
     public static void addRole(final @NotNull Member member, final Role role) {
-        member.getRoles().add(role);
+        member.getGuild().addRoleToMember(member.getUser(), role).queue();
     }
 
     /**
@@ -32,7 +32,7 @@ public class SimpleRoles {
      */
     public static void addRoles(final Member member, @NotNull final Role... roles) {
         for (final Role role : roles) {
-            member.getRoles().add(role);
+            member.getGuild().addRoleToMember(member.getUser(), role).queue();
         }
     }
 
@@ -43,7 +43,7 @@ public class SimpleRoles {
      * @param roleId The ID of the role to add
      */
     public static void addRole(@NotNull final Member member, final long roleId) {
-        member.getRoles().add(member.getGuild().getRoleById(roleId));
+        addRole(member, member.getGuild().getRoleById(roleId));
     }
 
     /**
@@ -54,7 +54,7 @@ public class SimpleRoles {
      */
     public static void addRoles(final Member member, @NotNull final long... roleIds) {
         for (final long roleId : roleIds) {
-            member.getRoles().add(member.getGuild().getRoleById(roleId));
+            addRole(member, member.getGuild().getRoleById(roleId));
         }
     }
 
@@ -65,7 +65,7 @@ public class SimpleRoles {
      * @param roleName The name of the role to add
      */
     public static void addRole(final @NotNull Member member, final String roleName) {
-        member.getRoles().add(member.getGuild().getRolesByName(roleName, true).get(0));
+        member.getGuild().getRolesByName(roleName, true).forEach(role -> addRole(member, role));
     }
 
     /**
@@ -75,8 +75,8 @@ public class SimpleRoles {
      * @param roleNames The name of the role to add
      */
     public static void addRoles(final Member member, @NotNull final String... roleNames) {
-        for (final String role : roleNames) {
-            member.getRoles().add(member.getGuild().getRolesByName(role, true).get(0));
+        for (final String roleName : roleNames) {
+            member.getGuild().getRolesByName(roleName, true).forEach(role -> addRole(member, role));
         }
     }
 
