@@ -1,3 +1,17 @@
+# [0.18.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.5...v0.18.0) (2022-11-27)
+
+
+### Bug Fixes
+
+* **defaultCommands:** Fixed these commands with new system ([2623e26](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/2623e26315929f952e94be51375356f85f3ec197))
+
+
+### Features
+
+* Renamed execute(...) ([93a6923](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/93a692344d9e08ba8d44165d17496e13b811d43d))
+
+
+
 ## [0.17.5](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.4...v0.17.5) (2022-11-23)
 
 
@@ -37,21 +51,6 @@
 * **github:** fixing github ([73b3f14](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/73b3f14a31b49bb92f0264e2a959568880eda679))
 * **simpleroles:** Managed comments ([37e72c2](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/37e72c294c612f85593259c637b7a6062a4e4ff1))
 * fixed vulnerability issues ([727e993](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/727e993d34bc1f7ed49fc0f8b3b544b21de343cc))
-
-
-
-## [0.17.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.0...v0.17.1) (2022-11-02)
-
-
-
-## 0.17.1 (2022-11-02)
-
-
-### Bug Fixes
-
-* build.yml ([f2783e8](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/f2783e868b0e506931a44425fec893bf1f0598d2))
-* Changed version and cleaned up dependencies  ([62bc317](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/62bc317d30392921efc9dd2312f18e2e55091657))
-* Pom.xml update ([04ee27b](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/04ee27b35d14130eca7236e213dabbff5ab4d3f7))
 
 
 
