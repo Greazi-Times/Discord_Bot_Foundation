@@ -1,7 +1,9 @@
 package com.greazi.discordbotfoundation.handlers.console;
 
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
+import net.dv8tion.jda.api.entities.User;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,21 +14,25 @@ public abstract class SimpleConsoleCommand {
     private String usage = null;
     private final List<String> arguments = new ArrayList<>();
 
-    public SimpleConsoleCommand(String command) {
+    private Member member = null;
+    private User user = null;
+
+
+    public SimpleConsoleCommand(final String command) {
         this.command = command;
     }
 
-    public SimpleConsoleCommand description(String description) {
+    public SimpleConsoleCommand description(final String description) {
         this.description = description;
         return this;
     }
 
-    public SimpleConsoleCommand usage(String usage) {
+    public SimpleConsoleCommand usage(final String usage) {
         this.usage = usage;
         return this;
     }
 
-    public SimpleConsoleCommand argument(String argument) {
+    public SimpleConsoleCommand argument(final String argument) {
         arguments.add(argument);
         return this;
     }
@@ -44,11 +50,11 @@ public abstract class SimpleConsoleCommand {
     }
 
     public void sendHelp() {
-        System.out.println(ConsoleColor.BLUE + this.command + ConsoleColor.RESET +  ": " + this.description);
+        System.out.println(ConsoleColor.BLUE + this.command + ConsoleColor.RESET + ": " + this.description);
     }
 
     public void sendUsage() {
-        StringBuilder commandUsagePadding = new StringBuilder();
+        final StringBuilder commandUsagePadding = new StringBuilder();
         for (int i = 0; i < this.command.length(); i++) {
             commandUsagePadding.append(" ");
         }
@@ -63,6 +69,12 @@ public abstract class SimpleConsoleCommand {
         return arguments;
     }
 
-    public abstract void execute(List<String> args);
+    public final boolean execute(final List<String> args) {
+        // TODO: Add checks in here
+        this.onConsoleCommand(args);
+        return true;
+    }
+
+    public abstract void onConsoleCommand(List<String> args);
 
 }

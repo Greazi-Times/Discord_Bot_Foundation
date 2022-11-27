@@ -8,7 +8,10 @@
 package com.greazi.discordbotfoundation.handlers.commands;
 
 import com.greazi.discordbotfoundation.utils.annotations.Disabled;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
@@ -20,201 +23,232 @@ import java.util.List;
 /**
  * A slash command creator to simply create your slash command
  */
-public abstract class SimpleSlashCommand {
+public abstract class SimpleSlashCommand extends ListenerAdapter {
 
-	// ----------------------------------------------------------------------------------------
-	// Main options
-	// ----------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------
+    // Main options
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * The actual command itself
-	 */
-	private String command = "example";
+    /**
+     * The actual command itself
+     */
+    private String command = "example";
 
-	/**
-	 * The help description for the slash command
-	 */
-	private String description = "No Description";
+    /**
+     * The help description for the slash command
+     */
+    private String description = "No Description";
 
-	/**
-	 * Is the command bound to only the main guild of the bot
-	 */
-	private boolean guildOnly = false;
+    /**
+     * Is the command bound to only the main guild of the bot
+     */
+    private boolean guildOnly = false;
 
-	/**
-	 * The subcommands
-	 */
-	private List<SubcommandData> subCommands = new ArrayList<>();
+    /**
+     * The subcommands
+     */
+    private List<SubcommandData> subCommands = new ArrayList<>();
 
-	/**
-	 * The subcommand groups
-	 */
-	private List<SubcommandGroupData> subcommandGroup = new ArrayList<>();
+    /**
+     * The subcommand groups
+     */
+    private List<SubcommandGroupData> subcommandGroup = new ArrayList<>();
 
-	/**
-	 * The options of the command
-	 * !! This can not be used alongside subCommand or subCommandGroup !!
-	 */
-	private List<OptionData> options = new ArrayList<>();
+    /**
+     * The options of the command
+     * !! This can not be used alongside subCommand or subCommandGroup !!
+     */
+    private List<OptionData> options = new ArrayList<>();
 
-	/**
-	 * The category of the command
-	 */
-	private String category = null;
+    /**
+     * The category of the command
+     */
+    private String category = null;
 
-	// ----------------------------------------------------------------------------------------
-	// Main methods
-	// ----------------------------------------------------------------------------------------
+    private Member member = null;
 
-	/**
-	 * Run the command logic
-	 *
-	 * @param event SlashCommandInteractionEvent
-	 */
-	protected abstract void execute(SlashCommandInteractionEvent event);
+    private User user = null;
 
-	// ----------------------------------------------------------------------------------------
-	// Setters
-	// ----------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------
+    // Main methods
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * Set the command
-	 */
-	public SimpleSlashCommand(final String command) {
-		this.command = command;
-	}
+    public final boolean execute(final SlashCommandInteractionEvent event) {
+        // TODO: Add the check for the command in here
+        this.member = event.getMember();
+        this.user = event.getUser();
 
-	/**
-	 * Set the description
-	 */
-	public void description(final String description) {
-		this.description = description;
-	}
+        this.onCommand(event);
+        return true;
+    }
 
-	/**
-	 * Set this command as main guild only
-	 */
-	public void mainGuildOnly() {
-		this.guildOnly = true;
-	}
+    /**
+     * Run the command logic
+     *
+     * @param event SlashCommandInteractionEvent
+     */
+    protected abstract void onCommand(SlashCommandInteractionEvent event);
 
-	/**
-	 * Set the subcommands
-	 */
-	public void subCommands(final List<SubcommandData> subCommands) {
-		this.subCommands = subCommands;
-	}
+    // ----------------------------------------------------------------------------------------
+    // Setters
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * Set the subcommands
-	 */
-	public void subCommands(final SubcommandData... subCommands) {
-		this.subCommands = Arrays.asList(subCommands);
-	}
+    /**
+     * Set the command
+     */
+    public SimpleSlashCommand(final String command) {
+        this.command = command;
+    }
 
-	/**
-	 * Set the subcommand group
-	 */
-	public void subcommandGroup(final List<SubcommandGroupData> subcommandGroupDataList) {
-		this.subcommandGroup = subcommandGroupDataList;
-	}
+    /**
+     * Set the description
+     */
+    public void description(final String description) {
+        this.description = description;
+    }
 
-	/**
-	 * Set the subcommand group
-	 */
-	public void subcommandGroup(final SubcommandGroupData... subcommandGroupDataList) {
-		this.subcommandGroup = Arrays.asList(subcommandGroupDataList);
-	}
+    /**
+     * Set this command as main guild only
+     */
+    public void mainGuildOnly() {
+        this.guildOnly = true;
+    }
 
-	/**
-	 * Set the options of the command
-	 * !! This can not be used alongside subCommand or subCommandGroup !!
-	 */
-	public void options(final List<OptionData> optionDataList) {
-		this.options = optionDataList;
-	}
+    /**
+     * Set the subcommands
+     */
+    public void subCommands(final List<SubcommandData> subCommands) {
+        this.subCommands = subCommands;
+    }
 
-	/**
-	 * Set the options of the command
-	 * !! This can not be used alongside subCommand or subCommandGroup !!
-	 */
-	public void options(final OptionData... optionDataList) {
-		this.options = Arrays.asList(optionDataList);
-	}
+    /**
+     * Set the subcommands
+     */
+    public void subCommands(final SubcommandData... subCommands) {
+        this.subCommands = Arrays.asList(subCommands);
+    }
 
-	/**
-	 * Set the category of the command
-	 */
-	@Disabled(since = "2.0")
-	public void category(final String category) {
-		this.category = category;
-	}
+    /**
+     * Set the subcommand group
+     */
+    public void subcommandGroup(final List<SubcommandGroupData> subcommandGroupDataList) {
+        this.subcommandGroup = subcommandGroupDataList;
+    }
 
-	// ----------------------------------------------------------------------------------------
-	// Getters
-	// ----------------------------------------------------------------------------------------
+    /**
+     * Set the subcommand group
+     */
+    public void subcommandGroup(final SubcommandGroupData... subcommandGroupDataList) {
+        this.subcommandGroup = Arrays.asList(subcommandGroupDataList);
+    }
 
-	/**
-	 * Returns the command
-	 *
-	 * @return the command
-	 */
-	public String getCommand() {
-		return command;
-	}
+    /**
+     * Set the options of the command
+     * !! This can not be used alongside subCommand or subCommandGroup !!
+     */
+    public void options(final List<OptionData> optionDataList) {
+        this.options = optionDataList;
+    }
 
-	/**
-	 * Return the description of the command
-	 *
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * Set the options of the command
+     * !! This can not be used alongside subCommand or subCommandGroup !!
+     */
+    public void options(final OptionData... optionDataList) {
+        this.options = Arrays.asList(optionDataList);
+    }
 
-	/**
-	 * Whether the command is restricted to the main guild of the bot
-	 *
-	 * @return the restricted guild
-	 */
-	public boolean getGuildOnly() {
-		return guildOnly;
-	}
+    /**
+     * Set the category of the command
+     */
+    @Disabled(since = "2.0")
+    public void category(final String category) {
+        this.category = category;
+    }
 
-	/**
-	 * Returns the subcommands
-	 *
-	 * @return the subcommands
-	 */
-	public List<SubcommandData> getSubCommands() {
-		return subCommands;
-	}
+    // ----------------------------------------------------------------------------------------
+    // Getters
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * Returns the subcommand group
-	 *
-	 * @return the subcommand group
-	 */
-	public List<SubcommandGroupData> getSubcommandGroup() {
-		return subcommandGroup;
-	}
+    /**
+     * Returns the command
+     *
+     * @return the command
+     */
+    public String getCommand() {
+        return command;
+    }
 
-	/**
-	 * Get the options of the command
-	 * !! This can not be used alongside subCommand or subCommandGroup !!
-	 *
-	 * @return the options
-	 */
-	public List<OptionData> getOptions() {
-		return options;
-	}
+    /**
+     * Return the description of the command
+     *
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Get the category of the command
-	 *
-	 * @return the category
-	 */
-	public String getCategory() {
-		return category;
-	}
+    /**
+     * Whether the command is restricted to the main guild of the bot
+     *
+     * @return the restricted guild
+     */
+    public boolean getGuildOnly() {
+        return guildOnly;
+    }
+
+    /**
+     * Returns the subcommands
+     *
+     * @return the subcommands
+     */
+    public List<SubcommandData> getSubCommands() {
+        return subCommands;
+    }
+
+    /**
+     * Returns the subcommand group
+     *
+     * @return the subcommand group
+     */
+    public List<SubcommandGroupData> getSubcommandGroup() {
+        return subcommandGroup;
+    }
+
+    /**
+     * Get the options of the command
+     * !! This can not be used alongside subCommand or subCommandGroup !!
+     *
+     * @return the options
+     */
+    public List<OptionData> getOptions() {
+        return options;
+    }
+
+    /**
+     * Get the category of the command
+     *
+     * @return the category
+     */
+    public String getCategory() {
+        return category;
+    }
+
+    /**
+     * Get the member who executed the command
+     *
+     * @return the member
+     */
+    protected final Member getMember() {
+        return this.member;
+    }
+
+    /**
+     * Get the user who executed the command
+     *
+     * @return the user
+     */
+    protected final User getUser() {
+        return this.user;
+    }
 }

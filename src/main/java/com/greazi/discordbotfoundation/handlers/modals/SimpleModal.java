@@ -1,6 +1,8 @@
 package com.greazi.discordbotfoundation.handlers.modals;
 
 import com.greazi.discordbotfoundation.SimpleBot;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 
@@ -8,77 +10,89 @@ import java.util.LinkedHashMap;
 
 public abstract class SimpleModal {
 
-	// ----------------------------------------------------------------------------------------
-	// Main options
-	// ----------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------
+    // Main options
+    // ----------------------------------------------------------------------------------------
 
-	private String id = "id";
+    private String id = "id";
 
-	private String title = "example";
+    private String title = "example";
 
-	private boolean guildOnly = false;
+    private boolean guildOnly = false;
 
-	private LinkedHashMap<String, SimpleTextInput> textInputs = new LinkedHashMap<>();
+    private LinkedHashMap<String, SimpleTextInput> textInputs = new LinkedHashMap<>();
 
-	// Disabled because select menus are not compatible with modals
-	//private LinkedHashMap<String, SimpleSelect> selectMenus = new LinkedHashMap<>();
+    // Disabled because select menus are not compatible with modals
+    //private LinkedHashMap<String, SimpleSelect> selectMenus = new LinkedHashMap<>();
 
-	// Disabled because buttons are not compatible with modals
-	//private ArrayList<String> buttonIds = new ArrayList<>();
+    // Disabled because buttons are not compatible with modals
+    //private ArrayList<String> buttonIds = new ArrayList<>();
 
-	// ----------------------------------------------------------------------------------------
-	// Main methods
-	// ----------------------------------------------------------------------------------------
+    private Member member = null;
+    private User user = null;
 
-	/**
-	 * Run the modal logic
-	 *
-	 * @param event ModalInteractionEvent
-	 */
-	protected abstract void execute(ModalInteractionEvent event);
+    // ----------------------------------------------------------------------------------------
+    // Main methods
+    // ----------------------------------------------------------------------------------------
 
-	// ----------------------------------------------------------------------------------------
-	// Setters
-	// ----------------------------------------------------------------------------------------
+    /**
+     * Run the modal logic
+     *
+     * @param event ModalInteractionEvent
+     */
+    public final boolean execute(final ModalInteractionEvent event) {
+        this.member = event.getMember();
+        this.user = event.getUser();
 
-	/**
-	 * Set the id
-	 */
-	public SimpleModal(final String id) {
-		this.id = id;
-	}
+        // TODO: Add modal checks here
+        this.onModalInteract(event);
+        return true;
+    }
 
-	/**
-	 * Set the title
-	 */
-	public void title(final String title) {
-		this.title = title;
-	}
+    protected abstract void onModalInteract(ModalInteractionEvent event);
 
-	/**
-	 * Add a textInput
-	 */
-	public void textInput(final SimpleTextInput textInput) {
-		this.textInputs.put(textInput.getId(), textInput);
-	}
+    // ----------------------------------------------------------------------------------------
+    // Setters
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * Add multiple textInputs
-	 */
-	public void textInputs(final SimpleTextInput... textInputs) {
-		for (final SimpleTextInput textInput : textInputs) {
-			this.textInputs.put(textInput.getId(), textInput);
-		}
-	}
+    /**
+     * Set the id
+     */
+    public SimpleModal(final String id) {
+        this.id = id;
+    }
 
-	/**
-	 * Set the textInputs
-	 */
-	public void textInputs(final LinkedHashMap<String, SimpleTextInput> textInputs) {
-		this.textInputs = textInputs;
-	}
+    /**
+     * Set the title
+     */
+    public void title(final String title) {
+        this.title = title;
+    }
 
-	// Disabled because select menus are not compatible with modals
+    /**
+     * Add a textInput
+     */
+    public void textInput(final SimpleTextInput textInput) {
+        this.textInputs.put(textInput.getId(), textInput);
+    }
+
+    /**
+     * Add multiple textInputs
+     */
+    public void textInputs(final SimpleTextInput... textInputs) {
+        for (final SimpleTextInput textInput : textInputs) {
+            this.textInputs.put(textInput.getId(), textInput);
+        }
+    }
+
+    /**
+     * Set the textInputs
+     */
+    public void textInputs(final LinkedHashMap<String, SimpleTextInput> textInputs) {
+        this.textInputs = textInputs;
+    }
+
+    // Disabled because select menus are not compatible with modals
 //    /**
 //     * Set the selectMenus
 //     */
@@ -86,7 +100,7 @@ public abstract class SimpleModal {
 //        this.selectMenus = selectMenus;
 //    }
 
-	// Disabled because select menus are not compatible with modals
+    // Disabled because select menus are not compatible with modals
 //    /**
 //     * Add a selectMenu
 //     */
@@ -94,7 +108,7 @@ public abstract class SimpleModal {
 //        this.selectMenus.put(selectMenu.getId(), selectMenu);
 //    }
 
-	// Disabled because button are not compatible with modals
+    // Disabled because button are not compatible with modals
 //    /**
 //     * Set the buttons
 //     */
@@ -102,7 +116,7 @@ public abstract class SimpleModal {
 //        this.buttonIds = buttonIds;
 //    }
 
-	// Disabled because button are not compatible with modals
+    // Disabled because button are not compatible with modals
 //    /**
 //     * Add a button
 //     */
@@ -110,7 +124,7 @@ public abstract class SimpleModal {
 //        this.buttonIds.add(button.getButton());
 //    }
 
-	// Disabled because button are not compatible with modals
+    // Disabled because button are not compatible with modals
 //    /**
 //     * Add a button
 //     */
@@ -118,86 +132,94 @@ public abstract class SimpleModal {
 //        this.buttonIds.add(buttonId);
 //    }
 
-	/**
-	 * Set this modal as main guild only
-	 */
-	public void mainGuildOnly() {
-		this.guildOnly = true;
-	}
+    /**
+     * Set this modal as main guild only
+     */
+    public void mainGuildOnly() {
+        this.guildOnly = true;
+    }
 
-	// ----------------------------------------------------------------------------------------
-	// Getters
-	// ----------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------
+    // Getters
+    // ----------------------------------------------------------------------------------------
 
-	/**
-	 * Get the id
-	 *
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
+    /**
+     * Get the id
+     *
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * Get the title
-	 *
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+    /**
+     * Get the title
+     *
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
 
-	/**
-	 * Whether the button is restricted to the main guild of the bot
-	 *
-	 * @return the restricted guild
-	 */
-	public boolean isMainGuildOnly() {
-		return guildOnly;
-	}
+    /**
+     * Whether the button is restricted to the main guild of the bot
+     *
+     * @return the restricted guild
+     */
+    public boolean isMainGuildOnly() {
+        return guildOnly;
+    }
 
-	/**
-	 * Get the textInputs
-	 *
-	 * @return the textInputs
-	 */
-	public LinkedHashMap<String, SimpleTextInput> getTextInputs() {
-		return textInputs;
-	}
+    /**
+     * Get the textInputs
+     *
+     * @return the textInputs
+     */
+    public LinkedHashMap<String, SimpleTextInput> getTextInputs() {
+        return textInputs;
+    }
 
-	/**
-	 * Get a textInput
-	 *
-	 * @return the textInput
-	 */
-	public SimpleTextInput getTextInput(final String id) {
-		return textInputs.get(id);
-	}
+    /**
+     * Get a textInput
+     *
+     * @return the textInput
+     */
+    public SimpleTextInput getTextInput(final String id) {
+        return textInputs.get(id);
+    }
 
-	/**
-	 * Get the modal
-	 *
-	 * @return the modal
-	 */
-	public Modal build() {
-		final Modal.Builder modalBuilder = Modal.create(this.id, this.title);
+    public Member getMember() {
+        return this.member;
+    }
 
-		this.textInputs.forEach((id, textInput) -> {
-			modalBuilder.addActionRow(textInput.build());
-		});
-		// Disabled because select menus are not compatible with modals
+    public User getUser() {
+        return this.user;
+    }
+
+    /**
+     * Get the modal
+     *
+     * @return the modal
+     */
+    public Modal build() {
+        final Modal.Builder modalBuilder = Modal.create(this.id, this.title);
+
+        this.textInputs.forEach((id, textInput) -> {
+            modalBuilder.addActionRow(textInput.build());
+        });
+        // Disabled because select menus are not compatible with modals
 //        this.selectMenus.forEach((id, selectMenu) -> {
 //            modalBuilder.addActionRow(selectMenu.build());
 //        });
-		// Disabled because button are not compatible with modals
+        // Disabled because button are not compatible with modals
 //        this.buttonIds.forEach(buttonId -> {
 //            SimpleButton button = SimpleBot.getButtonHandler().getButton(buttonId);
 //            modalBuilder.addActionRow(button.build());
 //        });
 
-		SimpleBot.getModalHandler().addModalListener(this);
+        SimpleBot.getModalHandler().addModalListener(this);
 
-		return modalBuilder.build();
-	}
+        return modalBuilder.build();
+    }
 
 }

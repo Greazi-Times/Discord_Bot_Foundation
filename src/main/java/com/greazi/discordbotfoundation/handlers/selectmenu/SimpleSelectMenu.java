@@ -1,5 +1,7 @@
 package com.greazi.discordbotfoundation.handlers.selectmenu;
 
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectInteraction;
@@ -18,6 +20,8 @@ public abstract class SimpleSelectMenu {
     private int min = 1;
     private int max = 1;
     private List<SelectOption> options = new ArrayList<>();
+    private Member member = null;
+    private User user = null;
 
     // ----------------------------------------------------------------------------------------
     // Main methods
@@ -28,7 +32,16 @@ public abstract class SimpleSelectMenu {
      *
      * @param event StringSelectInteraction
      */
-    protected abstract void execute(StringSelectInteraction event);
+    public final boolean execute(final StringSelectInteraction event) {
+        this.member = event.getMember();
+        this.user = event.getUser();
+
+        // TODO: Add menu checks here
+        this.onMenuInteract(event);
+        return true;
+    }
+
+    protected abstract void onMenuInteract(StringSelectInteraction event);
 
     // ----------------------------------------------------------------------------------------
     // Setters
@@ -276,6 +289,14 @@ public abstract class SimpleSelectMenu {
      */
     public List<SelectOption> getOptions() {
         return options;
+    }
+
+    public Member getMember() {
+        return this.member;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
     /**
