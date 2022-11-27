@@ -19,26 +19,26 @@ import java.awt.*;
  */
 public class PingCommand extends SimpleSlashCommand {
 
-	/**
-	 * Default enabled can not be disabled.
-	 */
-	public PingCommand() {
-		super("ping");
-		description("Test the latency of the bot");
-	}
+    /**
+     * Default enabled can not be disabled.
+     */
+    public PingCommand() {
+        super("ping");
+        description("Test the latency of the bot");
+    }
 
-	/**
-	 * The main code of the ping command
-	 *
-	 * @param event SlashCommandInteractionEvent
-	 */
-	@Override
-	protected void execute(final SlashCommandInteractionEvent event) {
-		event.replyEmbeds(new SimpleEmbedBuilder("Bot latency")
-				.text("Gateway: " + event.getJDA().getGatewayPing(),
-						"Rest: " + event.getJDA().getRestPing().complete(),
-						"Response: " + event.getJDA().getResponseTotal())
-				.setColor(Color.decode("#2f3136"))
-				.build()).setEphemeral(true).queue();
-	}
+    /**
+     * The main code of the ping command
+     *
+     * @param event SlashCommandInteractionEvent
+     */
+    @Override
+    protected void onCommand(final SlashCommandInteractionEvent event) {
+        event.replyEmbeds(new SimpleEmbedBuilder("Bot latency")
+                .text("Gateway: " + event.getJDA().getGatewayPing(),
+                        "Rest: " + event.getJDA().getRestPing().complete(),
+                        "Response: " + event.getJDA().getResponseTotal())
+                .setColor(Color.decode("#2f3136"))
+                .build()).setEphemeral(true).queue();
+    }
 }

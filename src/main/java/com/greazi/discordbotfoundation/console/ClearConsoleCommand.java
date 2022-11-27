@@ -13,7 +13,7 @@ public class ClearConsoleCommand extends SimpleConsoleCommand {
     }
 
     @Override
-    public void execute(List<String> args) {
+    public void onConsoleCommand(final List<String> args) {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }

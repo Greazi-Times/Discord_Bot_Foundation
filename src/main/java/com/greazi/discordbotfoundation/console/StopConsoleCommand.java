@@ -2,7 +2,6 @@ package com.greazi.discordbotfoundation.console;
 
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.handlers.console.SimpleConsoleCommand;
-import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class StopConsoleCommand extends SimpleConsoleCommand {
     }
 
     @Override
-    public void execute(List<String> args) {
+    public void onConsoleCommand(final List<String> args) {
         SimpleBot.getInstance().stop();
     }
 }

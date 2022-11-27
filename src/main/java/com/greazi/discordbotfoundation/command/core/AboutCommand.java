@@ -27,16 +27,17 @@ public class AboutCommand extends SimpleSlashCommand {
     }
 
     @Override
-    protected void execute(SlashCommandInteractionEvent event) {
+    protected void onCommand(final SlashCommandInteractionEvent event) {
 
 
-        SimpleEmbedBuilder embed = new SimpleEmbedBuilder("About the bot");
+        final SimpleEmbedBuilder embed = new SimpleEmbedBuilder("About the bot");
 
         embed.text("This bot uses the [Discord Bot Foundation](https://github.com/Greazi-Times/Discord_Bot_Foundation) version: " + Constants.Version.FOUNDATION + "\n\nBot information:");
         embed.field("Bot name", SimpleSettings.Bot.Name(), true);
         embed.field("Bot version", SimpleBot.getVersion(), true);
         embed.field("Developer", SimpleBot.getInstance().getDeveloperName(), true);
-        if(SimpleBot.getInstance().getFoundedYear() != -1) embed.field("Founded", SimpleBot.getInstance().getDeveloperName(), true);
+        if (SimpleBot.getInstance().getFoundedYear() != -1)
+            embed.field("Founded", SimpleBot.getInstance().getDeveloperName(), true);
         embed.setColor(Color.decode("#2f3136"));
 
         event.replyEmbeds(embed.build()).setEphemeral(true).queue();
