@@ -148,18 +148,10 @@ public final class Common {
     }
 
     /**
-     * Logs a bunch of messages to the console
-     * <p>
-     * Does not add {@link #getLogPrefix()}
+     * The main logging method. Logs the given messages to the console.
      *
-     * @param messages
-     */
-    public static void logNoPrefix(final String... messages) {
-        log(false, messages);
-    }
-
-    /*
-     * Logs a bunch of messages to the console
+     * @param addLogPrefix Should we add the log prefix to the messages?
+     * @param messages     The messages to log
      */
     private static void log(final boolean addLogPrefix, final String... messages) {
         if (messages == null)
@@ -181,6 +173,17 @@ public final class Common {
                 }
             }
         }
+    }
+
+    /**
+     * Logs a bunch of messages to the console
+     * <p>
+     * Does not add {@link #getLogPrefix()}
+     *
+     * @param messages
+     */
+    public static void logNoPrefix(final String... messages) {
+        log(false, messages);
     }
 
     /**
@@ -242,8 +245,6 @@ public final class Common {
         if (messages != null)
             logFramed(false, replaceErrorVariable(t, messages));
 
-        // TODO add debug save option
-        //Debugger.saveError(t, messages);
         sneaky(t);
     }
 
