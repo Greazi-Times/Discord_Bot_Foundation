@@ -1,3 +1,14 @@
+# [0.19.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.18.0...v0.19.0) (2022-11-30)
+
+
+### Features
+
+* Added dm user ([21fc2bb](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/21fc2bbc28d0993584c946d006b106c631dfc472))
+* Added getStringList for settings ([71dcb86](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/71dcb86c0a488d15dfc91c130058574d33162d8f))
+* Updated JDA version ([a4ae787](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/a4ae787a23297ed05692e7d1096f4ca52db5ce96))
+
+
+
 # [0.18.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.5...v0.18.0) (2022-11-27)
 
 
@@ -38,19 +49,6 @@
 ### Bug Fixes
 
 * **github:** fixed auto upload system ([5f695e2](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/5f695e212e07ec69ebfa8e25e8433e5a0960a06c))
-
-
-
-## [0.17.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.1...v0.17.2) (2022-11-08)
-
-
-### Bug Fixes
-
-* **github:** another try to fix it ([1443bd0](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1443bd09983c3296eec8e8b1cd1a486c8c86247b))
-* **github:** fixed some issues within github ([afa6658](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/afa66587163e0946acd91f452c73788332ef8e71))
-* **github:** fixing github ([73b3f14](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/73b3f14a31b49bb92f0264e2a959568880eda679))
-* **simpleroles:** Managed comments ([37e72c2](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/37e72c294c612f85593259c637b7a6062a4e4ff1))
-* fixed vulnerability issues ([727e993](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/727e993d34bc1f7ed49fc0f8b3b544b21de343cc))
 
 
 
