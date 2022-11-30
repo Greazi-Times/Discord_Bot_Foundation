@@ -25,6 +25,26 @@ public class SimpleRoles {
     }
 
     /**
+     * Add a role from its ID to a member
+     *
+     * @param member The member to add the role to
+     * @param roleId The ID of the role to add
+     */
+    public static void addRole(@NotNull final Member member, final long roleId) {
+        addRole(member, member.getGuild().getRoleById(roleId));
+    }
+
+    /**
+     * Add a role by name to a member
+     *
+     * @param member   The member to add the role to
+     * @param roleName The name of the role to add
+     */
+    public static void addRole(final @NotNull Member member, final String roleName) {
+        member.getGuild().getRolesByName(roleName, true).forEach(role -> addRole(member, role));
+    }
+
+    /**
      * Add multiple roles at once
      *
      * @param member The member to add the roles to
@@ -37,16 +57,6 @@ public class SimpleRoles {
     }
 
     /**
-     * Add a role from its ID to a member
-     *
-     * @param member The member to add the role to
-     * @param roleId The ID of the role to add
-     */
-    public static void addRole(@NotNull final Member member, final long roleId) {
-        addRole(member, member.getGuild().getRoleById(roleId));
-    }
-
-    /**
      * Add multiple roles from their IDs at once
      *
      * @param member  The member to add the roles to
@@ -56,16 +66,6 @@ public class SimpleRoles {
         for (final long roleId : roleIds) {
             addRole(member, member.getGuild().getRoleById(roleId));
         }
-    }
-
-    /**
-     * Add a role by name to a member
-     *
-     * @param member   The member to add the role to
-     * @param roleName The name of the role to add
-     */
-    public static void addRole(final @NotNull Member member, final String roleName) {
-        member.getGuild().getRolesByName(roleName, true).forEach(role -> addRole(member, role));
     }
 
     /**
