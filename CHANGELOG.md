@@ -1,3 +1,12 @@
+## [0.19.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.19.0...v0.19.1) (2022-12-10)
+
+
+### Bug Fixes
+
+* Bot Status system ([d0aa7bf](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d0aa7bfd106a1c2061bedee4af3bffbcd59b3813))
+
+
+
 # [0.19.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.18.0...v0.19.0) (2022-11-30)
 
 
@@ -40,15 +49,6 @@
 * Fix JDA issues ([04d4da1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/04d4da194aec97697ad8e98ad2c14d2652cca0f6))
 * fixed issues with buttonhandler ([fdd8034](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/fdd8034ba793565caebf9402f0347e0f1fe20832))
 * Fixed NotNull issues ([0205594](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/02055943db077ffe0947dabb5da57645e6227e25))
-
-
-
-## [0.17.3](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.2...v0.17.3) (2022-11-08)
-
-
-### Bug Fixes
-
-* **github:** fixed auto upload system ([5f695e2](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/5f695e212e07ec69ebfa8e25e8433e5a0960a06c))
 
 
 
