@@ -124,21 +124,28 @@ public abstract class SimpleBot {
         // Check the activity for the bot
         final Activity activityType;
         final String activity = SimpleSettings.Activity.Message();
+        Debugger.debug("Activity", "Activity is " + activity);
         switch (SimpleSettings.Activity.Type().toLowerCase()) {
-            case "watching":
+            case "watching" -> {
                 activityType = Activity.watching(activity);
-                break;
-            case "playing":
+                Debugger.debug("Activity", "Activity type is watching");
+            }
+            case "playing" -> {
                 activityType = Activity.playing(activity);
-                break;
-            case "streaming":
+                Debugger.debug("Activity", "Activity type is playing");
+            }
+            case "streaming" -> {
                 activityType = Activity.streaming(activity, getDeveloperWebsite());
-                break;
-            case "listening":
+                Debugger.debug("Activity", "Activity type is streaming");
+            }
+            case "listening" -> {
                 activityType = Activity.listening(activity);
-                break;
-            default:
+                Debugger.debug("Activity", "Activity type is listening");
+            }
+            default -> {
                 activityType = Activity.watching(getName());
+                Debugger.debug("Activity", "Activity type is default");
+            }
         }
 
         // Initialize the bot

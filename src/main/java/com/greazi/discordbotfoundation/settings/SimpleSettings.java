@@ -232,12 +232,12 @@ public class SimpleSettings {
 
         // The activity type
         public static String Type() {
-            return getString(path + "Activity.Type");
+            return getString(path + "Type");
         }
 
         // The message for the activity
         public static String Message() {
-            return getString(path + "Activity.Message");
+            return getString(path + "Message");
         }
     }
 
