@@ -1,5 +1,7 @@
 package com.greazi.discordbotfoundation.handlers.selectmenu;
 
+import com.greazi.discordbotfoundation.SimpleBot;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -22,6 +24,7 @@ public abstract class SimpleSelectMenu {
     private List<SelectOption> options = new ArrayList<>();
     private Member member = null;
     private User user = null;
+    private Guild guild = null;
 
     // ----------------------------------------------------------------------------------------
     // Main methods
@@ -35,6 +38,7 @@ public abstract class SimpleSelectMenu {
     public final boolean execute(final StringSelectInteraction event) {
         this.member = event.getMember();
         this.user = event.getUser();
+        this.guild = event.getGuild();
 
         // TODO: Add menu checks here
         this.onMenuInteract(event);
@@ -299,6 +303,10 @@ public abstract class SimpleSelectMenu {
         return this.user;
     }
 
+    public Guild getGuild() {
+        return this.guild;
+    }
+
     /**
      * Get the select menu
      *
@@ -310,7 +318,11 @@ public abstract class SimpleSelectMenu {
         builder.setDisabled(this.disabled);
         builder.setRequiredRange(this.min, this.max);
         builder.addOptions(this.options);
+        SimpleBot.getSelectMenuHandler().addMenuListener(this);
         return builder.build();
     }
 
+    public void remove() {
+        SimpleBot.getSelectMenuHandler().removeMenuListener(this);
+    }
 }

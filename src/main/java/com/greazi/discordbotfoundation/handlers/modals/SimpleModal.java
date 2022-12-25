@@ -1,6 +1,7 @@
 package com.greazi.discordbotfoundation.handlers.modals;
 
 import com.greazi.discordbotfoundation.SimpleBot;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -30,6 +31,7 @@ public abstract class SimpleModal {
 
     private Member member = null;
     private User user = null;
+    private Guild guild = null;
 
     // ----------------------------------------------------------------------------------------
     // Main methods
@@ -43,6 +45,7 @@ public abstract class SimpleModal {
     public final boolean execute(final ModalInteractionEvent event) {
         this.member = event.getMember();
         this.user = event.getUser();
+        this.guild = event.getGuild();
 
         // TODO: Add modal checks here
         this.onModalInteract(event);
@@ -148,7 +151,7 @@ public abstract class SimpleModal {
      *
      * @return the id
      */
-    public String getId() {
+    protected final String getId() {
         return id;
     }
 
@@ -157,7 +160,7 @@ public abstract class SimpleModal {
      *
      * @return the title
      */
-    public String getTitle() {
+    protected final String getTitle() {
         return title;
     }
 
@@ -166,7 +169,7 @@ public abstract class SimpleModal {
      *
      * @return the restricted guild
      */
-    public boolean isMainGuildOnly() {
+    protected final boolean isMainGuildOnly() {
         return guildOnly;
     }
 
@@ -175,7 +178,7 @@ public abstract class SimpleModal {
      *
      * @return the textInputs
      */
-    public LinkedHashMap<String, SimpleTextInput> getTextInputs() {
+    protected final LinkedHashMap<String, SimpleTextInput> getTextInputs() {
         return textInputs;
     }
 
@@ -184,16 +187,20 @@ public abstract class SimpleModal {
      *
      * @return the textInput
      */
-    public SimpleTextInput getTextInput(final String id) {
+    protected final SimpleTextInput getTextInput(final String id) {
         return textInputs.get(id);
     }
 
-    public Member getMember() {
+    protected final Member getMember() {
         return this.member;
     }
 
-    public User getUser() {
+    protected final User getUser() {
         return this.user;
+    }
+
+    protected final Guild getGuild() {
+        return this.guild;
     }
 
     /**
@@ -220,6 +227,10 @@ public abstract class SimpleModal {
         SimpleBot.getModalHandler().addModalListener(this);
 
         return modalBuilder.build();
+    }
+
+    public void remove() {
+        SimpleBot.getModalHandler().removeModalListener(this);
     }
 
 }

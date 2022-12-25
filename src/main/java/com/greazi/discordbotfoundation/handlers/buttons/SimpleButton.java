@@ -8,6 +8,7 @@
 package com.greazi.discordbotfoundation.handlers.buttons;
 
 import com.greazi.discordbotfoundation.SimpleBot;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -95,6 +96,7 @@ public abstract class SimpleButton {
 
     private Member member = null;
     private User user = null;
+    private Guild guild = null;
 
     // ----------------------------------------------------------------------------------------
     // Main methods
@@ -104,6 +106,7 @@ public abstract class SimpleButton {
         // TODO: Add the checks for the button in here
         this.member = event.getMember();
         this.user = event.getUser();
+        this.guild = event.getGuild();
 
         this.onButtonInteract(event);
         return true;
@@ -247,7 +250,7 @@ public abstract class SimpleButton {
      *
      * @return The button ID
      */
-    public String getId() {
+    protected final String getId() {
         return button_id;
     }
 
@@ -256,7 +259,7 @@ public abstract class SimpleButton {
      *
      * @return The button style
      */
-    public ButtonStyle getButtonStyle() {
+    protected final ButtonStyle getButtonStyle() {
         return button_style;
     }
 
@@ -265,7 +268,7 @@ public abstract class SimpleButton {
      *
      * @return The button Label
      */
-    public String getLabel() {
+    protected final String getLabel() {
         return label;
     }
 
@@ -274,7 +277,7 @@ public abstract class SimpleButton {
      *
      * @return The button Emoji
      */
-    public Emoji getEmoji() {
+    protected final Emoji getEmoji() {
         return this.emoji;
     }
 
@@ -283,7 +286,7 @@ public abstract class SimpleButton {
      *
      * @return The URL
      */
-    public String getUrl() {
+    protected final String getUrl() {
         return this.url;
     }
 
@@ -292,7 +295,7 @@ public abstract class SimpleButton {
      *
      * @return The restricted guild
      */
-    public boolean getGuildOnly() {
+    protected final boolean getGuildOnly() {
         return guildOnly;
     }
 
@@ -301,7 +304,7 @@ public abstract class SimpleButton {
      *
      * @return the restriction to a NSFW channel
      */
-    public boolean getNsfwOnly() {
+    protected final boolean getNsfwOnly() {
         return nsfwOnly;
     }
 
@@ -310,7 +313,7 @@ public abstract class SimpleButton {
      *
      * @return the allowed roles
      */
-    public List<Role> getEnabledRoles() {
+    protected final List<Role> getEnabledRoles() {
         return enabledRoles;
     }
 
@@ -319,7 +322,7 @@ public abstract class SimpleButton {
      *
      * @return the allowed users
      */
-    public List<User> getEnabledUsers() {
+    protected final List<User> getEnabledUsers() {
         return enabledUsers;
     }
 
@@ -328,7 +331,7 @@ public abstract class SimpleButton {
      *
      * @return the disallowed roles
      */
-    public List<Role> getDisabledRoles() {
+    protected final List<Role> getDisabledRoles() {
         return disabledRoles;
     }
 
@@ -337,16 +340,20 @@ public abstract class SimpleButton {
      *
      * @return the disallowed users
      */
-    public List<User> getDisabledUsers() {
+    protected final List<User> getDisabledUsers() {
         return disabledUsers;
     }
 
-    public Member getMember() {
+    protected final Member getMember() {
         return this.member;
     }
 
-    public User getUser() {
+    protected final User getUser() {
         return this.user;
+    }
+
+    protected final Guild getGuild() {
+        return this.guild;
     }
 
     // ----------------------------------------------------------------------------------------
@@ -368,5 +375,9 @@ public abstract class SimpleButton {
         Checks.notLonger(this.label, Button.LABEL_MAX_LENGTH, "Label");
         SimpleBot.getButtonHandler().addButtonListener(this);
         return new ButtonImpl(this.button_id, this.label, this.button_style, this.url, this.disabled, this.emoji);
+    }
+
+    public void remove() {
+        SimpleBot.getButtonHandler().removeButtonListener(this);
     }
 }

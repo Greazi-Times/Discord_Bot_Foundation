@@ -19,98 +19,102 @@ import java.util.HashMap;
  */
 public class ModalHandler extends ListenerAdapter {
 
-	/**
-	 * The HashMap with all modals
-	 */
-	private final HashMap<String, SimpleModal> modalList = new HashMap<>();
+    /**
+     * The HashMap with all modals
+     */
+    private final HashMap<String, SimpleModal> modalList = new HashMap<>();
 
-	/**
-	 * The main modal handler method
-	 */
-	public ModalHandler() {
-		Debugger.debug("Modal", "Modals main method");
-		SimpleBot.getJDA().addEventListener(this);
-	}
+    /**
+     * The main modal handler method
+     */
+    public ModalHandler() {
+        Debugger.debug("Modal", "Modals main method");
+        SimpleBot.getJDA().addEventListener(this);
+    }
 
-	/**
-	 * Add the modal listener
-	 *
-	 * @param module
-	 * @return this
-	 */
-	public ModalHandler addModalListener(final SimpleModal module) {
-		modalList.put(module.getId(), module);
-		return this;
-	}
+    /**
+     * Add the modal listener
+     *
+     * @param module
+     * @return this
+     */
+    public ModalHandler addModalListener(final SimpleModal module) {
+        modalList.put(module.getId(), module);
+        return this;
+    }
 
-	/**
-	 * Get a modal by id
-	 *
-	 * @param modal_id
-	 * @return The modal
-	 */
-	public SimpleModal getModal(final String modal_id) {
-		return modalList.get(modal_id);
-	}
+    public void removeModalListener(final SimpleModal module) {
+        modalList.remove(module.getId());
+    }
 
-	/**
-	 * The event listener for the modals
-	 *
-	 * @param event ModalInteractionEvent
-	 */
-	@Override
-	@SubscribeEvent
-	public void onModalInteraction(@NotNull final ModalInteractionEvent event) {
-		Debugger.debug("Modal", "A modal has been submitted");
+    /**
+     * Get a modal by id
+     *
+     * @param modal_id
+     * @return The modal
+     */
+    public SimpleModal getModal(final String modal_id) {
+        return modalList.get(modal_id);
+    }
 
-		// Log who used a modal
-		Common.log("User, " + ConsoleColor.CYAN + event.getMember().getEffectiveName() + ConsoleColor.RESET + " used Modal: " + ConsoleColor.CYAN + event.getId() + ConsoleColor.RESET);
+    /**
+     * The event listener for the modals
+     *
+     * @param event ModalInteractionEvent
+     */
+    @Override
+    @SubscribeEvent
+    public void onModalInteraction(@NotNull final ModalInteractionEvent event) {
+        Debugger.debug("Modal", "A modal has been submitted");
 
-		// Retrieve the modal class from the command that has been run
-		final SimpleModal module = modalList.get(event.getModalId());
+        // Log who used a modal
+        Common.log("User, " + ConsoleColor.CYAN + event.getMember().getEffectiveName() + ConsoleColor.RESET + " used Modal: " + ConsoleColor.CYAN + event.getId() + ConsoleColor.RESET);
 
-		// Check if the modal exists
-		if (module == null) {
-			event.replyEmbeds(new SimpleEmbedBuilder("ERROR - modal not found")
-					.text("The modal you used does not exist or hasn't been activated!",
-							"Please contact an admin and report this error!")
-					.error()
-					.setFooter("")
-					.build()).setEphemeral(true).queue();
-			return;
-		}
+        // Retrieve the modal class from the command that has been run
+        final SimpleModal module = modalList.get(event.getModalId());
 
-		Debugger.debug("Modal", "Found event; " + module);
+        // Check if the modal exists
+        if (module == null) {
+            event.replyEmbeds(new SimpleEmbedBuilder("ERROR - modal not found")
+                    .text("The modal you used does not exist or hasn't been activated!",
+                            "Please contact an admin and report this error!")
+                    .error()
+                    .setFooter("")
+                    .build()).setEphemeral(true).queue();
+            return;
+        }
 
-		// Get the guild of the button and the main guild of the bot
-		final Guild guild = event.getGuild();
-		final Guild mainGuild = SimpleBot.getMainGuild();
-		assert guild != null : "Event guild is null!";
+        Debugger.debug("Modal", "Found event; " + module);
 
-		// Check if the button is for the main guild only
-		if (!guild.getId().equals(mainGuild.getId()) && module.isMainGuildOnly()) {
-			event.replyEmbeds(new SimpleEmbedBuilder("ERROR - Button main guild only")
-					.text(
-							"The button you used is only usable in the main guild of this bot!",
-							"If you feel like this is a problem please contact a admin!"
-					)
-					.error()
-					.setFooter("")
-					.build()).setEphemeral(true).queue();
-			return;
-		}
+        // Get the guild of the button and the main guild of the bot
+        final Guild guild = event.getGuild();
+        final Guild mainGuild = SimpleBot.getMainGuild();
+        assert guild != null : "Event guild is null!";
 
-		Debugger.debug("Modal", "Executing modal logic");
-		// Execute modal logic
-		module.execute(event);
-	}
+        // Check if the button is for the main guild only
+        if (!guild.getId().equals(mainGuild.getId()) && module.isMainGuildOnly()) {
+            event.replyEmbeds(new SimpleEmbedBuilder("ERROR - Button main guild only")
+                    .text(
+                            "The button you used is only usable in the main guild of this bot!",
+                            "If you feel like this is a problem please contact a admin!"
+                    )
+                    .error()
+                    .setFooter("")
+                    .build()).setEphemeral(true).queue();
+            return;
+        }
 
-	/**
-	 * Get the total amount of modals registered
-	 *
-	 * @return Total amount of modals
-	 */
-	public int getTotal() {
-		return modalList.size();
-	}
+        Debugger.debug("Modal", "Executing modal logic");
+        // Execute modal logic
+        module.execute(event);
+    }
+
+    /**
+     * Get the total amount of modals registered
+     *
+     * @return Total amount of modals
+     */
+    public int getTotal() {
+        return modalList.size();
+    }
 }

@@ -625,7 +625,7 @@ public abstract class SimpleBot {
      *
      * @return SelectMenu handler
      */
-    private static SelectMenuHandler getSelectMenuHandler() {
+    public static SelectMenuHandler getSelectMenuHandler() {
         return menuHandler;
     }
 

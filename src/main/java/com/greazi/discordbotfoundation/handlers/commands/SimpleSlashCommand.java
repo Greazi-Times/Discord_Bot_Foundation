@@ -8,6 +8,7 @@
 package com.greazi.discordbotfoundation.handlers.commands;
 
 import com.greazi.discordbotfoundation.utils.annotations.Disabled;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -69,6 +70,8 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
 
     private User user = null;
 
+    private Guild guild = null;
+
     // ----------------------------------------------------------------------------------------
     // Main methods
     // ----------------------------------------------------------------------------------------
@@ -77,6 +80,7 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
         // TODO: Add the check for the command in here
         this.member = event.getMember();
         this.user = event.getUser();
+        this.guild = event.getGuild();
 
         this.onCommand(event);
         return true;
@@ -250,5 +254,14 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
      */
     protected final User getUser() {
         return this.user;
+    }
+
+    /**
+     * Get the guild where the command was executed
+     *
+     * @return the guild
+     */
+    protected final Guild getGuild() {
+        return this.guild;
     }
 }
