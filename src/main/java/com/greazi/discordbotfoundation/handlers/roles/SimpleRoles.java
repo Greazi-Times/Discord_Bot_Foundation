@@ -80,6 +80,36 @@ public class SimpleRoles {
         }
     }
 
+    public static void removeRole(final @NotNull Member member, final Role role) {
+        member.getGuild().removeRoleFromMember(member.getUser(), role).queue();
+    }
+
+    public static void removeRole(@NotNull final Member member, final long roleId) {
+        removeRole(member, member.getGuild().getRoleById(roleId));
+    }
+
+    public static void removeRole(final @NotNull Member member, final String roleName) {
+        member.getGuild().getRolesByName(roleName, true).forEach(role -> removeRole(member, role));
+    }
+
+    public static void removeRoles(final Member member, @NotNull final Role... roles) {
+        for (final Role role : roles) {
+            member.getGuild().removeRoleFromMember(member.getUser(), role).queue();
+        }
+    }
+
+    public static void removeRoles(final Member member, @NotNull final long... roleIds) {
+        for (final long roleId : roleIds) {
+            removeRole(member, member.getGuild().getRoleById(roleId));
+        }
+    }
+
+    public static void removeRoles(final Member member, @NotNull final String... roleNames) {
+        for (final String roleName : roleNames) {
+            member.getGuild().getRolesByName(roleName, true).forEach(role -> removeRole(member, role));
+        }
+    }
+
     /**
      * Get a role from its ID
      *
