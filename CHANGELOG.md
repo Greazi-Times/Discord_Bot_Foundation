@@ -1,3 +1,12 @@
+# [0.20.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.19.1...v0.20.0) (2022-12-27)
+
+
+### Features
+
+* added remove roles methods ([1bb43d4](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1bb43d407419abb0085d066407a53d3f4a33f5fa))
+
+
+
 ## [0.19.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.19.0...v0.19.1) (2022-12-10)
 
 
@@ -38,17 +47,6 @@
 ### Bug Fixes
 
 * fixed the roles system ([1fbead5](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1fbead5809a19d3959e68157e886f5f449546921))
-
-
-
-## [0.17.4](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.3...v0.17.4) (2022-11-14)
-
-
-### Bug Fixes
-
-* Fix JDA issues ([04d4da1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/04d4da194aec97697ad8e98ad2c14d2652cca0f6))
-* fixed issues with buttonhandler ([fdd8034](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/fdd8034ba793565caebf9402f0347e0f1fe20832))
-* Fixed NotNull issues ([0205594](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/02055943db077ffe0947dabb5da57645e6227e25))
 
 
 
