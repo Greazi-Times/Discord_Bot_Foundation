@@ -62,7 +62,6 @@ public class SelectMenuHandler extends ListenerAdapter {
      */
     @SubscribeEvent
     public void onSelectMenuInteraction(@NotNull final StringSelectInteractionEvent event) {
-        Debugger.debug("SelectMenu", "A menu has been filled in");
 
         // Get the list of menus
         final SimpleSelectMenu module = menuList.get(event.getSelectMenu().getId());
@@ -80,8 +79,7 @@ public class SelectMenuHandler extends ListenerAdapter {
                     .build()).setEphemeral(true).queue();
             return;
         }
-
-        Debugger.debug("SelectMenu", "Executing Menu logic");
+        
         // Execute the menu logic
         module.execute(event);
     }
