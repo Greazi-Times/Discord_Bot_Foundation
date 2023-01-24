@@ -143,24 +143,24 @@ public class SimpleRoles {
 		return true;
 	}
 
-    /**
-     * Get a role from its ID
-     *
-     * @param roleId The ID of the role to get
-     * @return The role
-     */
-    public static Role getRoleById(final long roleId) {
-        return SimpleBot.getMainGuild().getRoleById(roleId);
-    }
+	/**
+	 * Get a role from its ID
+	 *
+	 * @param roleId The ID of the role to get
+	 * @return The role
+	 */
+	public static Role getRoleById(@NotNull final Guild guild, final long roleId) {
+		return guild.getRoleById(roleId);
+	}
 
-    /**
-     * Get a role by name
-     *
-     * @param roleName The name of the role to get
-     * @return The role
-     */
-    public static Role getRoleByName(final String roleName) {
-        return SimpleBot.getMainGuild().getRolesByName(roleName, true).get(0);
-    }
+	/**
+	 * Get a role by name
+	 *
+	 * @param roleName The name of the role to get
+	 * @return The role
+	 */
+	public static Role getRoleByName(@NotNull final Guild guild, final String roleName) {
+		return guild.getRolesByName(roleName, true).get(0);
+	}
 
 }
