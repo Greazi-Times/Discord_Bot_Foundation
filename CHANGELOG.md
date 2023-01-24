@@ -1,3 +1,13 @@
+# [0.22.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.21.0...v0.22.0) (2023-01-24)
+
+
+### Features
+
+* Added SimpleRoles.hasRole(Member, ...)  ([e0e7305](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e0e73054991d1827cb2ffd60ba8048b22225b736))
+* changed getRoleByID(...) & getRoleByName(...) ([172b3e6](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/172b3e67875ffd40f83b28775b4794db19d9d0a5))
+
+
+
 # [0.21.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.20.0...v0.21.0) (2023-01-11)
 
 
@@ -33,20 +43,6 @@
 * Added dm user ([21fc2bb](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/21fc2bbc28d0993584c946d006b106c631dfc472))
 * Added getStringList for settings ([71dcb86](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/71dcb86c0a488d15dfc91c130058574d33162d8f))
 * Updated JDA version ([a4ae787](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/a4ae787a23297ed05692e7d1096f4ca52db5ce96))
-
-
-
-# [0.18.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.17.5...v0.18.0) (2022-11-27)
-
-
-### Bug Fixes
-
-* **defaultCommands:** Fixed these commands with new system ([2623e26](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/2623e26315929f952e94be51375356f85f3ec197))
-
-
-### Features
-
-* Renamed execute(...) ([93a6923](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/93a692344d9e08ba8d44165d17496e13b811d43d))
 
 
 
