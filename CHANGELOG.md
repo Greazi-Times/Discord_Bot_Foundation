@@ -1,3 +1,12 @@
+## [0.22.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.0...v0.22.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* fixed an issue that caused option data not being added to subcmds ([c81ba2a](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/c81ba2a7d75ea5533dd3abde0690f32124dc050e))
+
+
+
 # [0.22.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.21.0...v0.22.0) (2023-01-24)
 
 
@@ -32,17 +41,6 @@
 ### Bug Fixes
 
 * Bot Status system ([d0aa7bf](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d0aa7bfd106a1c2061bedee4af3bffbcd59b3813))
-
-
-
-# [0.19.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.18.0...v0.19.0) (2022-11-30)
-
-
-### Features
-
-* Added dm user ([21fc2bb](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/21fc2bbc28d0993584c946d006b106c631dfc472))
-* Added getStringList for settings ([71dcb86](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/71dcb86c0a488d15dfc91c130058574d33162d8f))
-* Updated JDA version ([a4ae787](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/a4ae787a23297ed05692e7d1096f4ca52db5ce96))
 
 
 
