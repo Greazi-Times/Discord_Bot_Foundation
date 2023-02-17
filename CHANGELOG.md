@@ -1,3 +1,14 @@
+## [0.22.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.1...v0.22.2) (2023-02-17)
+
+
+### Bug Fixes
+
+* fixed an issue with SimpleRoles ([cb27a75](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/cb27a75d385795dda0ddda4fd6e8f07460091b8e))
+* Made sub commands and options work. ([1e56708](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1e567082e7674869d467806013befc1bb7fcd187))
+* Mainguild system ([eb8dd36](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/eb8dd36945c16a3f77156c4721c3198bbadbbe26))
+
+
+
 ## [0.22.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.0...v0.22.1) (2023-02-07)
 
 
@@ -32,15 +43,6 @@
 ### Features
 
 * added remove roles methods ([1bb43d4](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1bb43d407419abb0085d066407a53d3f4a33f5fa))
-
-
-
-## [0.19.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.19.0...v0.19.1) (2022-12-10)
-
-
-### Bug Fixes
-
-* Bot Status system ([d0aa7bf](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d0aa7bfd106a1c2061bedee4af3bffbcd59b3813))
 
 
 
