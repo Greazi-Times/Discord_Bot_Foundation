@@ -155,7 +155,7 @@ public abstract class SimpleBot {
         final long mainGuildId = SimpleSettings.Bot.MainGuild();
 
         // Set the main guild of the bot
-        if (mainGuildId != 0) {
+        if (mainGuildId != 0 && mainGuild != null) {
             // Get the guild by ID
             final Guild guild = jda.getGuildById(mainGuildId);
             // Check if the guild could be found
