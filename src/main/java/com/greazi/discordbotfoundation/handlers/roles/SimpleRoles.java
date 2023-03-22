@@ -172,4 +172,8 @@ public class SimpleRoles {
         return guild.getRolesByName(roleName, true).get(0);
     }
 
+    public static List<Role> getAllMemberRoles(@NotNull final Member member) {
+        return member.getRoles();
+    }
+
 }
