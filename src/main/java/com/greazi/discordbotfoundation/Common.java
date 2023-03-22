@@ -246,6 +246,7 @@ public final class Common {
             logFramed(false, replaceErrorVariable(t, messages));
 
         sneaky(t);
+        
     }
 
     /*
