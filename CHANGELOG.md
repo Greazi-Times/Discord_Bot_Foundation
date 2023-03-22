@@ -1,3 +1,13 @@
+## [0.22.3](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.2...v0.22.3) (2023-03-22)
+
+
+### Bug Fixes
+
+* Fixed all roles method ([e7c9ae9](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e7c9ae958e4c995baad6bb8201d639eb8152d6a3))
+* fixed an issue in the main gulid ([1765568](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1765568e4b7bec4c9aa35990d1643ebb1e34f3a7))
+
+
+
 ## [0.22.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.1...v0.22.2) (2023-02-17)
 
 
@@ -34,15 +44,6 @@
 ### Features
 
 * updated to JDA 5.0.0-Beta.2 ([1d8d6a3](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1d8d6a37393393a96098d68c3f5f61920b92ba4a))
-
-
-
-# [0.20.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.19.1...v0.20.0) (2022-12-27)
-
-
-### Features
-
-* added remove roles methods ([1bb43d4](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1bb43d407419abb0085d066407a53d3f4a33f5fa))
 
 
 
