@@ -2,7 +2,6 @@ package com.greazi.discordbotfoundation.handlers.selectmenu;
 
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
-import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
@@ -67,7 +66,6 @@ public class SelectMenuHandler extends ListenerAdapter {
         final SimpleSelectMenu module = menuList.get(event.getSelectMenu().getId());
 
         Common.log("User, " + ConsoleColor.CYAN + event.getMember().getEffectiveName() + ConsoleColor.RESET + " used Menu: " + ConsoleColor.CYAN + event.getSelectMenu().getId() + ConsoleColor.RESET);
-        Debugger.debug("SelectMenu", menuList.toString());
 
         // Check if the select menu exists
         if (module == null) {
@@ -79,7 +77,7 @@ public class SelectMenuHandler extends ListenerAdapter {
                     .build()).setEphemeral(true).queue();
             return;
         }
-        
+
         // Execute the menu logic
         module.execute(event);
     }
