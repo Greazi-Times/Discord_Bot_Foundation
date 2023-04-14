@@ -73,6 +73,7 @@ We use JitPack to automatically compile and host the latest release of DiscordBo
 You can eitehr use Jitpack or download and import the project manually.
 
 ## Jitpack
+[![](https://jitpack.io/v/Greazi-Times/Discord_Bot_Foundation.svg)](https://jitpack.io/#Greazi-Times/Discord_Bot_Foundation)
 
 **Step 1.** Add the JitPack repository to your build file
 
