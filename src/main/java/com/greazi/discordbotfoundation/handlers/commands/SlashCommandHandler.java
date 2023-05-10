@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -71,6 +72,8 @@ public class SlashCommandHandler extends ListenerAdapter {
         if (module.getSubCommands().isEmpty() && module.getSubcommandGroup().isEmpty()) {
             command.addOptions(module.getOptions());
         }
+
+        command.setDefaultPermissions(DefaultMemberPermissions.enabledFor(module.getPermissions()));
 
         // TODO: When api has an update for the slash command system update it to that system
         //       Check it out here: https://github.com/DV8FromTheWorld/JDA/pull/2113

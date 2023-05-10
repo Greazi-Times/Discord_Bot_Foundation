@@ -8,6 +8,7 @@
 package com.greazi.discordbotfoundation.handlers.commands;
 
 import com.greazi.discordbotfoundation.utils.annotations.Disabled;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -60,6 +61,8 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
      * !! This can not be used alongside subCommand or subCommandGroup !!
      */
     private List<OptionData> options = new ArrayList<>();
+    
+    private List<Permission> permissions = new ArrayList<>();
 
     /**
      * The category of the command
@@ -162,6 +165,14 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
         this.options = Arrays.asList(optionDataList);
     }
 
+    public void permissions(final List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public void permissions(final Permission... permissions) {
+        this.permissions = Arrays.asList(permissions);
+    }
+
     /**
      * Set the category of the command
      */
@@ -227,6 +238,10 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
      */
     public List<OptionData> getOptions() {
         return options;
+    }
+    
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 
     /**
