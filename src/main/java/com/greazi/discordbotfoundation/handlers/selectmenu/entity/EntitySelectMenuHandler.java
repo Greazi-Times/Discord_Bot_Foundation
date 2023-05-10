@@ -1,9 +1,10 @@
-package com.greazi.discordbotfoundation.handlers.selectmenu;
+package com.greazi.discordbotfoundation.handlers.selectmenu.entity;
 
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
+import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
@@ -13,19 +14,19 @@ import java.util.HashMap;
 
 /**
  * The selection menu andler that handles the whole selection menu event.
- * Uses the information of {@link SimpleSelectMenu}
+ * Uses the information of {@link SimpleEntitySelectMenu}
  */
-public class SelectMenuHandler extends ListenerAdapter {
+public class EntitySelectMenuHandler extends ListenerAdapter {
 
     /**
      * The HasMap for the menus
      */
-    private final HashMap<String, SimpleSelectMenu> menuList = new HashMap<>();
+    private final HashMap<String, SimpleEntitySelectMenu> menuList = new HashMap<>();
 
     /**
      * The select menu handler
      */
-    public SelectMenuHandler() {
+    public EntitySelectMenuHandler() {
         SimpleBot.getJDA().addEventListener(this);
     }
 
@@ -35,12 +36,12 @@ public class SelectMenuHandler extends ListenerAdapter {
      * @param module
      * @return this
      */
-    public SelectMenuHandler addMenuListener(final SimpleSelectMenu module) {
+    public EntitySelectMenuHandler addMenuListener(final SimpleEntitySelectMenu module) {
         menuList.put(module.getId(), module);
         return this;
     }
 
-    public void removeMenuListener(final SimpleSelectMenu module) {
+    public void removeMenuListener(final SimpleEntitySelectMenu module) {
         menuList.remove(module.getId());
     }
 
@@ -50,7 +51,7 @@ public class SelectMenuHandler extends ListenerAdapter {
      * @param modal_id
      * @return The menu from an id
      */
-    public SimpleSelectMenu getMenu(final String modal_id) {
+    public SimpleEntitySelectMenu getMenu(final String modal_id) {
         return menuList.get(modal_id);
     }
 
@@ -60,10 +61,10 @@ public class SelectMenuHandler extends ListenerAdapter {
      * @param event SelectMenuInteractionEvent
      */
     @SubscribeEvent
-    public void onSelectMenuInteraction(@NotNull final StringSelectInteractionEvent event) {
+    public void onSelectMenuInteraction(@NotNull final EntitySelectInteractionEvent event) {
 
         // Get the list of menus
-        final SimpleSelectMenu module = menuList.get(event.getSelectMenu().getId());
+        final SimpleEntitySelectMenu module = menuList.get(event.getSelectMenu().getId());
 
         Common.log("User, " + ConsoleColor.CYAN + event.getMember().getEffectiveName() + ConsoleColor.RESET + " used Menu: " + ConsoleColor.CYAN + event.getSelectMenu().getId() + ConsoleColor.RESET);
 

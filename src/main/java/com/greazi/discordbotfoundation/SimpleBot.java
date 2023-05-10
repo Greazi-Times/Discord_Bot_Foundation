@@ -17,8 +17,9 @@ import com.greazi.discordbotfoundation.handlers.console.SimpleConsoleCommand;
 import com.greazi.discordbotfoundation.handlers.crons.CronHandler;
 import com.greazi.discordbotfoundation.handlers.modals.ModalHandler;
 import com.greazi.discordbotfoundation.handlers.modals.SimpleModal;
-import com.greazi.discordbotfoundation.handlers.selectmenu.SelectMenuHandler;
-import com.greazi.discordbotfoundation.handlers.selectmenu.SimpleSelectMenu;
+import com.greazi.discordbotfoundation.handlers.selectmenu.entity.EntitySelectMenuHandler;
+import com.greazi.discordbotfoundation.handlers.selectmenu.string.StringSelectMenuHandler;
+import com.greazi.discordbotfoundation.handlers.selectmenu.string.SimpleStringSelectMenu;
 import com.greazi.discordbotfoundation.mysql.SqlManager;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
@@ -57,7 +58,8 @@ public abstract class SimpleBot {
     private static SlashCommandHandler slashCommandHandler;
     private static ButtonHandler buttonHandler;
     private static ModalHandler modalHandler;
-    private static SelectMenuHandler menuHandler;
+    private static StringSelectMenuHandler stringSelectMenuHandler;
+    private static EntitySelectMenuHandler entitySelectMenuHandler;
     private static ConsoleCommandHandler consoleCommandHandler;
     private static CronHandler cronHandler;
     private static SqlManager sqlManager;
@@ -155,7 +157,7 @@ public abstract class SimpleBot {
         final long mainGuildId = SimpleSettings.Bot.MainGuild();
 
         // Set the main guild of the bot
-        if (mainGuildId != 0 && mainGuild == null) {
+        if (mainGuildId != 0L && mainGuild != null) {
             // Get the guild by ID
             final Guild guild = jda.getGuildById(mainGuildId);
             // Check if the guild could be found
@@ -219,7 +221,8 @@ public abstract class SimpleBot {
         slashCommandHandler = new SlashCommandHandler();
         buttonHandler = new ButtonHandler();
         modalHandler = new ModalHandler();
-        menuHandler = new SelectMenuHandler();
+        stringSelectMenuHandler = new StringSelectMenuHandler();
+        entitySelectMenuHandler = new EntitySelectMenuHandler();
         consoleCommandHandler = new ConsoleCommandHandler();
         cronHandler = new CronHandler();
         Common.log("System managers have been set up");
@@ -278,7 +281,7 @@ public abstract class SimpleBot {
         // A log option to show how many things are registered
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getSlashCommandHandler().getTotal() + ConsoleColor.RESET + " slash commands " + ConsoleColor.CYAN + getSlashCommandHandler().getGuildTotal() + ConsoleColor.RESET + " main guild and " + ConsoleColor.CYAN + getSlashCommandHandler().getPublicTotal() + ConsoleColor.RESET + " public");
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getConsoleCommandHandler().getTotal() + ConsoleColor.RESET + " console commands");
-        Common.log("Loaded a total of " + ConsoleColor.CYAN + getSelectMenuHandler().getTotal() + ConsoleColor.RESET + " menus");
+        Common.log("Loaded a total of " + ConsoleColor.CYAN + getStringSelectMenuHandler().getTotal() + ConsoleColor.RESET + " menus");
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getButtonHandler().getTotal() + ConsoleColor.RESET + " buttons");
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getModalHandler().getTotal() + ConsoleColor.RESET + " modals");
     }
@@ -417,8 +420,8 @@ public abstract class SimpleBot {
      * @deprecated Use build() instead
      */
     @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerMenu(final SimpleSelectMenu menu) {
-        getSelectMenuHandler().addMenuListener(menu);
+    protected final void registerMenu(final SimpleStringSelectMenu menu) {
+        getStringSelectMenuHandler().addMenuListener(menu);
     }
 
     /**
@@ -428,9 +431,9 @@ public abstract class SimpleBot {
      * @deprecated Use build() instead
      */
     @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerMenus(final SimpleSelectMenu... menus) {
-        for (final SimpleSelectMenu menu : menus) {
-            getSelectMenuHandler().addMenuListener(menu);
+    protected final void registerMenus(final SimpleStringSelectMenu... menus) {
+        for (final SimpleStringSelectMenu menu : menus) {
+            getStringSelectMenuHandler().addMenuListener(menu);
         }
     }
 
@@ -621,12 +624,21 @@ public abstract class SimpleBot {
     }
 
     /**
-     * Retrieve the select menu handler
+     * Retrieve the string select menu handler
      *
-     * @return SelectMenu handler
+     * @return StringSelectMenu handler
      */
-    public static SelectMenuHandler getSelectMenuHandler() {
-        return menuHandler;
+    public static StringSelectMenuHandler getStringSelectMenuHandler() {
+        return stringSelectMenuHandler;
+    }
+
+    /**
+     * Retrieve the entity select menu handler
+     *
+     * @return EntitySelectMenu handler
+     */
+    public static EntitySelectMenuHandler getEntitySelectMenuHandler() {
+        return entitySelectMenuHandler;
     }
 
     /**
@@ -666,8 +678,8 @@ public abstract class SimpleBot {
         return getButtonHandler().getButton(button_id);
     }
 
-    public static SimpleSelectMenu getSelectMenu(final String menu_id) {
-        return getSelectMenuHandler().getMenu(menu_id);
+    public static SimpleStringSelectMenu getSelectMenu(final String menu_id) {
+        return getStringSelectMenuHandler().getMenu(menu_id);
     }
 
     /**
