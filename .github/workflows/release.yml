@@ -26,6 +26,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
+          node-version: '16'
 
       # Build the maven project
       - name: Build with Maven
