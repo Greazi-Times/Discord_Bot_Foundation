@@ -19,6 +19,11 @@ public class ConsoleCommandHandler {
         Thread thread = new Thread(() -> {
             Console console = System.console();
 
+            if (console == null) {
+                Common.error("Console is not available there for console commands are disabled");
+                return;
+            }
+
             while (true) {
                 String input = console.readLine();
 
