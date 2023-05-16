@@ -6,6 +6,7 @@ import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import com.greazi.discordbotfoundation.utils.time.TimeUtil;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -246,7 +247,7 @@ public final class Common {
             logFramed(false, replaceErrorVariable(t, messages));
 
         sneaky(t);
-        
+
     }
 
     /*
@@ -270,14 +271,18 @@ public final class Common {
         return msgs;
     }
 
-    public static void dm(final User user, final String message) {
-        if (message == null)
-            return;
-        user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
+    public static void dm(@NotNull final User user, @NotNull final String message) {
+        user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue(message1 -> {
+        }, error -> {
+            throwError(error, "Failed to send message to " + user.getAsTag() + " (" + user.getId() + ") This user has either blocked the bot or disabled dm's from non-friends.");
+        }));
     }
 
-    public static void dm(final User user, final SimpleEmbedBuilder embed) {
-        user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessageEmbeds(embed.build()).queue());
+    public static void dm(@NotNull final User user, @NotNull final SimpleEmbedBuilder embed) {
+        user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessageEmbeds(embed.build()).queue(message -> {
+        }, error -> {
+            throwError(error, "Failed to send message to " + user.getAsTag() + " (" + user.getId() + ") This user has either blocked the bot or disabled dm's from non-friends.");
+        }));
     }
 
     // ------------------------------------------------------------------------------------------------------------
