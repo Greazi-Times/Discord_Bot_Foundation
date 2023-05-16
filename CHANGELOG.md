@@ -1,20 +1,3 @@
-# [0.24.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.2...v0.24.0) (2023-05-16)
-
-
-### Bug Fixes
-
-* Fixed all roles method ([e7c9ae9](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e7c9ae958e4c995baad6bb8201d639eb8152d6a3))
-* fixed an issue in the main gulid ([1765568](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1765568e4b7bec4c9aa35990d1643ebb1e34f3a7))
-* fixed mainguild system. ([3afdd18](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/3afdd181d4b9878d9e8ddf0bc14a03b40cb0c3ca))
-
-
-### Features
-
-* Adde permissions to slashCommands ([971c74e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/971c74e952f1c27113b8b2fb7add915760387a96))
-* Added Entity menu's ([d895e81](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d895e81855dba0b511913aa85ff8fabcbedc07b4))
-
-
-
 ## [0.22.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.1...v0.22.2) (2023-02-17)
 
 
