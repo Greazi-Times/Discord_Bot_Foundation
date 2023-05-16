@@ -12,6 +12,9 @@
   <a href="https://github.com/Greazi-Times/Discord_Bot_Foundation/graphs/contributors">
     <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/Greazi-Times/Discord_Bot_Foundation" />
   </a>
+   <a href="https://jitpack.io/#Greazi-Times/Discord_Bot_Foundation">
+    <img src="https://jitpack.io/v/Greazi-Times/Discord_Bot_Foundation.svg" />
+  </a>
   <a href="https://github.com/Greazi-Times/Discord_Bot_Foundation/releases">
     <img src="https://img.shields.io/github/v/release/Greazi-Times/Discord_Bot_Foundation" />
   </a>
