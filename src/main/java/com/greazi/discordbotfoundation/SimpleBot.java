@@ -156,35 +156,27 @@ public abstract class SimpleBot {
         // Get the main guild ID from the settings
         final long mainGuildId = SimpleSettings.Bot.MainGuild();
 
-        // Set the main guild of the bot
-        if (mainGuildId != 0 && mainGuild == null) {
-            // Get the guild by ID
-            final Guild guild = jda.getGuildById(mainGuildId);
-            // Check if the guild could be found
-            if (guild != null) {
-                // Set the main guild
-                mainGuild = guild;
-                // Log that the main guild has been set
-                Common.log("Main guild set to: " + ConsoleColor.CYAN + guild.getName() + ConsoleColor.BLACK_BRIGHT + " (" + guild.getId() + ")");
-                // No guild by that ID could be found
-            } else {
-                // Error message that the guild could not be found
-                Common.error(
-                        "The main guild ID is not valid! Please check the config file!",
-                        "Now using the first guild as the main guild!"
-                );
-                // Set the main guild to the first guild in the list
-                mainGuild = jda.getGuilds().get(0);
-            }
-            // Guild option couldn't be found
-        } else {
-            // Error message that the guild could not be found
+        if (mainGuildId == 0L) {
             Common.error(
-                    "The main guild ID is not configured! Please check the config file!",
+                    "It seems that you haven't set the main guild ID in the config file!",
                     "Now using the first guild as the main guild!"
             );
-            // Set the main guild to the first guild in the list
             mainGuild = jda.getGuilds().get(0);
+        } else {
+            if (mainGuild == null) {
+                Guild guild = jda.getGuildById(mainGuildId);
+                if (guild != null) {
+                    mainGuild = guild;
+                    Common.log("Main guild set to: " + ConsoleColor.CYAN + guild.getName() + ConsoleColor.BLACK_BRIGHT + " (" + guild.getId() + ")");
+                } else {
+                    Common.error(
+                            "The main guild ID is not valid! Please check the config file!",
+                            "Now using the first guild as the main guild!"
+                    );
+                }
+            } else {
+                Common.log("Main guild is already set to: " + ConsoleColor.CYAN + mainGuild.getName() + ConsoleColor.BLACK_BRIGHT + " (" + mainGuild.getId() + ")");
+            }
         }
 
         // Load after the bot has been initialized
