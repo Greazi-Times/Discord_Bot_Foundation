@@ -1,4 +1,4 @@
-# [0.23.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.2...v0.23.0) (2023-05-16)
+# [0.24.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.2...v0.24.0) (2023-05-16)
 
 
 ### Bug Fixes
