@@ -1,3 +1,12 @@
+## [0.23.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.23.1...v0.23.2) (2023-05-17)
+
+
+### Bug Fixes
+
+* updated to JDA - 5.0.0-beta.9 ([77f12d6](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/77f12d6364ce6c535140ba8cef0003e6c39d455a))
+
+
+
 ## [0.23.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.23.0...v0.23.1) (2023-05-16)
 
 
@@ -44,15 +53,6 @@
 * fixed an issue with SimpleRoles ([cb27a75](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/cb27a75d385795dda0ddda4fd6e8f07460091b8e))
 * Made sub commands and options work. ([1e56708](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1e567082e7674869d467806013befc1bb7fcd187))
 * Mainguild system ([eb8dd36](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/eb8dd36945c16a3f77156c4721c3198bbadbbe26))
-
-
-
-## [0.22.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.0...v0.22.1) (2023-02-07)
-
-
-### Bug Fixes
-
-* fixed an issue that caused option data not being added to subcmds ([c81ba2a](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/c81ba2a7d75ea5533dd3abde0690f32124dc050e))
 
 
 
