@@ -151,6 +151,9 @@ public abstract class SimpleBot {
         // Register the bot by Discord
         registerJda(SimpleSettings.Bot.Token(), activityType);
 
+        // Load things the moment the Discord bot is registerd
+        onBotLoad();
+
         // Load the {@link SqlManager}
         sqlManager = new SqlManager();
 
@@ -266,8 +269,6 @@ public abstract class SimpleBot {
 
             // Set selfUser so it can be used later
             self = jda.getSelfUser();
-
-            onBotLoad();
 
             // Log message when the bot is registered
             Common.log("JDA registered");
