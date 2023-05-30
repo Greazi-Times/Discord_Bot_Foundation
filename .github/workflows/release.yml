@@ -48,6 +48,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag: ${{ steps.changelog.outputs.tag }}
-          name: ${{ steps.changelog.outputs.tag }}
+          tag: ${{ steps.changelog.outputs.version }}
+          name: ${{ steps.changelog.outputs.version }}
           body: ${{ steps.changelog.outputs.clean_changelog }}

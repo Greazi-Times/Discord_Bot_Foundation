@@ -53,6 +53,7 @@ public abstract class SimpleBot {
     // Important variables
     private static Guild mainGuild;
     private static SelfUser self;
+    private boolean enabled;
 
     // Handlers
     private static SlashCommandHandler slashCommandHandler;
@@ -64,8 +65,6 @@ public abstract class SimpleBot {
     private static CronHandler cronHandler;
     private static SqlManager sqlManager;
 
-    private boolean enabled;
-
     // ----------------------------------------------------------------------------------------
     // Instance specific
     // ----------------------------------------------------------------------------------------
@@ -73,20 +72,21 @@ public abstract class SimpleBot {
     /**
      * Returns the instance of {@link SimpleBot}.
      * <p>
-     * It is recommended to override this in your own {@link SimpleBot}
+     * You can override this in your own {@link SimpleBot}
      * implementation, so you will get the instance of that, directly.
+     * It is not recommended but if needed you can.
      *
-     * @return this instance
+     * @return Main instance of the Discord bot
      */
     public static SimpleBot getInstance() {
         return instance;
     }
 
     /**
-     * Get if the instance that is used across the library has been set. Normally it
-     * is always set, except for testing.
+     * Check if the instance has been set before proceeding with
+     * your tasks.
      *
-     * @return if the instance has been set.
+     * @return boolean to see if there is an instance
      */
     public static boolean hasInstance() {
         return instance != null;
@@ -97,31 +97,29 @@ public abstract class SimpleBot {
     // ----------------------------------------------------------------------------------------
 
     /**
-     * The main method that is the beginning of the bot
+     * The main method that starts the bot
      * <p>
-     * By default, it will start the bot with the {@link #registerJda(String, Activity)} method
+     * A Discord bot needs the {@link #registerJda(String, Activity)} method to register.
+     * Before the bot registers it will set some things up and than register the bot to ensure
+     * a function Discord bot.
      */
     public SimpleBot() {
+        // Set the bot to startup
         this.enabled = false;
 
+        // Check if the bot has a startup logo
         if (getStartupLogo() != null) {
-            Debugger.debug("StartupLogo", "Startup logo isn't empty");
             Common.logNoPrefix(getStartupLogo());
-        } else {
-            Debugger.debug("StartupLogo", "Startup logo is empty");
         }
 
-        // Load the settings from the config file
+        // Load even before JDA is regsitered
+        onPreLoad();
+
+        // Load all the settings
         SimpleSettings.init();
 
-        // Set the instance of the bot
+        // Setting the instance
         instance = this;
-
-        // Load the sql manager
-        sqlManager = new SqlManager();
-
-        // Load way before the bot starts to avoid any issues
-        onPreLoad();
 
         // Check the activity for the bot
         final Activity activityType;
@@ -150,12 +148,19 @@ public abstract class SimpleBot {
             }
         }
 
-        // Initialize the bot
+        // Register the bot by Discord
         registerJda(SimpleSettings.Bot.Token(), activityType);
 
-        // Get the main guild ID from the settings
+        // Load things the moment the Discord bot is registerd
+        onBotLoad();
+
+        // Load the {@link SqlManager}
+        sqlManager = new SqlManager();
+
+        // Get the main guild from the settings
         final long mainGuildId = SimpleSettings.Bot.MainGuild();
 
+        // Check if the main Guild is configured
         if (mainGuildId == 0L) {
             Common.error(
                     "It seems that you haven't set the main guild ID in the config file!",
@@ -179,68 +184,8 @@ public abstract class SimpleBot {
             }
         }
 
-        // Load after the bot has been initialized
-        onBotLoad();
-
-        // Set up the command manager that handles slash commands
-        setupCommandManager();
-
-        // This is a method that will be ren everytime the bot is reloaded
-        // In here you add all the commands and events
-        /** {@link #onReloadableStart()} */
-        onReload();
-
-        setEnabled();
-
-        // A check if the bot is truly enabled !!!NOT YET FINISHED!!!
-        if (enabled) {
-            // Message that the bot has started
-            Common.success("Bot is ready");
-        } else {
-            Common.error("The bot failed to enable something is wrong!");
-        }
-
-        for (final Command command : getJDA().retrieveCommands().complete()) {
-            Debugger.debug("SlashCommand", command.getName() + "" + command.getDescription());
-        }
-    }
-
-    /**
-     * The pre start of the bot. Register the bot and do some simple checks
-     */
-    public final void setupCommandManager() {
-        Common.log("Setting up the system managers");
-        slashCommandHandler = new SlashCommandHandler();
-        buttonHandler = new ButtonHandler();
-        modalHandler = new ModalHandler();
-        stringSelectMenuHandler = new StringSelectMenuHandler();
-        entitySelectMenuHandler = new EntitySelectMenuHandler();
-        consoleCommandHandler = new ConsoleCommandHandler();
-        cronHandler = new CronHandler();
-        Common.log("System managers have been set up");
-    }
-
-    // TODO: Fix the reload system
-
-    /**
-     * A method that is called when the bot is reloaded
-     */
-    public void onReload() {
-        // Check if the bot is enabled before doing anything
-        if (enabled) {
-            Common.error("The bot is already enabled!");
-            return;
-        }
-
-        // Close old SQL connection safely before opening a new one
-		/*try {
-			sqlManager.getConnection().close();
-		} catch (final SQLException e) {
-			e.printStackTrace();
-		}
-
-		// Create a new SQL connection
-		sqlManager = new SqlManager();*/
+        // Setup the managers for the bot
+        setupManagers();
 
         // Load the static commands
         registerCommands(
@@ -258,17 +203,39 @@ public abstract class SimpleBot {
                 new StopConsoleCommand()
         );
 
-        // Run the onReloadableStart() method
+        // Load the bots matrix
+        onBotStart();
+
+        // Run the method that gets called to load things on startup and reloads
         onReloadableStart();
 
-        // Register commands to JDA
+        // Register all the commands
         slashCommandHandler.registerCommands();
 
-        // Register cron jobs
-        cronHandler.scheduleJobs();
+        // TODO: Make the reload system work
 
-        // A boolean that says the bot is loaded and enabled
-        enabled = true;
+        // Enable the bot
+        // TODO: Add a check to all managers to see if the bot is enabled
+        //       before running command, button, menu, and modal code.
+        // TODO: Change how this method works. only set enabled to true if
+        //       it is really done with everything and no errors accured.
+        //       Adding multiple booleans in this class could do this.
+        //       (separate checks for all systems)
+        setEnabled();
+
+        // A check to see if the bot is succecfully enabled
+        if (enabled) {
+            Common.success("Bot is ready");
+        } else {
+            Common.error("The bot failed to enable something is wrong!");
+        }
+
+        // A debug message to see what command are registered
+        if (Debugger.isDebugged("SlashCommand")) {
+            for (final Command command : getJDA().retrieveCommands().complete()) {
+                Debugger.debug("SlashCommand", command.getName() + "" + command.getDescription());
+            }
+        }
 
         // A log option to show how many things are registered
         Common.log("Loaded a total of " + ConsoleColor.CYAN + getSlashCommandHandler().getTotal() + ConsoleColor.RESET + " slash commands " + ConsoleColor.CYAN + getSlashCommandHandler().getGuildTotal() + ConsoleColor.RESET + " main guild and " + ConsoleColor.CYAN + getSlashCommandHandler().getPublicTotal() + ConsoleColor.RESET + " public");
@@ -279,13 +246,16 @@ public abstract class SimpleBot {
     }
 
     /**
-     * Registration of the bot itself
+     * The registration of the bot by Discord
      *
-     * @param token    = The token of the bot
-     * @param activity = The activity status of the bot
+     * @param token The token from the https://discord.com/developers/applications
+     * @param activity The activity of the bot
      */
     private static void registerJda(final String token, final Activity activity) {
+        // Log message when starting to register the bot
         Common.log("Registering JDA...");
+        
+        // Registering the bot by Discord
         try {
             jda = JDABuilder.createDefault(token)
                     .setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
@@ -297,64 +267,142 @@ public abstract class SimpleBot {
                     .setEventManager(new AnnotatedEventManager())
                     .build().awaitReady();
 
-            // Set self to the bot
+            // Set selfUser so it can be used later
             self = jda.getSelfUser();
+
+            // Log message when the bot is registered
             Common.log("JDA registered");
         } catch (final InterruptedException ex) {
             Common.throwError(ex, "Failed to register JDA");
         }
     }
 
+    /**
+     * Initilization of all managers and handlers
+     */
+    public final void setupManagers() {
+        // Log message to let know managers are starting
+        Common.log("Setting up the system managers");
+
+        slashCommandHandler = new SlashCommandHandler();
+
+        buttonHandler = new ButtonHandler();
+        modalHandler = new ModalHandler();
+
+        stringSelectMenuHandler = new StringSelectMenuHandler();
+        entitySelectMenuHandler = new EntitySelectMenuHandler();
+
+        consoleCommandHandler = new ConsoleCommandHandler();
+
+        cronHandler = new CronHandler();
+
+        // Log message to let know managers are setup
+        Common.log("System managers have been set up");
+    }
+
+    // TODO: Fix the reload system
+
+    /**
+     * Reload the bot, this method stops all systems and
+     * load the important things again.
+     * Database, Settings, cronHandlers
+     */
+    private void reload() {
+        Common.log("Reload has been started");
+
+        // Check if the bot is enabled or not.
+        if (enabled) {
+            Common.log("Stopping systems to reload configuration");
+
+            // TODO: Add system stoppers
+
+            // Disable the bot when everything is disabled
+            enabled = false;
+        }
+
+        // Load things before settings are loaded
+        onBotPreReload();
+
+        // Load after settings have loaded
+        onBotReload();
+
+        // TODO: Add enable methods
+
+        // Close old SQL connection safely before opening a new one
+		/*try {
+			sqlManager.getConnection().close();
+		} catch (final SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Create a new SQL connection
+		sqlManager = new SqlManager();*/
+
+        // Load when everything has been setup and final things need to happen
+        onReloadableStart();
+
+        // Register cron jobs
+        cronHandler.scheduleJobs();
+
+        // A boolean that says the bot is loaded and enabled
+        enabled = true;
+    }
+
+    /**
+     * Stop the bot, this method will stop the bot and will
+     * disable the Discord bot.
+     * Using this method will ensure the bot stops and saves
+     * all its data before stopping everything.
+     */
     public void stop() {
+        // Log message to let know the bot is stopping
+        Common.log("Stopping the bot");
+
+        // Stopping cron jobs
+        cronHandler.stop();
+
+        // Stop code that needs to be run when stopping the bot.
+        onBotStop();
+
+        // Create a new thread for timing purposes
         new Thread(() -> {
+            // Log message to let know when the bot is stopping
             Common.log("Stopping JDA");
+
+            // Starting to shutdown JDA
             jda.shutdown();
 
+            // Set a loop for the time-out
             int jdaShutdownTimeout = 0;
             while (jda.getStatus() != JDA.Status.SHUTDOWN) {
+                // Check if the limit of 15 sec is reached
                 if (jdaShutdownTimeout > 15) {
                     Common.warning("JDA shutdown timeout reached, forcing shutdown");
                     jda.shutdownNow();
                     break;
                 }
 
+                // Wait a second
                 try {
                     Thread.sleep(1000);
                 } catch (final InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                // Counting 1 up for the timeout counter
                 jdaShutdownTimeout++;
             }
+
+            // Log message to let know JDA has been stoped
             Common.log("JDA stopped");
 
-            cronHandler.stop();
-
-            int cronShutdownTimeout = 0;
-            while (!cronHandler.isShutdown()) {
-                if (cronShutdownTimeout > 15) {
-                    Common.warning("Cron shutdown timeout reached, forcing shutdown");
-                    break;
-                }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (final InterruptedException e) {
-                    e.printStackTrace();
-                }
-                cronShutdownTimeout++;
-            }
-
-            try {
-                Thread.sleep(1000);
-            } catch (final InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Common.log("Stopping bot it self");
-            System.exit(0);
         }).start();
 
-        onBotStop();
+        // Log message to let know the bot is not finished shutting down
+        Common.log("The bot is succefully been shutdown. Good bye!");
+
+        // Stopping the jar
+        System.exit(0);
     }
 
     // ----------------------------------------------------------------------------------------
@@ -362,7 +410,7 @@ public abstract class SimpleBot {
     // ----------------------------------------------------------------------------------------
 
     /**
-     * Register a new command in the slash command list
+     * Register a new slash command
      *
      * @param command SimpleSlashCommand
      */
@@ -371,7 +419,7 @@ public abstract class SimpleBot {
     }
 
     /**
-     * Register new commands in the slash command list at once
+     * Register new slash commands at once
      *
      * @param commands SimpleSlashCommands
      */
@@ -382,79 +430,7 @@ public abstract class SimpleBot {
     }
 
     /**
-     * Register a new button in the button list
-     *
-     * @param button SimpleButton
-     * @deprecated Use build() instead
-     */
-    @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerButton(final SimpleButton button) {
-        getButtonHandler().addButtonListener(button);
-    }
-
-    /**
-     * Register new buttons in the button list at once
-     *
-     * @param buttons SimpleButton
-     * @deprecated Use build() instead
-     */
-    @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerButtons(final SimpleButton... buttons) {
-        for (final SimpleButton button : buttons) {
-            getButtonHandler().addButtonListener(button);
-        }
-    }
-
-    /**
-     * Register a new menu in the menu list
-     *
-     * @param menu SimpleSelectMenu
-     * @deprecated Use build() instead
-     */
-    @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerMenu(final SimpleStringSelectMenu menu) {
-        getStringSelectMenuHandler().addMenuListener(menu);
-    }
-
-    /**
-     * Register new menus in the menu list at once
-     *
-     * @param menus SimpleSelectMenu
-     * @deprecated Use build() instead
-     */
-    @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerMenus(final SimpleStringSelectMenu... menus) {
-        for (final SimpleStringSelectMenu menu : menus) {
-            getStringSelectMenuHandler().addMenuListener(menu);
-        }
-    }
-
-    /**
-     * Register a new modal in the modal list
-     *
-     * @param modal SimpleModal
-     * @deprecated Use build() instead
-     */
-    @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerModal(final SimpleModal modal) {
-        getModalHandler().addModalListener(modal);
-    }
-
-    /**
-     * Register new modals in the modal list at once
-     *
-     * @param modals SimpleModal
-     * @deprecated Use build() instead
-     */
-    @Deprecated(since = "2.0.0", forRemoval = true)
-    protected final void registerModals(final SimpleModal... modals) {
-        for (final SimpleModal modal : modals) {
-            getModalHandler().addModalListener(modal);
-        }
-    }
-
-    /**
-     * Register a new console command in the console command list
+     * Register a new console command
      *
      * @param command SimpleConsoleCommand
      */
@@ -463,7 +439,7 @@ public abstract class SimpleBot {
     }
 
     /**
-     * Register new console commands in the console commands list
+     * Register new console commands at once
      *
      * @param commands SimpleConsoleCommand
      */
@@ -485,12 +461,10 @@ public abstract class SimpleBot {
 
 
     /**
-     * Called just before the bot starts
+     * Called the moment JDA is registerd
      */
     protected void onBotLoad() {
     }
-
-    //Copyright
 
     /**
      * The main loading method, called when we are ready to load
@@ -544,6 +518,7 @@ public abstract class SimpleBot {
     /**
      * Set the bot as status enabled
      */
+    // Needs to be deprecated
     private void setEnabled() {
         this.enabled = true;
     }
@@ -580,9 +555,9 @@ public abstract class SimpleBot {
     }
 
     /**
-     * Retrieve the bot members self
+     * Retrieve the bot its self as a User
      *
-     * @return Self
+     * @return User The bot it self
      */
     public static SelfUser getSelf() {
         return self;
