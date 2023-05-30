@@ -307,7 +307,7 @@ public abstract class SimpleBot {
      * Database, Settings, cronHandlers
      */
     private void reload() {
-        Common.log("Reload has been started")
+        Common.log("Reload has been started");
 
         // Check if the bot is enabled or not.
         if (enabled) {
