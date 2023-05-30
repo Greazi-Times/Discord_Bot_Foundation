@@ -316,14 +316,14 @@ public abstract class SimpleBot {
             // TODO: Add system stoppers
 
             // Disable the bot when everything is disabled
-            enabled = false
+            enabled = false;
         }
 
         // Load things before settings are loaded
-        onBotPreReload()
+        onBotPreReload();
 
         // Load after settings have loaded
-        onBotReload()
+        onBotReload();
 
         // TODO: Add enable methods
 
@@ -355,7 +355,7 @@ public abstract class SimpleBot {
      */
     public void stop() {
         // Log message to let know the bot is stopping
-        Common.log("Stopping the bot")
+        Common.log("Stopping the bot");
 
         // Stopping cron jobs
         cronHandler.stop();
@@ -398,7 +398,7 @@ public abstract class SimpleBot {
         }).start();
 
         // Log message to let know the bot is not finished shutting down
-        Common.log("The bot is succefully been shutdown. Good bye!")
+        Common.log("The bot is succefully been shutdown. Good bye!");
 
         // Stopping the jar
         System.exit(0);
