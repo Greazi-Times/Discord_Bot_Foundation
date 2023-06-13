@@ -25,7 +25,6 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           template: 'avatar-with-link'
-          include-extras: true
 
       # Setup JDK 18 to build the project
       - name: Set up JDK 17
