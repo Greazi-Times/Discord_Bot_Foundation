@@ -78,22 +78,22 @@ public abstract class SimpleButton {
     /**
      * Set the roles that can use this button
      */
-    private List<Role> enabledRoles = new ArrayList<>();
+    private List<Role> allowedRoles = new ArrayList<>();
 
     /**
      * Set the users that can use this button
      */
-    private List<User> enabledUsers = new ArrayList<>();
+    private List<User> allowedUsers = new ArrayList<>();
 
     /**
      * Set the roles that can not use this button
      */
-    private List<Role> disabledRoles = new ArrayList<>();
+    private List<Role> blockedRoles = new ArrayList<>();
 
     /**
      * Set the users that can not use this button
      */
-    private List<User> disabledUsers = new ArrayList<>();
+    private List<User> blockedUsers = new ArrayList<>();
 
     private Member member = null;
     private User user = null;
@@ -104,13 +104,35 @@ public abstract class SimpleButton {
     // ----------------------------------------------------------------------------------------
 
     public final boolean execute(final ButtonInteractionEvent event) {
-        // TODO: Add the checks for the button in here
         this.member = event.getMember();
         this.user = event.getUser();
         this.guild = event.getGuild();
 
-        this.onButtonInteract(event);
-        return true;
+        if (this.guildOnly && !event.isFromGuild()) {
+            event.replyEmbeds(
+                    new SimpleEmbedBuilder("Main Guild Only", false)
+                            .text("This command can only be used in the main guild of the bot")
+                            .build()
+            ).setEphemeral(true).queue();
+            return false;
+        }
+
+        boolean canUse = true;
+
+        if (!this.allowedUsers.isEmpty() && !this.allowedUsers.contains(event.getUser())) canUse = false;
+        if (!this.blockedUsers.isEmpty() && this.blockedUsers.contains(event.getUser())) canUse = false;
+
+        if (canUse) {
+            this.onButtonInteract(event);
+            return true;
+        } else {
+            event.replyEmbeds(
+                    new SimpleEmbedBuilder("Missing Permissions", false)
+                            .text("You are not allowed to execute this button")
+                            .build()
+            ).setEphemeral(true).queue();
+            return false;
+        }
     }
 
     /**
@@ -193,53 +215,53 @@ public abstract class SimpleButton {
      * Set the list of roles that can use this button
      */
     public void enabledRoles(final List<Role> roles) {
-        this.enabledRoles = roles;
+        this.allowedRoles = roles;
     }
 
     /**
      * Set the list of roles that can use this button
      */
     public void enabledRoles(final Role... roles) {
-        this.enabledRoles = Arrays.asList(roles);
+        this.allowedRoles = Arrays.asList(roles);
     }
 
     public void enabledUsers(final List<User> users) {
-        this.enabledUsers = users;
+        this.allowedUsers = users;
     }
 
     /**
      * Set the list users that can use this button
      */
     public void enabledUsers(final User... users) {
-        this.enabledUsers = Arrays.asList(users);
+        this.allowedUsers = Arrays.asList(users);
     }
 
     /**
      * Set the list of roles that can not use the button
      */
     public void disabledRoles(final Role... roles) {
-        this.disabledRoles = Arrays.asList(roles);
+        this.blockedRoles = Arrays.asList(roles);
     }
 
     /**
      * Set the list of roles that can not use the button
      */
     public void disabledRoles(final List<Role> roles) {
-        this.disabledRoles = roles;
+        this.blockedRoles = roles;
     }
 
     /**
      * Set the list of users that can not use the button
      */
     public void disabledUsers(final User... users) {
-        this.disabledUsers = Arrays.asList(users);
+        this.blockedUsers = Arrays.asList(users);
     }
 
     /**
      * Set the list of users that can not use the button
      */
     public void disabledUsers(final List<User> users) {
-        this.disabledUsers = users;
+        this.blockedUsers = users;
     }
 
     // ----------------------------------------------------------------------------------------
@@ -314,8 +336,8 @@ public abstract class SimpleButton {
      *
      * @return the allowed roles
      */
-    protected final List<Role> getEnabledRoles() {
-        return enabledRoles;
+    protected final List<Role> getAllowedRoles() {
+        return allowedRoles;
     }
 
     /**
@@ -323,8 +345,8 @@ public abstract class SimpleButton {
      *
      * @return the allowed users
      */
-    protected final List<User> getEnabledUsers() {
-        return enabledUsers;
+    protected final List<User> getAllowedUsers() {
+        return allowedUsers;
     }
 
     /**
@@ -332,8 +354,8 @@ public abstract class SimpleButton {
      *
      * @return the disallowed roles
      */
-    protected final List<Role> getDisabledRoles() {
-        return disabledRoles;
+    protected final List<Role> getDisallowedRoles() {
+        return blockedRoles;
     }
 
     /**
@@ -341,8 +363,8 @@ public abstract class SimpleButton {
      *
      * @return the disallowed users
      */
-    protected final List<User> getDisabledUsers() {
-        return disabledUsers;
+    protected final List<User> getDisallowedUsers() {
+        return blockedUsers;
     }
 
     protected final Member getMember() {
