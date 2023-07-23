@@ -701,11 +701,20 @@ public abstract class SimpleBot {
     }
 
     /**
-     * Retrieve the version of the bot
+     * Get the version of the bot
+     *
+     * @return 1.0.0 by default, or the version
+     */
+    public String getVersion() {
+        return "1.0.0";
+    }
+
+    /**
+     * Retrieve the version of the foundation
      *
      * @return Version
      */
-    public static String getVersion() {
+    public static String getFoundationVersion() {
         return Constants.Version.FOUNDATION;
     }
 
