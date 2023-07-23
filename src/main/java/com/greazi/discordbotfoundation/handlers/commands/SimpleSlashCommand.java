@@ -7,6 +7,7 @@
 
 package com.greazi.discordbotfoundation.handlers.commands;
 
+import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.annotations.Disabled;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -64,6 +65,10 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
     
     private List<Permission> permissions = new ArrayList<>();
 
+    private List<User> allowedUsers = new ArrayList<>();
+
+    private List<User> blockedUsers = new ArrayList<>();
+
     /**
      * The category of the command
      */
@@ -80,13 +85,35 @@ public abstract class SimpleSlashCommand extends ListenerAdapter {
     // ----------------------------------------------------------------------------------------
 
     public final boolean execute(final SlashCommandInteractionEvent event) {
-        // TODO: Add the check for the command in here
         this.member = event.getMember();
         this.user = event.getUser();
         this.guild = event.getGuild();
 
-        this.onCommand(event);
-        return true;
+        if (this.guildOnly && !event.isFromGuild()) {
+            event.replyEmbeds(
+                    new SimpleEmbedBuilder("Main Guild Only", false)
+                            .text("This command can only be used in the main guild of the bot")
+                            .build()
+            ).setEphemeral(true).queue();
+            return false;
+        }
+
+        boolean canUse = true;
+
+        if (!this.allowedUsers.isEmpty() && !this.allowedUsers.contains(event.getUser())) canUse = false;
+        if (!this.blockedUsers.isEmpty() && this.blockedUsers.contains(event.getUser())) canUse = false;
+
+        if (canUse) {
+            this.onCommand(event);
+            return true;
+        } else {
+            event.replyEmbeds(
+                    new SimpleEmbedBuilder("Missing Permissions", false)
+                            .text("You are not allowed to execute this command")
+                            .build()
+            ).setEphemeral(true).queue();
+            return false;
+        }
     }
 
     /**
