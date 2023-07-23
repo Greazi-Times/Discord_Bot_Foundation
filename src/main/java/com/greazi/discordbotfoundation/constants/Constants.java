@@ -25,6 +25,6 @@ public final class Constants {
 	 */
 	public static final class Version {
 		// The version
-		public static final String FOUNDATION = "1.0.0";
+		public static final String FOUNDATION = "0.24.0";
 	}
 }
