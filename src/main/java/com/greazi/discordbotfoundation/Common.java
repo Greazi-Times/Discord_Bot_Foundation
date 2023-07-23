@@ -1,6 +1,7 @@
 package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.debug.FoException;
+import com.greazi.discordbotfoundation.settings.SimpleSettings;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
 import com.greazi.discordbotfoundation.utils.time.TimeUtil;
@@ -8,6 +9,11 @@ import lombok.Getter;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -164,9 +170,11 @@ public final class Common {
                 final LocalTime localTime = LocalTime.now();
 
                 if (addLogPrefix && ADD_LOG_PREFIX) {
-                    System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.GREEN + logPrefix + ConsoleColor.RESET + " " + part + ConsoleColor.RESET);
+                    System.out.println(ConsoleColor.WHITE + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.GREEN + logPrefix + ConsoleColor.RESET + " " + part + ConsoleColor.RESET);
+                    saveToFile("[" + dtf.format(localTime) + "] " + logPrefix + " " + part);
                 } else {
-                    System.out.println(ConsoleColor.BLACK_BRIGHT + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.RESET + part + ConsoleColor.RESET);
+                    System.out.println(ConsoleColor.WHITE + dtf.format(localTime) + ConsoleColor.BLACK_BRIGHT + " " + ConsoleColor.RESET + part + ConsoleColor.RESET);
+                    saveToFile("[" + dtf.format(localTime) + "] " + part);
                 }
             }
         }
@@ -203,6 +211,7 @@ public final class Common {
     public static void logFramed(final boolean disableBot, final String... messages) {
         if (messages != null && !Valid.isNullOrEmpty(messages)) {
             logNoPrefix(ConsoleColor.BLACK_BRIGHT + consoleLine());
+
             for (final String msg : messages)
                 logNoPrefix(msg + ConsoleColor.RESET);
 
@@ -414,6 +423,61 @@ public final class Common {
         }
 
         return parts.split(delimiter);
+    }
+
+    private static String getCurrentDateTime(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        return "<"+dtf.format(now)+"> ";
+    }
+
+    public static void saveToFile(String message) {
+        if (!SimpleSettings.Console.logConsole) return;
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        String currentDate = dtf.format(now);
+
+        String location = new File(SimpleBot.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getPath();
+
+
+        // Get the location of the .jar file
+        String jarFilePath = SimpleBot.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        // Decode the URL-encoded path (if needed)
+        try {
+            jarFilePath = java.net.URLDecoder.decode(jarFilePath, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException ex) {
+            // Handle the exception if decoding fails
+            throwError(ex, "Failed to decode the .jar file path.");
+        }
+
+        // If the .jar is run from the command line, the path will include the .jar file name,
+        // so we need to remove it to get the folder location.
+        File jarFile = new File(jarFilePath);
+        String jarFolder = jarFile.getParent();
+
+        String logPath = jarFolder + "/logs/";
+
+        File file = new File(logPath);
+
+        if(!file.exists()){
+            try{
+                file.mkdir();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        try{
+            FileWriter fw = new FileWriter(logPath+"/"+currentDate+".log", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(message.replaceAll("\u001B\\[[;\\d]*m", ""));
+            bw.newLine();
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
 

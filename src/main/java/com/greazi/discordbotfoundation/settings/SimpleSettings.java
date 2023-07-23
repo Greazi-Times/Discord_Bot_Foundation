@@ -305,6 +305,8 @@ public class SimpleSettings {
         // Set the main path of the settings values
         private static final String consolePath = "Console.";
 
+        public static boolean logConsole = getBoolean(consolePath + "LogConsole");
+
         public static class Commands {
 
             // Set the main path of the settings values
