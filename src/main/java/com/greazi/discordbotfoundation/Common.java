@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * This class holds some pre-made log and message send modules
+ * This class holds some pre-made modules
  */
 public final class Common {
 
@@ -45,17 +45,13 @@ public final class Common {
     /**
      * Set the log prefix applied for messages in the console from log() methods.
      * <p>
-     * Colors with & letter are translated automatically.
+     * Default output is [INFO]
      *
      * @param prefix
      */
     public static void setLogPrefix(final String prefix) {
         logPrefix = prefix;
     }
-
-    // ------------------------------------------------------------------------------------------------------------
-    // Aesthetics
-    // ------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns a long ------ console line
