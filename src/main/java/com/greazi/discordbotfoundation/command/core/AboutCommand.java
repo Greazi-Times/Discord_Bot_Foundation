@@ -34,7 +34,7 @@ public class AboutCommand extends SimpleSlashCommand {
 
         embed.text("This bot uses the [Discord Bot Foundation](https://github.com/Greazi-Times/Discord_Bot_Foundation) version: " + Constants.Version.FOUNDATION + "\n\nBot information:");
         embed.field("Bot name", SimpleSettings.Bot.Name(), true);
-        embed.field("Bot version", SimpleBot.getVersion(), true);
+        embed.field("Bot version", SimpleBot.getInstance().getVersion(), true);
         embed.field("Developer", SimpleBot.getInstance().getDeveloperName(), true);
         if (SimpleBot.getInstance().getFoundedYear() != -1)
             embed.field("Founded", SimpleBot.getInstance().getDeveloperName(), true);
