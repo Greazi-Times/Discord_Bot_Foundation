@@ -1,3 +1,12 @@
+## [0.24.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.24.0...v0.24.1) (2023-08-01)
+
+
+### Bug Fixes
+
+* Moved SimpleRoles to another package ([7b39cb0](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/7b39cb01ba42263d629e3b9e551ad3d8edeea06c))
+
+
+
 # [0.24.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.23.2...v0.24.0) (2023-07-23)
 
 
@@ -49,16 +58,6 @@
 * added Entity menu system ([9fab8eb](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/9fab8ebe112f6ead97e5133339c3c9a0562206b2))
 * Added Entity menu's ([d895e81](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d895e81855dba0b511913aa85ff8fabcbedc07b4))
 * Added permissions to SlashCommand ([48d8ff1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/48d8ff17813c3e9a6cdd64a61da4d5bff59b7d71))
-
-
-
-## [0.22.3](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.2...v0.22.3) (2023-03-22)
-
-
-### Bug Fixes
-
-* Fixed all roles method ([e7c9ae9](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e7c9ae958e4c995baad6bb8201d639eb8152d6a3))
-* fixed an issue in the main gulid ([1765568](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1765568e4b7bec4c9aa35990d1643ebb1e34f3a7))
 
 
 
