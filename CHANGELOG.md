@@ -1,3 +1,20 @@
+# [0.24.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.23.2...v0.24.0) (2023-07-23)
+
+
+### Bug Fixes
+
+* fixed check for mainguild and permission check ([0aa95d0](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/0aa95d0cafb8c2cecbf89a55d4478d6054d31394))
+* fixed the main guild only check and permission check ([f29ee90](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/f29ee90f60b3aa37c68837094bac2fdf2eb846cf))
+* fixed verion in about command ([a1f39c8](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/a1f39c86b3534be3df55f84f66d4626f44a35251))
+* version getter has been fixed ([c0aefb1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/c0aefb1de429a2dc26d6ca90b66edea910e9b6b4))
+
+
+### Features
+
+* Added log to file option for messages send to console ([177b51b](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/177b51bde19cc40ce5bae20dbbe2b7104b30a3bc))
+
+
+
 ## [0.23.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.23.1...v0.23.2) (2023-05-17)
 
 
@@ -42,17 +59,6 @@
 
 * Fixed all roles method ([e7c9ae9](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/e7c9ae958e4c995baad6bb8201d639eb8152d6a3))
 * fixed an issue in the main gulid ([1765568](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1765568e4b7bec4c9aa35990d1643ebb1e34f3a7))
-
-
-
-## [0.22.2](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.1...v0.22.2) (2023-02-17)
-
-
-### Bug Fixes
-
-* fixed an issue with SimpleRoles ([cb27a75](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/cb27a75d385795dda0ddda4fd6e8f07460091b8e))
-* Made sub commands and options work. ([1e56708](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1e567082e7674869d467806013befc1bb7fcd187))
-* Mainguild system ([eb8dd36](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/eb8dd36945c16a3f77156c4721c3198bbadbbe26))
 
 
 
