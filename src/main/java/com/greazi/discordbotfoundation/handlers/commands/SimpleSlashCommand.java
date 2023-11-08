@@ -24,14 +24,152 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A slash command creator to simply create your slash command
+ * Command creation system
  */
 public abstract class SimpleSlashCommand extends ListenerAdapter {
 
+    /**
+     * The command name, eg. /about or /ping
+     */
+    private final String command
+    
+    /**
+	 * You can set the cooldown time before executing the command again. This map
+	 * stores the player uuid and his last execution of the command.
+	 */
+    private final ExpiringMap<User, Long> cooldownMap = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
+
+    /**
+     * The command cooldown before we can run this command again
+     */
+    @Getter
+    private int cooldownSeconds = 0;
+    
+    /**
+     * The users that are allowd to bypass this command's cooldown, if it is set
+     */
+    private List<User> cooldownBypassUsers = null
+    
+    /**
+     * The permissions that are allowd to bypass this command's cooldown, if it is set
+     */
+    private List<Permission> cooldownBypassPermission = null
+    
+    /**
+	 * A custom message when the user attempts to run this command
+	 * within {@link #cooldownSeconds}. By default we use the line below
+	 * <p>
+	 * TIP: Use {duration} to replace the remaining time till next run
+	 */
+    private String cooldownMessage = "The command you used is in cooldow you can use this command after {duration}";
+    
+    /**
+     * Send the cooldownMessage in a embed or as a normal message
+     */
+    private boolean cooldownMessageAsEmbed = true
+    
+    /**
+     * If the command can only be ran in the main guild of the bot
+     * <p>
+     * The mainGuild is set inside {@link SimpleBot#setMainGuild}
+     */
+    private boolean mainGuildOnly = false;
+    
+    /**
+     * Users that can't use this command
+     */
+    private List<User> disabledUsers = null
+    
+    /**
+     * Roles that can't use this command
+     */
+    private List<Role> disabledRoles = null;
+    
+    /**
+     * Channels that aren't allowed to use this command
+     */
+    private List<Channel> disabledChannels = null
+    
+    /**
+     * Users that are allowed use this command
+     */
+    private List<User> allowedUsers = null;
+    
+    /**
+     * Roles that are allowed use this command
+     */
+    private List<Role> allowedRoles = null;
+    
+    /**
+     * Channels where this command is allowed
+     */
+    private List<Channel> allowedChannels = null;
+    
     // ----------------------------------------------------------------------------------------
-    // Main options
+    // Temporary variables
+    // ----------------------------------------------------------------------------------------
+    
+    /**
+     * The command User
+     * <p>
+     * This variable is set dynamically when the command is run with the
+     * last known user
+     */
+    protected User user;
+    
+    /**
+     * The command Member
+     * <p>
+     * This variable is set dynamically when the command is run with the
+     * last known member
+     */
+    protected Member member;
+    
+    /**
+     * The command Guild
+     * <p>
+     * This variable is set dynamically when the command is run with the
+     * last known guild
+     */
+    protected Guilg guild;
+    
+    // ----------------------------------------------------------------------------------------    
+    
+    /**
+     * The main method to create the command
+     */
+    protected SimpleSlashCommand(final String command) {
+        super(command)
+        
+        this.command = command;
+        
+    }
+ 
+    // ----------------------------------------------------------------------------------------
+    // Registration
+    // ----------------------------------------------------------------------------------------
+    // TODO: Register command
+
+    // ----------------------------------------------------------------------------------------
+    // Execution
+    // ----------------------------------------------------------------------------------------
+    
+    // TODO: Check if its possible to extend SlashCommandInteractionEvent
+    @Override
+    public final boolean execute(final SlashCommandInteractionEvent event) {
+        this.user = event.getuser();
+        this.member = event.getMember();
+        this.guild = event.getGuild();
+        
+    }
+    
+    
+    // ----------------------------------------------------------------------------------------
+    // OLD SYSTEM
     // ----------------------------------------------------------------------------------------
 
+    
+    
     /**
      * The actual command itself
      */
