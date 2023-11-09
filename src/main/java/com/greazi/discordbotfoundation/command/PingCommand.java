@@ -5,11 +5,7 @@
  * Proprietary and confidential
  */
 
-package com.greazi.discordbotfoundation.command.general;
-
-import com.greazi.discordbotfoundation.handlers.commands.SimpleSlashCommand;
-import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+package com.greazi.discordbotfoundation.command;
 
 import java.awt.*;
 
@@ -17,23 +13,18 @@ import java.awt.*;
  * A simple ping command to get the latency of the bot
  * The message output can be changed by overriding this file!
  */
-public class PingCommand extends SimpleSlashCommand {
+public class PingCommand extends SimpleCommand {
 
     /**
      * Default enabled can not be disabled.
      */
     public PingCommand() {
         super("ping");
-        description("Test the latency of the bot");
+        setDescription("Get the latency of the bot");
     }
 
-    /**
-     * The main code of the ping command
-     *
-     * @param event SlashCommandInteractionEvent
-     */
     @Override
-    protected void onCommand(final SlashCommandInteractionEvent event) {
+    protected void onCommand() {
         event.replyEmbeds(new SimpleEmbedBuilder("Bot latency")
                 .text("Gateway: " + event.getJDA().getGatewayPing(),
                         "Rest: " + event.getJDA().getRestPing().complete(),
