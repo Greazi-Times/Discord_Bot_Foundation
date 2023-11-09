@@ -16,34 +16,34 @@ public class TempStorage {
         return folder;
     }
 
-    public static void saveFile(File file) {
+    public static void saveFile(final File file) {
         try {
             FileUtils.copyFile(file, new File(folder + "/" + file.getName()));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void deleteFile(File file) {
+    public static void deleteFile(final File file) {
         try {
             FileUtils.forceDelete(file);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void saveText(String text, String fileName) {
-        try{
+    public static void saveText(final String text, final String fileName) {
+        try {
             FileUtils.writeStringToFile(new File(folder + "/" + fileName), text, StandardCharsets.UTF_8);
-        }catch (Exception e){
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static @Nullable String readText(String fileName) {
-        try{
+    public static @Nullable String readText(final String fileName) {
+        try {
             return FileUtils.readFileToString(new File(folder + "/" + fileName), StandardCharsets.UTF_8);
-        }catch (Exception e){
+        } catch (final Exception e) {
             e.printStackTrace();
             return null;
         }

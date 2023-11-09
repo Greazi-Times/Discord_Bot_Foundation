@@ -1,10 +1,5 @@
 package com.greazi.discordbotfoundation;
 
-import com.greazi.discordbotfoundation.debug.FoException;
-import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
-import com.greazi.discordbotfoundation.utils.color.ConsoleColor;
-import com.greazi.discordbotfoundation.utils.time.TimeUtil;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -245,8 +239,8 @@ public final class Common {
             t = t.getCause();
 
         // Delegate to only print out the relevant stuff
-        if (t instanceof FoException)
-            throw (FoException) t;
+        if (t instanceof BotException)
+            throw (BotException) t;
 
         if (messages != null)
             logFramed(false, replaceErrorVariable(t, messages));
@@ -385,7 +379,7 @@ public final class Common {
             SneakyThrow.sneaky(throwable);
 
         } catch (final NoClassDefFoundError | NoSuchFieldError | NoSuchMethodError err) {
-            throw new FoException(throwable);
+            throw new BotException(throwable);
         }
     }
 
@@ -400,7 +394,7 @@ public final class Common {
      */
     @Deprecated
     public static String[] splitNewline(final String message) {
-        if (!SimpleBot.getInstance().enforceNewLine())
+        if (!com.greazi.old.SimpleBot.getInstance().enforceNewLine())
             return message.split("\n");
 
         final String delimiter = "GREAZIWASHERE";
@@ -425,20 +419,20 @@ public final class Common {
         return parts.split(delimiter);
     }
 
-    private static String getCurrentDateTime(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        return "<"+dtf.format(now)+"> ";
+    private static String getCurrentDateTime() {
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        final LocalDateTime now = LocalDateTime.now();
+        return "<" + dtf.format(now) + "> ";
     }
 
-    public static void saveToFile(String message) {
+    public static void saveToFile(final String message) {
         if (!SimpleSettings.Console.logConsole) return;
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime now = LocalDateTime.now();
-        String currentDate = dtf.format(now);
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        final LocalDateTime now = LocalDateTime.now();
+        final String currentDate = dtf.format(now);
 
-        String location = new File(SimpleBot.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getPath();
+        final String location = new File(com.greazi.old.SimpleBot.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getPath();
 
 
         // Get the location of the .jar file
@@ -447,35 +441,35 @@ public final class Common {
         // Decode the URL-encoded path (if needed)
         try {
             jarFilePath = java.net.URLDecoder.decode(jarFilePath, "UTF-8");
-        } catch (java.io.UnsupportedEncodingException ex) {
+        } catch (final java.io.UnsupportedEncodingException ex) {
             // Handle the exception if decoding fails
             throwError(ex, "Failed to decode the .jar file path.");
         }
 
         // If the .jar is run from the command line, the path will include the .jar file name,
         // so we need to remove it to get the folder location.
-        File jarFile = new File(jarFilePath);
-        String jarFolder = jarFile.getParent();
+        final File jarFile = new File(jarFilePath);
+        final String jarFolder = jarFile.getParent();
 
-        String logPath = jarFolder + "/logs/";
+        final String logPath = jarFolder + "/logs/";
 
-        File file = new File(logPath);
+        final File file = new File(logPath);
 
-        if(!file.exists()){
-            try{
+        if (!file.exists()) {
+            try {
                 file.mkdir();
-            }catch (Exception e){
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
 
-        try{
-            FileWriter fw = new FileWriter(logPath+"/"+currentDate+".log", true);
-            BufferedWriter bw = new BufferedWriter(fw);
+        try {
+            final FileWriter fw = new FileWriter(logPath + "/" + currentDate + ".log", true);
+            final BufferedWriter bw = new BufferedWriter(fw);
             bw.write(message.replaceAll("\u001B\\[[;\\d]*m", ""));
             bw.newLine();
             bw.close();
-        }catch (Exception e){
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
