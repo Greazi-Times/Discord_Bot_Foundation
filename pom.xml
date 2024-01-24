@@ -8,7 +8,7 @@
     <artifactId>discordbotfoundation</artifactId>
 
     <name>DiscordBotFoundation</name>
-    <version>1.0.0-DEV1</version>
+    <version>1.0.0-DEV_17</version>
     <packaging>jar</packaging>
 
     <properties>
