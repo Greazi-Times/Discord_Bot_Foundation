@@ -1,3 +1,13 @@
+# [0.25.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.24.1...v0.25.0) (2024-01-24)
+
+
+### Features
+
+* Updated String menu to new event listener ([36fd08e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/36fd08eaff87ee55093734036945a87fde9b6934))
+* Updated to latest library versions ([2673f32](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/2673f329da8638e7f8091079737294ef9e5d88cf))
+
+
+
 ## [0.24.1](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.24.0...v0.24.1) (2023-08-01)
 
 
@@ -39,25 +49,6 @@
 ### Bug Fixes
 
 * Console == null ([19c570f](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/19c570f14c733231cfa547730aace18726775b2d))
-
-
-
-# [0.23.0](https://github.com/Greazi-Times/Discord_Bot_Foundation/compare/v0.22.3...v0.23.0) (2023-05-16)
-
-
-### Bug Fixes
-
-* fixed mainguild system. ([3afdd18](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/3afdd181d4b9878d9e8ddf0bc14a03b40cb0c3ca))
-* fixed the main guild system ([1c6425e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/1c6425eebc2bca80873fcab802dc27b35b787ee5))
-* NotNull arguments for method dm(...) ([40092f4](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/40092f446e6a601761a7a2b4121ca35e9d565011))
-
-
-### Features
-
-* Adde permissions to slashCommands ([971c74e](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/971c74e952f1c27113b8b2fb7add915760387a96))
-* added Entity menu system ([9fab8eb](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/9fab8ebe112f6ead97e5133339c3c9a0562206b2))
-* Added Entity menu's ([d895e81](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/d895e81855dba0b511913aa85ff8fabcbedc07b4))
-* Added permissions to SlashCommand ([48d8ff1](https://github.com/Greazi-Times/Discord_Bot_Foundation/commit/48d8ff17813c3e9a6cdd64a61da4d5bff59b7d71))
 
 
 
