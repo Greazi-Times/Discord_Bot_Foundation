@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectInteraction;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
@@ -35,7 +36,7 @@ public abstract class SimpleStringSelectMenu {
      *
      * @param event StringSelectInteraction
      */
-    public final boolean execute(final StringSelectInteraction event) {
+    public final boolean execute(final StringSelectInteractionEvent event) {
         this.member = event.getMember();
         this.user = event.getUser();
         this.guild = event.getGuild();
@@ -45,7 +46,7 @@ public abstract class SimpleStringSelectMenu {
         return true;
     }
 
-    protected abstract void onMenuInteract(StringSelectInteraction event);
+    protected abstract void onMenuInteract(StringSelectInteractionEvent event);
 
     // ----------------------------------------------------------------------------------------
     // Setters
