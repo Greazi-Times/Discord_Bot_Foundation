@@ -4,6 +4,10 @@
 
 package com.greazi.discordbotfoundation.debug;
 
+import com.greazi.discordbotfoundation.Common;
+import com.greazi.discordbotfoundation.SimpleBot;
+import com.greazi.discordbotfoundation.settings.SimpleSettings;
+import com.greazi.discordbotfoundation.utils.ConsoleColor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;

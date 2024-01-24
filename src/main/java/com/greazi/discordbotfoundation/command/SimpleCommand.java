@@ -1,7 +1,12 @@
 package com.greazi.discordbotfoundation.command;
 
+import com.greazi.discordbotfoundation.Common;
+import com.greazi.discordbotfoundation.SimpleBot;
+import com.greazi.discordbotfoundation.debug.Debugger;
+import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
+import com.greazi.discordbotfoundation.utils.Valid;
+import com.greazi.discordbotfoundation.utils.expiringmap.ExpiringMap;
 import lombok.Getter;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -11,9 +16,9 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.channels.Channel;
 import java.util.ArrayList;
@@ -31,23 +36,24 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * Example: /about or /info user Greazi
  */
-public abstract class SimpleCommand extends ListenerAdapter {
+public abstract class SimpleCommand extends SlashCommandHandler {
 
     /**
      * The command name, eg. /about or /ping
      */
+    @Getter
     private final String command;
 
     /**
      * The command description, eg. "Get some info about the bot"
      */
+    @Getter
     private String description;
-
 
     /**
      * The permissions that are required to run this command
      */
-    private List<Permission> permissionList = new ArrayList<>();
+    private final List<Permission> permissionList = new ArrayList<>();
 
     /**
      * A list containing all subcommand groups
@@ -102,7 +108,7 @@ public abstract class SimpleCommand extends ListenerAdapter {
     /**
      * If the command can only be run in the main guild of the bot
      * <p>
-     * The mainGuild is set inside {@link SimpleBot#setMainGuild(JDA)}
+     * The mainGuild is set inside {@link SimpleBot#setMainGuild()}
      */
     private boolean mainGuildOnly = false;
 
@@ -136,10 +142,16 @@ public abstract class SimpleCommand extends ListenerAdapter {
      */
     private List<Channel> allowedChannels = null;
 
+    /**
+     * A list of all commands that need to be registered
+     */
+    public static final List<SimpleCommand> COMMANDS = new ArrayList<>();
+
     // ----------------------------------------------------------------------------------------
     // Temporary variables
     // ----------------------------------------------------------------------------------------
 
+    @Getter
     protected SlashCommandInteractionEvent event;
 
     /**
@@ -148,6 +160,7 @@ public abstract class SimpleCommand extends ListenerAdapter {
      * This variable is set dynamically when the command is run with the
      * last known user
      */
+    @Getter
     protected User user;
 
     /**
@@ -156,6 +169,7 @@ public abstract class SimpleCommand extends ListenerAdapter {
      * This variable is set dynamically when the command is run with the
      * last known member
      */
+    @Getter
     protected Member member;
 
     /**
@@ -164,6 +178,7 @@ public abstract class SimpleCommand extends ListenerAdapter {
      * This variable is set dynamically when the command is run with the
      * last known guild
      */
+    @Getter
     protected Guild guild;
 
     /**
@@ -186,20 +201,37 @@ public abstract class SimpleCommand extends ListenerAdapter {
 
     // ----------------------------------------------------------------------------------------
 
+    public SimpleCommand() {
+        this.command = null;
+        Common.log("Starting up main command listener");
+        SimpleBot.getJda().addEventListener(this);
+    }
+
     /**
      * The main method to create the command
      */
     protected SimpleCommand(final String command) {
         this.command = command;
-        //this.description = description;
     }
 
     // ----------------------------------------------------------------------
     // Registration
     // ----------------------------------------------------------------------
 
+    public static void register(final SimpleCommand command) {
+        Debugger.debug("SimpleCommand", "Registering command: " + command.getCommand() + " with description: " + command.getDescription());
+        COMMANDS.add(command);
+        SimpleBot.getJda().addEventListener(command);
+    }
+
+    public static void registerAll() {
+        Debugger.debug("SimpleCommand", "Registering all commands");
+        // Register all commands
+        SimpleBot.getJda().updateCommands().addCommands(COMMANDS.stream().map(SimpleCommand::getCommandData).toList()).queue();
+    }
+
     public final CommandData getCommandData() {
-        Debugger.debug("SimpleCommand", "Registering command: " + this.getCommand() + " with description: " + this.getDescription());
+        Debugger.debug("SimpleCommand", "Creating command data for command: " + this.getCommand() + " with description: " + this.getDescription());
         final SlashCommandData commandData = Commands.slash(this.getCommand(), this.getDescription());
 
         // add sub command groups
@@ -226,27 +258,169 @@ public abstract class SimpleCommand extends ListenerAdapter {
     // Execution
     // ----------------------------------------------------------------------------------------
 
-    public final void execute(final SlashCommandInteractionEvent event) {
-        // Setting the temporary variables
-        this.guild = event.getGuild();
+    @Override
+    protected void execute(@NotNull final SlashCommandInteractionEvent event) {
+        Common.log("SimpleCommand", "Executing command: " + this.getCommand() + " User: " + event.getUser().getName());
+        // Set the event variable
+        this.event = event;
 
+        // Log the command
+        Debugger.debug("SimpleCommand", "Executing command: " + this.getCommand() + " User: " + this.event.getUser().getName());
+
+        // Check if the command is the same as the command name
+        if (!this.event.getCommandString().equalsIgnoreCase(this.getCommand())) {
+            // Return because the command is not the same
+            return;
+        }
+
+        // Set the guild where to command is used
+        this.guild = this.event.getGuild();
+
+        // Check if the guild is set and if its set to mainguild only
         if (this.guild == null || this.guild != SimpleBot.getMainGuild()) {
+            // Return an error message
             replyErrorEmbed("Command denied", "This command can only be used in the main guild");
             return;
         }
 
-        this.user = event.getUser();
-        this.member = event.getMember();
+        // Set the user and member
+        this.user = this.event.getUser();
+        this.member = this.event.getMember();
 
-        // Making sure that the channel is a text channel
-        this.channel = event.getChannel() instanceof TextChannel ? event.getChannel().asTextChannel() : null;
-        // Making sure that the channel is a thread channel
-        this.threadChannel = event.getChannel() instanceof ThreadChannel ? event.getChannel().asThreadChannel() : null;
+        // Making sure that the channel is a text channel set to null if it's a thread channel
+        this.channel = this.event.getChannel() instanceof TextChannel ? this.event.getChannel().asTextChannel() : null;
+        // Making sure that the channel is a thread channel set to null if it's a text channel
+        this.threadChannel = this.event.getChannel() instanceof ThreadChannel ? this.event.getChannel().asThreadChannel() : null;
 
-        this.event = event;
+        // Check if the user can use the command
+        boolean canExecute = true;
+
+        // Check if the user is in the disabled users list
+        if (this.disabledUsers != null && this.disabledUsers.contains(this.user)) {
+            canExecute = false;
+        }
+
+        // Check if the user is in the disabled roles list
+        if (this.disabledRoles != null && this.member != null) {
+            for (final Role role : this.disabledRoles) {
+                if (this.member.getRoles().contains(role)) {
+                    canExecute = false;
+                    break;
+                }
+            }
+        }
+
+        // Check if the channel is in the disabled channels list
+        if (this.disabledChannels != null && this.channel != null) {
+            if (this.disabledChannels.contains(this.channel) || this.disabledChannels.contains(this.threadChannel)) {
+                canExecute = false;
+            }
+        }
+
+        // Check if the user is in the allowed users list
+        if (this.allowedUsers != null && !this.allowedUsers.contains(this.user)) {
+            canExecute = false;
+        }
+
+        // Check if the user is in the allowed roles list
+        if (this.allowedRoles != null && this.member != null) {
+            for (final Role role : this.allowedRoles) {
+                if (this.member.getRoles().contains(role)) {
+                    canExecute = true;
+                    break;
+                }
+            }
+        }
+
+        // Check if the channel is in the allowed channels list
+        if (this.allowedChannels != null && this.channel != null) {
+            if (!this.allowedChannels.contains(this.channel) || !this.allowedChannels.contains(this.threadChannel)) {
+                canExecute = false;
+            }
+        }
+
+        // Check if the user has the permission to bypass the cooldown
+        if (this.cooldownBypassPermission != null && this.member != null) {
+            for (final Permission permission : this.cooldownBypassPermission) {
+                if (this.member.hasPermission(permission)) {
+                    canExecute = true;
+                    break;
+                }
+            }
+        }
+
+        // Check if the user is in the cooldown bypass list
+        if (this.cooldownBypassUsers != null && this.cooldownBypassUsers.contains(this.user)) {
+            canExecute = true;
+        }
+
+        // Check if the user is in the cooldown map
+        if (this.cooldownMap.containsKey(this.user)) {
+            // Get the last execution time
+            final long lastExecution = this.cooldownMap.get(this.user);
+
+            // Get the current time
+            final long currentTime = System.currentTimeMillis();
+
+            // Get the remaining time
+            final long remainingTime = (lastExecution + (this.cooldownSeconds * 1000)) - currentTime;
+
+            // Check if the remaining time is greater than 0
+            if (remainingTime > 0) {
+                // Check if we should send the cooldown message
+                if (this.cooldownMessage != null && !this.cooldownMessage.isEmpty()) {
+                    // Replace the duration placeholder
+                    final String message = this.cooldownMessage.replace("{duration}", String.valueOf(remainingTime / 1000));
+
+                    // Check if we should send the message as an embed
+                    if (this.cooldownMessageAsEmbed) {
+                        // Send the message as an embed
+                        this.replyErrorEmbed("Command denied", message);
+                    } else {
+                        // Send the message as a normal message
+                        this.reply(message);
+                    }
+                }
+
+                replyErrorEmbed("Command denied", "This command is in cooldown you can use this command after " + remainingTime / 1000 + " seconds");
+
+                // Return because the user is in cooldown
+                return;
+            }
+        }
+
+        // Check if the user can execute the command
+        if (!canExecute) {
+            // Return an error message
+            replyErrorEmbed("Command denied", "You don't have permission to use this command");
+            return;
+        }
+
+        // Check if the command is set to main guild only
+        if (this.isMainGuildOnly()) {
+            // Check if the guild is set
+            if (this.guild == null) {
+                // Return an error message
+                replyErrorEmbed("Command denied", "This command can only be used in the main guild");
+                return;
+            }
+
+            // Check if the guild is the main guild
+            if (this.guild != SimpleBot.getMainGuild()) {
+                // Return an error message
+                replyErrorEmbed("Command denied", "This command can only be used in the main guild");
+                return;
+            }
+        }
+
+        // Check if the command is in cooldown
+        if (this.cooldownSeconds > 0) {
+            // Add the user to the cooldown map
+            this.cooldownMap.put(this.user, System.currentTimeMillis());
+        }
 
         // Runs the command
-        this.onCommand();
+        onCommand();
     }
 
     /**
@@ -258,14 +432,6 @@ public abstract class SimpleCommand extends ListenerAdapter {
     // ----------------------------------------------------------------------
     // Temporary variables and safety
     // ----------------------------------------------------------------------
-
-    public String getCommand() {
-        return this.command;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
 
     public void setDescription(final String description) {
         this.description = description;
@@ -317,22 +483,6 @@ public abstract class SimpleCommand extends ListenerAdapter {
 
     public List<OptionData> getOptions() {
         return this.optionDataList;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public Member getMember() {
-        return this.member;
-    }
-
-    public Guild getGuild() {
-        return this.guild;
-    }
-
-    public SlashCommandInteractionEvent getEvent() {
-        return this.event;
     }
 
     public GuildMessageChannel getChannel() {

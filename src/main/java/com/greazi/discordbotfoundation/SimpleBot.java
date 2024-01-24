@@ -1,50 +1,62 @@
 package com.greazi.discordbotfoundation;
 
+import com.greazi.discordbotfoundation.command.PingCommand;
+import com.greazi.discordbotfoundation.command.SimpleCommand;
+import com.greazi.discordbotfoundation.command.SlashCommandHandler;
 import com.greazi.discordbotfoundation.constants.Constants;
 import com.greazi.discordbotfoundation.debug.BotException;
+import com.greazi.discordbotfoundation.mysql.SqlManager;
 import com.greazi.discordbotfoundation.settings.SimpleSettings;
-import com.greazi.old.mysql.SqlManager;
+import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.SelfUser;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class SimpleBot {
 
     /**
      * The JDA instance
      */
+    @Getter
     private static JDA jda;
 
     /**
      * The instance of the bot
      */
+    @Getter
     private static volatile SimpleBot instance;
 
     /**
      * The main guild of the bot
      */
+    @Getter
     private static Guild mainGuild;
 
     /**
      * The bot itself as a user
      */
+    @Getter
     private static SelfUser selfUser;
 
     /**
      * If the bot is enabled or not
      */
+    @Getter
     private boolean enabled;
 
     /**
      * The SQL manager
      */
+    @Getter
     private static SqlManager sqlManager;
 
     // ----------------------------------------------------------------------------------------
@@ -65,12 +77,20 @@ public abstract class SimpleBot {
     // Main methods
     // ----------------------------------------------------------------------------------------
 
+    public static void main(final String[] args) {
+        new SimpleBot() {
+            @Override
+            protected void onBotStart() {
+
+            }
+        };
+    }
+
     /**
      * The main method that starts the bot
      * <p>
-     * A Discord bot needs the {@link #registerJda(String, Activity)} method to register.
-     * Before the bot registers it will set some things up and than register the bot to ensure
-     * a function Discord bot.
+     * Registering the discord bot to Discord and starting up all
+     * managers.
      */
     public SimpleBot() {
         this.enabled = false;
@@ -124,7 +144,7 @@ public abstract class SimpleBot {
         // Registering the bot to Discord using JDA
         log("Registering the bot to Discord");
         try {
-            jda = JDABuilder.createDefault("SETTINGS TOKEN HERE")
+            jda = JDABuilder.createDefault(SimpleSettings.Bot.Token())
                     .setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.DEFAULT | GatewayIntent.GUILD_MEMBERS.getRawValue() | GatewayIntent.GUILD_BANS.getRawValue()))
                     .setDisabledIntents(GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.GUILD_MESSAGE_TYPING)
                     .disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
@@ -140,7 +160,7 @@ public abstract class SimpleBot {
         }
 
         // Setting the selfUser
-        this.selfUser = jda.getSelfUser();
+        selfUser = jda.getSelfUser();
 
         // Set the main guild
         setMainGuild();
@@ -151,11 +171,25 @@ public abstract class SimpleBot {
         // Call the onBotLoad method
         onBotLoad();
 
+        // Register the ping command
+        SimpleCommand.register(new PingCommand());
+
         // Call the onBotStart method
         onBotStart();
 
         // Call the onReloadableStart method
         onReloadableStart();
+
+        SimpleCommand.registerAll();
+
+        getJda().addEventListener(new SlashCommandHandler() {
+            @Override
+            protected void execute(@NotNull final SlashCommandInteractionEvent event) {
+
+            }
+        });
+
+        getJda().addEventListener(new PingCommand());
 
         // Set the enabled to true
         this.enabled = true;
@@ -218,6 +252,16 @@ public abstract class SimpleBot {
 
     private static void error(final String... messages) {
         Common.error(messages);
+    }
+
+    /**
+     * Should every message be divided by \n by an own method (tends to work more
+     * than split("\n"))
+     *
+     * @return If the system need to force a new line with \n
+     */
+    public boolean enforceNewLine() {
+        return false;
     }
 
     // ----------------------------------------------------------------------------------------

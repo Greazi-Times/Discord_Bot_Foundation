@@ -63,6 +63,10 @@ Commands:
 #  Manage the console of the bot
 # -------------------------------------------------------------------------------------------------
 Console:
+
+  # Log all the messages in the console
+  LogConsole: true
+
   Commands:
     # Should console commands be enabled?
     Enabled: true

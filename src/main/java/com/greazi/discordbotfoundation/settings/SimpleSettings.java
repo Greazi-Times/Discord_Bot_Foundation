@@ -8,6 +8,9 @@
 package com.greazi.discordbotfoundation.settings;
 
 import com.google.common.collect.Maps;
+import com.greazi.discordbotfoundation.Common;
+import com.greazi.discordbotfoundation.constants.Constants;
+import com.greazi.discordbotfoundation.utils.ResourceCopier;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;

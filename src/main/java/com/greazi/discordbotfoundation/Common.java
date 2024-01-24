@@ -1,5 +1,11 @@
 package com.greazi.discordbotfoundation;
 
+import com.greazi.discordbotfoundation.debug.BotException;
+import com.greazi.discordbotfoundation.settings.SimpleSettings;
+import com.greazi.discordbotfoundation.utils.ConsoleColor;
+import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
+import com.greazi.discordbotfoundation.utils.Valid;
+import com.greazi.discordbotfoundation.utils.time.TimeUtil;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.NotNull;
@@ -394,7 +400,7 @@ public final class Common {
      */
     @Deprecated
     public static String[] splitNewline(final String message) {
-        if (!com.greazi.old.SimpleBot.getInstance().enforceNewLine())
+        if (!SimpleBot.getInstance().enforceNewLine())
             return message.split("\n");
 
         final String delimiter = "GREAZIWASHERE";
@@ -432,7 +438,7 @@ public final class Common {
         final LocalDateTime now = LocalDateTime.now();
         final String currentDate = dtf.format(now);
 
-        final String location = new File(com.greazi.old.SimpleBot.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getPath();
+        final String location = new File(SimpleBot.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getPath();
 
 
         // Get the location of the .jar file
