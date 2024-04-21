@@ -9,10 +9,7 @@ package com.greazi.discordbotfoundation.command;
 
 import com.greazi.discordbotfoundation.Common;
 
-/**
- * A simple ping command to get the latency of the bot
- * The message output can be changed by overriding this file!
- */
+
 public class PingCommand extends SimpleCommand {
 
     /**

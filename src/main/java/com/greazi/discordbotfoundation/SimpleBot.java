@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.SelfUser;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -171,8 +170,9 @@ public abstract class SimpleBot {
         // Call the onBotLoad method
         onBotLoad();
 
-        // Register the ping command
-        SimpleCommand.register(new PingCommand());
+        registerCommands(
+                new PingCommand()
+        );
 
         // Call the onBotStart method
         onBotStart();
@@ -180,16 +180,9 @@ public abstract class SimpleBot {
         // Call the onReloadableStart method
         onReloadableStart();
 
-        SimpleCommand.registerAll();
+        jda.addEventListener(new SlashCommandHandler());
 
-        getJda().addEventListener(new SlashCommandHandler() {
-            @Override
-            protected void execute(@NotNull final SlashCommandInteractionEvent event) {
-
-            }
-        });
-
-        getJda().addEventListener(new PingCommand());
+        SlashCommandHandler.registerCommands();
 
         // Set the enabled to true
         this.enabled = true;
@@ -219,6 +212,14 @@ public abstract class SimpleBot {
         } else {
             mainGuild = guild;
         }
+    }
+
+    private void registerCommands(@NotNull final SimpleCommand... simpleCommands) {
+        for (final SimpleCommand simpleCommand : simpleCommands) registerCommand(simpleCommand);
+    }
+
+    private void registerCommand(final SimpleCommand simpleCommand) {
+        SlashCommandHandler.register(simpleCommand);
     }
 
 
@@ -276,7 +277,6 @@ public abstract class SimpleBot {
      */
     protected void onPreLoad() {
     }
-
 
     /**
      * Called the moment JDA is registerd
