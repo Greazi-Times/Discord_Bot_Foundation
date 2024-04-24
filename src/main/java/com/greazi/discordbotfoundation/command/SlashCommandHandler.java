@@ -41,7 +41,7 @@ public class SlashCommandHandler extends ListenerAdapter {
             simpleCommand.execute(event, simpleCommand);
         } else {
             final Optional<SimpleCommand> sub = simpleCommand
-                    .getSubcommands()
+                    .getSubcommandsList()
                     .stream()
                     .filter(subcommand -> subcommand.getCommand().equals(event.getSubcommandName()))
                     .findFirst();

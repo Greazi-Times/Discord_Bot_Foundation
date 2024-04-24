@@ -1,4 +1,4 @@
-package com.greazi.discordbotfoundation.command.tests;
+package com.greazi.discordbotfoundation.tests;
 
 import com.greazi.discordbotfoundation.command.SimpleCommand;
 

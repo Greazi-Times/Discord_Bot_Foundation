@@ -1,5 +1,6 @@
-package com.greazi.discordbotfoundation.command;
+package com.greazi.discordbotfoundation.tests;
 
+import com.greazi.discordbotfoundation.command.SimpleCommand;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -16,6 +17,10 @@ public class ReplyCommand extends SimpleCommand {
     }
 
     public void onCommand(String message, User user) {
-
+        if (user == null) {
+            reply(message);
+        } else {
+            reply(user.getAsMention() + ", " + message);
+        }
     }
 }
