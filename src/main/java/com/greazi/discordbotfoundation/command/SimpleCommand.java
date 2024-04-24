@@ -6,6 +6,7 @@ import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.Valid;
 import com.greazi.discordbotfoundation.utils.expiringmap.ExpiringMap;
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -70,21 +71,25 @@ public abstract class SimpleCommand {
      * The command description, eg. "Get some info about the bot"
      */
     @Getter
+    @Setter
     private String description;
 
     /**
      * The permissions that are required to run this command
      */
-    private final List<Permission> permissionList = new ArrayList<>();
+    @Getter
+    private final List<Permission> permissions = new ArrayList<>();
 
     /**
      * A list containing all the {@link SimpleCommand subcommands} of this command
      */
+    @Getter
     private final List<SimpleCommand> subcommandsList = new ArrayList<>();
 
     /**
      * A list containing all the options
      */
+    @Getter
     private final List<OptionData> optionDataList = new ArrayList<>();
 
     /**
@@ -124,39 +129,44 @@ public abstract class SimpleCommand {
 
     /**
      * If the command can only be run in the main guild of the bot
-     * <p>
-     * The mainGuild is set inside {@link SimpleBot#setMainGuild()}
      */
+    @Setter
     private boolean mainGuildOnly = false;
 
     /**
      * Users that can't use this command
      */
+    @Getter @Setter
     private List<User> disabledUsers = null;
 
     /**
      * Roles that can't use this command
      */
+    @Getter @Setter
     private List<Role> disabledRoles = null;
 
     /**
      * Channels that aren't allowed to use this command
      */
+    @Getter @Setter
     private List<Channel> disabledChannels = null;
 
     /**
      * Users that are allowed use this command
      */
+    @Getter @Setter
     private List<User> allowedUsers = null;
 
     /**
      * Roles that are allowed use this command
      */
+    @Getter @Setter
     private List<Role> allowedRoles = null;
 
     /**
      * Channels where this command is allowed
      */
+    @Getter @Setter
     private List<Channel> allowedChannels = null;
 
     /**
@@ -253,7 +263,7 @@ public abstract class SimpleCommand {
         }
 
         // Set up the rest
-        commandData.setDefaultPermissions(DefaultMemberPermissions.enabledFor(permissionList));
+        commandData.setDefaultPermissions(DefaultMemberPermissions.enabledFor(permissions));
         commandData.setGuildOnly(mainGuildOnly);
 
         return commandData;
@@ -381,7 +391,7 @@ public abstract class SimpleCommand {
             final long currentTime = System.currentTimeMillis();
 
             // Get the remaining time
-            final long remainingTime = (lastExecution + (simpleCommand.cooldownSeconds * 1000)) - currentTime;
+            final long remainingTime = (lastExecution + (simpleCommand.cooldownSeconds * 1000L)) - currentTime;
 
             // Check if the remaining time is greater than 0
             if (remainingTime > 0) {
@@ -440,7 +450,7 @@ public abstract class SimpleCommand {
         // Try to run the dynamic method, given the options registered:
         // First, get all options to store them in a list of pair, containing the (possible null) parsed option and its class type
         final List<Pair<Object, Class<?>>> parsedOptions = new ArrayList<>();
-        for (final OptionData data : simpleCommand.getOptions()) {
+        for (final OptionData data : simpleCommand.getOptionDataList()) {
             final String name = data.getName();
 
             switch (data.getType()) {
@@ -476,48 +486,28 @@ public abstract class SimpleCommand {
     // Temporary variables and safety
     // ----------------------------------------------------------------------
 
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public void addPermission(final Permission permission) {
-        this.permissionList.add(permission);
-    }
-
-    public void addPermission(final Permission... permissions) {
-        this.permissionList.addAll(Arrays.asList(permissions));
-    }
-
-    public List<Permission> getPermissions() {
-        return this.permissionList;
-    }
-
-    public void addOption(final OptionData option) {
-        this.optionDataList.add(option);
-    }
-
-    public void addOption(final OptionData... options) {
-        this.optionDataList.addAll(Arrays.asList(options));
-    }
-
-    public void addSubcommand(final SimpleCommand subcommand) {
-        this.subcommandsList.add(subcommand);
-    }
-
-    public List<SimpleCommand> getSubcommands() {
-        return subcommandsList;
-    }
-
-    public List<OptionData> getOptions() {
-        return this.optionDataList;
-    }
-
     public GuildMessageChannel getChannel() {
         if (this.channel == null && this.threadChannel != null) {
             return this.threadChannel;
         } else {
             return this.channel;
         }
+    }
+
+    /**
+     * Adds a new option data to the command
+     * @param optionData The option data to add
+     */
+    public void addOption(final OptionData optionData) {
+        this.optionDataList.add(optionData);
+    }
+
+    /**
+     * Adds a new sub command to the command
+     * @param subcommand The sub command to add
+     */
+    public void addSubcommand(final SimpleCommand subcommand) {
+        this.subcommandsList.add(subcommand);
     }
 
     /**
@@ -532,80 +522,12 @@ public abstract class SimpleCommand {
         this.cooldownSeconds = (int) unit.toSeconds(cooldown);
     }
 
-    protected final void setCooldownMessage(final String cooldownMessage) {
-        this.cooldownMessage = cooldownMessage;
-    }
-
-    protected final void sendCooldownMessageAsEmbed(final boolean cooldownMessageAsEmbed) {
-        this.cooldownMessageAsEmbed = cooldownMessageAsEmbed;
-    }
-
-    protected final void setCooldownBypassUsers(final List<User> cooldownBypassUsers) {
-        this.cooldownBypassUsers = cooldownBypassUsers;
-    }
-
-    protected final void setCooldownBypassPermission(final List<Permission> cooldownBypassPermission) {
-        this.cooldownBypassPermission = cooldownBypassPermission;
-    }
-
-    protected final void setMainGuildOnly(final boolean mainGuildOnly) {
-        this.mainGuildOnly = mainGuildOnly;
-    }
-
     protected final boolean isMainGuildOnly() {
         // Make sure that the bot has and is in the main guild
         if (SimpleBot.getMainGuild() == null)
             return false;
 
         return this.mainGuildOnly;
-    }
-
-    protected final void setDisabledUsers(final List<User> disabledUsers) {
-        this.disabledUsers = disabledUsers;
-    }
-
-    protected final List<User> getDisabledUsers() {
-        return this.disabledUsers;
-    }
-
-    protected final void setDisabledRoles(final List<Role> disabledRoles) {
-        this.disabledRoles = disabledRoles;
-    }
-
-    protected final List<Role> getDisabledRoles() {
-        return this.disabledRoles;
-    }
-
-    protected final void setDisabledChannels(final List<Channel> disabledChannels) {
-        this.disabledChannels = disabledChannels;
-    }
-
-    protected final List<Channel> getDisabledChannels() {
-        return this.disabledChannels;
-    }
-
-    protected final void setAllowedUsers(final List<User> allowedUsers) {
-        this.allowedUsers = allowedUsers;
-    }
-
-    protected final List<User> getAllowedUsers() {
-        return this.allowedUsers;
-    }
-
-    protected final void setAllowedRoles(final List<Role> allowedRoles) {
-        this.allowedRoles = allowedRoles;
-    }
-
-    protected final List<Role> getAllowedRoles() {
-        return this.allowedRoles;
-    }
-
-    protected final void setAllowedChannels(final List<Channel> allowedChannels) {
-        this.allowedChannels = allowedChannels;
-    }
-
-    protected final List<Channel> getAllowedChannels() {
-        return this.allowedChannels;
     }
 
     // ----------------------------------------------------------------------
@@ -645,7 +567,7 @@ public abstract class SimpleCommand {
 
             getEvent().reply(String.join("\n", messages)).setEphemeral(ephemeral).queue();
 
-        } finally {
+        } catch (Exception e) {
             getChannel().sendMessage(String.join("\n", messages)).queue();
         }
     }
