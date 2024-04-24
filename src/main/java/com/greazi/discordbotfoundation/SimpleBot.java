@@ -1,8 +1,10 @@
 package com.greazi.discordbotfoundation;
 
 import com.greazi.discordbotfoundation.command.PingCommand;
+import com.greazi.discordbotfoundation.command.ReplyCommand;
 import com.greazi.discordbotfoundation.command.SimpleCommand;
 import com.greazi.discordbotfoundation.command.SlashCommandHandler;
+import com.greazi.discordbotfoundation.command.tests.MainCommand;
 import com.greazi.discordbotfoundation.constants.Constants;
 import com.greazi.discordbotfoundation.debug.BotException;
 import com.greazi.discordbotfoundation.mysql.SqlManager;
@@ -171,7 +173,9 @@ public abstract class SimpleBot {
         onBotLoad();
 
         registerCommands(
-                new PingCommand()
+                new PingCommand(),
+                new ReplyCommand(),
+                new MainCommand()
         );
 
         // Call the onBotStart method
