@@ -7,6 +7,7 @@ import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.Valid;
 import com.greazi.discordbotfoundation.utils.time.TimeUtil;
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,20 +45,17 @@ public final class Common {
 
     /**
      * The log prefix applied on log() methods
-     */
-    @Getter
-    private static String logPrefix = "[INFO]";
-
-    /**
-     * Set the log prefix applied for messages in the console from log() methods.
-     * <p>
-     * Default output is [INFO]
+     * -- SETTER --
+     *  Set the log prefix applied for messages in the console from log() methods.
+     *  <p>
+     *  Default output is [INFO]
      *
      * @param prefix
+
      */
-    public static void setLogPrefix(final String prefix) {
-        logPrefix = prefix;
-    }
+    @Setter
+    @Getter
+    private static String logPrefix = "[INFO]";
 
     /**
      * Returns a long ------ console line
