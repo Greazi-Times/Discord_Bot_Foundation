@@ -105,6 +105,24 @@ public class SimpleEmbedBuilder extends EmbedBuilder {
     }
 
     /**
+     * Set the embed color to yellow
+     */
+    public SimpleEmbedBuilder warning() {
+        color(new Color(255, 255, 0));
+
+        return this;
+    }
+
+    /**
+     * Set the embed color to blue
+     */
+    public SimpleEmbedBuilder info() {
+        color(new Color(0, 0, 255));
+
+        return this;
+    }
+
+    /**
      * Set the text of the embed
      *
      * @param text

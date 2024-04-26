@@ -2,6 +2,10 @@ package com.greazi.discordbotfoundation.command;
 
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
+import com.greazi.discordbotfoundation.command.checkers.SlashCommandChecker;
+import com.greazi.discordbotfoundation.command.checkers.response.SlashCommandResponse;
+import com.greazi.discordbotfoundation.command.checkers.response.SlashCommandResponseProvider;
+import com.greazi.discordbotfoundation.command.checkers.response.DefaultCommandProvider;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.Valid;
 import com.greazi.discordbotfoundation.utils.expiringmap.ExpiringMap;
@@ -28,7 +32,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.channels.Channel;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -73,6 +76,21 @@ public abstract class SimpleCommand {
     @Getter
     @Setter
     private String description;
+
+    /**
+     * The command response provider that will be used in
+     * slash command checkers.
+     */
+    @Getter
+    @Setter
+    private SlashCommandResponseProvider responseProvider = new DefaultCommandProvider();
+
+    /**
+     * List of {@link com.greazi.discordbotfoundation.command.checkers.SlashCommandChecker checkers} that will be used
+     * to check if the command can be executed.
+     */
+    @Getter
+    private final List<SlashCommandChecker> checkers = new ArrayList<>();
 
     /**
      * The permissions that are required to run this command
@@ -140,34 +158,10 @@ public abstract class SimpleCommand {
     private List<User> disabledUsers = null;
 
     /**
-     * Roles that can't use this command
-     */
-    @Getter @Setter
-    private List<Role> disabledRoles = null;
-
-    /**
-     * Channels that aren't allowed to use this command
-     */
-    @Getter @Setter
-    private List<Channel> disabledChannels = null;
-
-    /**
      * Users that are allowed use this command
      */
     @Getter @Setter
     private List<User> allowedUsers = null;
-
-    /**
-     * Roles that are allowed use this command
-     */
-    @Getter @Setter
-    private List<Role> allowedRoles = null;
-
-    /**
-     * Channels where this command is allowed
-     */
-    @Getter @Setter
-    private List<Channel> allowedChannels = null;
 
     /**
      * A list of all commands that need to be registered
@@ -298,6 +292,15 @@ public abstract class SimpleCommand {
 
     protected void execute(@NotNull final SlashCommandInteractionEvent event, final SimpleCommand simpleCommand) {
         Common.log("Received command: " + this.getCommand() + " User: " + event.getUser().getName());
+        // First we run the checkers
+        for (final SlashCommandChecker checker : checkers) {
+            final SlashCommandResponse response = checker.check(this, event);
+            if (!response.isSuccessful()) {
+                response.respond(event);
+                return;
+            }
+        }
+
         // Set the event variable
         simpleCommand.event = event;
 
@@ -328,43 +331,9 @@ public abstract class SimpleCommand {
             canExecute = false;
         }
 
-        // Check if the user is in the disabled roles list
-        if (simpleCommand.disabledRoles != null && simpleCommand.member != null) {
-            for (final Role role : simpleCommand.disabledRoles) {
-                if (simpleCommand.member.getRoles().contains(role)) {
-                    canExecute = false;
-                    break;
-                }
-            }
-        }
-
-        // Check if the channel is in the disabled channels list
-        if (simpleCommand.disabledChannels != null && simpleCommand.channel != null) {
-            if (simpleCommand.disabledChannels.contains(simpleCommand.channel) || simpleCommand.disabledChannels.contains(simpleCommand.threadChannel)) {
-                canExecute = false;
-            }
-        }
-
         // Check if the user is in the allowed users list
         if (simpleCommand.allowedUsers != null && !simpleCommand.allowedUsers.contains(simpleCommand.user)) {
             canExecute = false;
-        }
-
-        // Check if the user is in the allowed roles list
-        if (simpleCommand.allowedRoles != null && simpleCommand.member != null) {
-            for (final Role role : simpleCommand.allowedRoles) {
-                if (simpleCommand.member.getRoles().contains(role)) {
-                    canExecute = true;
-                    break;
-                }
-            }
-        }
-
-        // Check if the channel is in the allowed channels list
-        if (simpleCommand.allowedChannels != null && simpleCommand.channel != null) {
-            if (!simpleCommand.allowedChannels.contains(simpleCommand.channel) || !simpleCommand.allowedChannels.contains(simpleCommand.threadChannel)) {
-                canExecute = false;
-            }
         }
 
         // Check if the user has the permission to bypass the cooldown
