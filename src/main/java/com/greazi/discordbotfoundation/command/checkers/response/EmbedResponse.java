@@ -99,6 +99,16 @@ public class EmbedResponse implements SlashCommandResponse {
         return this;
     }
 
+    /**
+     * Change the ephemeral state of the current embed response instance.
+     * @param ephemeral The new ephemeral state.
+     * @return the current embed response instance, for chaining.
+     */
+    public EmbedResponse ephemeral(boolean ephemeral) {
+        this.ephemeral = ephemeral;
+        return this;
+    }
+
     public enum EmbedType {
         ERROR,
         WARNING,
