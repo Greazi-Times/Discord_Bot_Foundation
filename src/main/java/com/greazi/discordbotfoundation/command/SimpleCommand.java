@@ -112,57 +112,10 @@ public abstract class SimpleCommand {
     private final List<OptionData> optionDataList = new ArrayList<>();
 
     /**
-     * You can set the cooldown time before executing the command again. This map
-     * stores the player uuid and his last execution of the command.
-     */
-    private final ExpiringMap<User, Long> cooldownMap = ExpiringMap.builder().expiration(30, TimeUnit.MINUTES).build();
-
-    /**
-     * The command cooldown before we can run this command again
-     */
-    @Getter
-    private int cooldownSeconds = 0;
-
-    /**
-     * The users that are allowd to bypass this command's cooldown, if it is set
-     */
-    private List<User> cooldownBypassUsers = null;
-
-    /**
-     * The permissions that are allowd to bypass this command's cooldown, if it is set
-     */
-    private List<Permission> cooldownBypassPermission = null;
-
-    /**
-     * A custom message when the user attempts to run this command
-     * within {@link #cooldownSeconds}. By default we use the line below
-     * <p>
-     * TIP: Use {duration} to replace the remaining time till next run
-     */
-    private String cooldownMessage = "The command you used is in cooldow you can use this command after {duration}";
-
-    /**
-     * Send the cooldownMessage in a embed or as a normal message
-     */
-    private boolean cooldownMessageAsEmbed = true;
-
-    /**
      * If the command can only be run in the main guild of the bot
      */
     @Setter
     private boolean mainGuildOnly = false;
-
-    /**
-     * Users that can't use this command
-     */
-    @Getter @Setter
-    private List<User> disabledUsers = null;
-
-    /**
-     * Users that are allowed use this command
-     */
-    @Getter @Setter
-    private List<User> allowedUsers = null;
 
     /**
      * A list of all commands that need to be registered
@@ -317,99 +270,6 @@ public abstract class SimpleCommand {
             return;
         }
 
-        // Check if the user can use the command
-        boolean canExecute = true;
-
-        // Check if the user is in the disabled users list
-        if (disabledUsers != null && disabledUsers.contains(user)) {
-            canExecute = false;
-        }
-
-        // Check if the user is in the allowed users list
-        if (allowedUsers != null && !allowedUsers.contains(user)) {
-            canExecute = false;
-        }
-
-        // Check if the user has the permission to bypass the cooldown
-        if (cooldownBypassPermission != null && member != null) {
-            for (final Permission permission : this.cooldownBypassPermission) {
-                if (member.hasPermission(permission)) {
-                    canExecute = true;
-                    break;
-                }
-            }
-        }
-
-        // Check if the user is in the cooldown bypass list
-        if (cooldownBypassUsers != null && cooldownBypassUsers.contains(user)) {
-            canExecute = true;
-        }
-
-        // Check if the user is in the cooldown map
-        if (cooldownMap.containsKey(user)) {
-            // Get the last execution time
-            final long lastExecution = cooldownMap.get(user);
-
-            // Get the current time
-            final long currentTime = System.currentTimeMillis();
-
-            // Get the remaining time
-            final long remainingTime = (lastExecution + (cooldownSeconds * 1000L)) - currentTime;
-
-            // Check if the remaining time is greater than 0
-            if (remainingTime > 0) {
-                // Check if we should send the cooldown message
-                if (cooldownMessage != null && !cooldownMessage.isEmpty()) {
-                    // Replace the duration placeholder
-                    final String message = cooldownMessage.replace("{duration}", String.valueOf(remainingTime / 1000));
-
-                    // Check if we should send the message as an embed
-                    if (cooldownMessageAsEmbed) {
-                        // Send the message as an embed
-                        replyErrorEmbed("Command denied", message);
-                    } else {
-                        // Send the message as a normal message
-                        reply(message);
-                    }
-                }
-
-                replyErrorEmbed("Command denied", "This command is in cooldown you can use this command after " + remainingTime / 1000 + " seconds");
-
-                // Return because the user is in cooldown
-                return;
-            }
-        }
-
-        // Check if the user can execute the command
-        if (!canExecute) {
-            // Return an error message
-            replyErrorEmbed("Command denied", "You don't have permission to use this command");
-            return;
-        }
-
-        // Check if the command is set to main guild only
-        if (this.isMainGuildOnly()) {
-            // Check if the guild is set
-            if (guild == null) {
-                // Return an error message
-                replyErrorEmbed("Command denied", "This command can only be used in the main guild");
-                return;
-            }
-
-            // Check if the guild is the main guild
-            if (guild != SimpleBot.getMainGuild()) {
-                // Return an error message
-                replyErrorEmbed("Command denied", "This command can only be used in the main guild");
-                return;
-            }
-        }
-
-        // Check if the command is in cooldown
-        if (cooldownSeconds > 0) {
-            // Add the user to the cooldown map
-            cooldownMap.put(user, System.currentTimeMillis());
-        }
-
         // Try to run the dynamic method, given the options registered:
         // First, get all options to store them in a list of pair, containing the (possible null) parsed option and its class type
         final List<Pair<Object, Class<?>>> parsedOptions = new ArrayList<>();
@@ -479,18 +339,6 @@ public abstract class SimpleCommand {
      */
     public void addChecker(final SlashCommandChecker checker) {
         this.checkers.add(checker);
-    }
-
-    /**
-     * Set the time before the same user can execute this command again
-     *
-     * @param cooldown
-     * @param unit
-     */
-    protected final void setCooldown(final int cooldown, final TimeUnit unit) {
-        Valid.checkBoolean(cooldown >= 0, "Cooldown must be >= 0 for /" + this.getCommand());
-
-        this.cooldownSeconds = (int) unit.toSeconds(cooldown);
     }
 
     protected final boolean isMainGuildOnly() {
