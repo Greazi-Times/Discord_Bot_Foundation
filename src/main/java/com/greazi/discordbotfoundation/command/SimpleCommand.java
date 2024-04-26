@@ -83,7 +83,7 @@ public abstract class SimpleCommand {
      */
     @Getter
     @Setter
-    private SlashCommandResponseProvider responseProvider = new DefaultCommandProvider();
+    private SlashCommandResponseProvider responseProvider = DefaultCommandProvider.EPHEMERAL;
 
     /**
      * List of {@link com.greazi.discordbotfoundation.command.checkers.SlashCommandChecker checkers} that will be used
@@ -477,6 +477,14 @@ public abstract class SimpleCommand {
      */
     public void addSubcommand(final SimpleCommand subcommand) {
         this.subcommandsList.add(subcommand);
+    }
+
+    /**
+     * Adds a new checker to the command
+     * @param checker The checker to add
+     */
+    public void addChecker(final SlashCommandChecker checker) {
+        this.checkers.add(checker);
     }
 
     /**
