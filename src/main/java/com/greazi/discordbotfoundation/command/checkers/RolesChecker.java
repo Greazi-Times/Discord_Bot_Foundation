@@ -43,10 +43,11 @@ public class RolesChecker implements SlashCommandChecker {
      */
     public static RolesChecker create(@NotNull List<String> allowedRolesIds,
                                       @NotNull List<String> disallowedRolesIds) {
-        Checks.notEmpty(allowedRolesIds, "allowedRolesIds");
         Checks.noneNull(allowedRolesIds, "allowedRolesIds");
-        Checks.notEmpty(disallowedRolesIds, "disallowedRolesIds");
         Checks.noneNull(disallowedRolesIds, "disallowedRolesIds");
+
+        if (allowedRolesIds.isEmpty() && disallowedRolesIds.isEmpty())
+            throw new IllegalArgumentException("You must specify at least one allowed or disallowed channel.");
 
         return new RolesChecker(allowedRolesIds, disallowedRolesIds);
     }
