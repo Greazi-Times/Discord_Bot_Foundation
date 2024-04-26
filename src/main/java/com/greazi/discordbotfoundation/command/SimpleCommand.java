@@ -2,24 +2,30 @@ package com.greazi.discordbotfoundation.command;
 
 import com.greazi.discordbotfoundation.Common;
 import com.greazi.discordbotfoundation.SimpleBot;
-import com.greazi.discordbotfoundation.debug.Debugger;
 import com.greazi.discordbotfoundation.utils.SimpleEmbedBuilder;
 import com.greazi.discordbotfoundation.utils.Valid;
 import com.greazi.discordbotfoundation.utils.expiringmap.ExpiringMap;
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-import net.dv8tion.jda.api.interactions.commands.build.*;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.internal.utils.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,12 +35,29 @@ import java.util.concurrent.TimeUnit;
 /**
  * A simple slash command class that can be used to create slash commands
  * <p>
- * Create a command by extending this class and overriding the onCommand method
- * to register the command use {@link #getCommandData()}
+ * <code>/{@link #command} {sub command group} {sub command} {options...}</code>
  * <p>
- * /{command} {sub command group} {sub command} {options...}
+ * <h1>Execution</h1>
  * <p>
- * Example: /about or /info user Greazi
+ *     You will have to define an <strong>execution</strong> method, that'll be called when the command is executed.
+ *     The method <strong>must be</strong> called <code>onCommand</code> and <strong>must</strong> have the same parameters as the options you've registered (in the same order too!).
+ *     <br>
+ *     Here's the list of the commands option to Java type mapping:
+ * </p>
+ * <ul>
+ *      <li>{@link OptionType#USER} => {@link User}</li>
+ *      <li>{@link OptionType#CHANNEL} => {@link GuildChannelUnion}</li>
+ *      <li>{@link OptionType#ROLE} => {@link Role}</li>
+ *      <li>{@link OptionType#STRING} => {@link String}</li>
+ *      <li>{@link OptionType#NUMBER} => {@link Double}</li>
+ *      <li>{@link OptionType#INTEGER} => {@link Long}</li>
+ *      <li>{@link OptionType#BOOLEAN} => {@link Boolean}</li>
+ *      <li>{@link OptionType#MENTIONABLE} => {@link IMentionable}</li>
+ *      <li>{@link OptionType#ATTACHMENT} => {@link Message.Attachment}</li>
+ * </ul>
+ * <p>
+ *     For optional options, the passed argument will simply be <code>null</code>, so keep that in mind!
+ * </p>
  */
 public abstract class SimpleCommand {
 
@@ -48,26 +71,25 @@ public abstract class SimpleCommand {
      * The command description, eg. "Get some info about the bot"
      */
     @Getter
+    @Setter
     private String description;
 
     /**
      * The permissions that are required to run this command
      */
-    private final List<Permission> permissionList = new ArrayList<>();
+    @Getter
+    private final List<Permission> permissions = new ArrayList<>();
 
     /**
-     * A list containing all subcommand groups
+     * A list containing all the {@link SimpleCommand subcommands} of this command
      */
-    private final List<SubcommandGroupData> subcommandGroupDataList = new ArrayList<>();
-
-    /**
-     * A list containing all the subcommands
-     */
-    private final List<SubcommandData> subcommandDataList = new ArrayList<>();
+    @Getter
+    private final List<SimpleCommand> subcommandsList = new ArrayList<>();
 
     /**
      * A list containing all the options
      */
+    @Getter
     private final List<OptionData> optionDataList = new ArrayList<>();
 
     /**
@@ -107,39 +129,44 @@ public abstract class SimpleCommand {
 
     /**
      * If the command can only be run in the main guild of the bot
-     * <p>
-     * The mainGuild is set inside {@link SimpleBot#setMainGuild()}
      */
+    @Setter
     private boolean mainGuildOnly = false;
 
     /**
      * Users that can't use this command
      */
+    @Getter @Setter
     private List<User> disabledUsers = null;
 
     /**
      * Roles that can't use this command
      */
+    @Getter @Setter
     private List<Role> disabledRoles = null;
 
     /**
      * Channels that aren't allowed to use this command
      */
+    @Getter @Setter
     private List<Channel> disabledChannels = null;
 
     /**
      * Users that are allowed use this command
      */
+    @Getter @Setter
     private List<User> allowedUsers = null;
 
     /**
      * Roles that are allowed use this command
      */
+    @Getter @Setter
     private List<Role> allowedRoles = null;
 
     /**
      * Channels where this command is allowed
      */
+    @Getter @Setter
     private List<Channel> allowedChannels = null;
 
     /**
@@ -215,42 +242,54 @@ public abstract class SimpleCommand {
     }
 
     // ----------------------------------------------------------------------
-    // Command data
+    // Data Building
     // ----------------------------------------------------------------------
 
     /**
-     * Set the command data required by Discord to register the command
-     *
-     * @return CommandData The command data for Discord
+     * Builds the slash command data, as a "core" command
+     * @return The built slash command
      */
-    public final CommandData getCommandData() {
-        Debugger.debug("SimpleCommand", "Creating command data for command: " + this.getCommand() + " with description: " + this.getDescription());
-        final SlashCommandData commandData = Commands.slash(this.getCommand(), this.getDescription());
+    public final SlashCommandData buildSlashCommand() {
+        final SlashCommandData commandData = Commands.slash(command, description);
 
-        // add sub command groups
-        for (final SubcommandGroupData subcommandGroup : getSubcommandGroup()) {
-            commandData.addSubcommandGroups(subcommandGroup);
+        // Add options
+        for (final OptionData option : optionDataList) {
+            commandData.addOptions(option);
         }
 
-        // add sub commands
-        for (final SubcommandData subcommand : getSubcommandGroupDataList()) {
-            commandData.addSubcommands(subcommand);
+        // Add subcommands
+        for (final SimpleCommand subcommand : subcommandsList) {
+            commandData.addSubcommands(subcommand.buildSubCommand());
         }
 
-        // Add options if there are no subcommands or subcommand groups
-        if (getSubcommandGroupDataList().isEmpty() && getSubcommandGroup().isEmpty()) {
-            commandData.addOptions(getOptions());
-        }
-
-        // Set default permissions
-        final DefaultMemberPermissions defaultMemberPermissions = DefaultMemberPermissions.enabledFor(getPermissions());
-        commandData.setDefaultPermissions(defaultMemberPermissions);
-
-        // Set guild-only status
-        final boolean isGuildOnly = isMainGuildOnly();
-        commandData.setGuildOnly(isGuildOnly);
+        // Set up the rest
+        commandData.setDefaultPermissions(DefaultMemberPermissions.enabledFor(permissions));
+        commandData.setGuildOnly(mainGuildOnly);
 
         return commandData;
+    }
+
+    /**
+     * Builds the subcommand data, as a "sub" command
+     * @return The built subcommand
+     */
+    public final SubcommandData buildSubCommand() {
+        final SubcommandData subcommandData = new SubcommandData(command, description);
+
+        // Add options
+        for (final OptionData option : optionDataList) {
+            subcommandData.addOptions(option);
+        }
+
+        return subcommandData;
+    }
+
+    /**
+     * Check if this command is a "core" command or a subcommand
+     * @return True if this command is a "core" command, false otherwise
+     */
+    public final boolean isCoreCommand() {
+        return subcommandsList.isEmpty();
     }
 
     // ----------------------------------------------------------------------------------------
@@ -261,12 +300,6 @@ public abstract class SimpleCommand {
         Common.log("Received command: " + this.getCommand() + " User: " + event.getUser().getName());
         // Set the event variable
         simpleCommand.event = event;
-
-        // Check if the command is the same as the command name
-        if (!simpleCommand.event.getCommandString().equalsIgnoreCase(simpleCommand.getCommand())) {
-            // Return because the command is not the same
-            return;
-        }
 
         // Set the guild where to command is used
         simpleCommand.guild = simpleCommand.event.getGuild();
@@ -358,7 +391,7 @@ public abstract class SimpleCommand {
             final long currentTime = System.currentTimeMillis();
 
             // Get the remaining time
-            final long remainingTime = (lastExecution + (simpleCommand.cooldownSeconds * 1000)) - currentTime;
+            final long remainingTime = (lastExecution + (simpleCommand.cooldownSeconds * 1000L)) - currentTime;
 
             // Check if the remaining time is greater than 0
             if (remainingTime > 0) {
@@ -414,71 +447,44 @@ public abstract class SimpleCommand {
             simpleCommand.cooldownMap.put(simpleCommand.user, System.currentTimeMillis());
         }
 
-        // Runs the command
-        simpleCommand.onCommand();
-    }
+        // Try to run the dynamic method, given the options registered:
+        // First, get all options to store them in a list of pair, containing the (possible null) parsed option and its class type
+        final List<Pair<Object, Class<?>>> parsedOptions = new ArrayList<>();
+        for (final OptionData data : simpleCommand.getOptionDataList()) {
+            final String name = data.getName();
 
-    /**
-     * Executed when the command is run. You can get the variable sender and args directly,
-     * and use convenience checks in the simple command class.
-     */
-    protected abstract void onCommand();
+            switch (data.getType()) {
+                case USER -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsUser), User.class));
+                case CHANNEL -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsChannel), GuildChannelUnion.class));
+                case ROLE -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsRole), Role.class));
+                case STRING -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsString), String.class));
+                case NUMBER -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsDouble), Double.class));
+                case INTEGER -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsLong), Long.class));
+                case BOOLEAN -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsBoolean), Boolean.class));
+                case MENTIONABLE -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsMentionable), IMentionable.class));
+                case ATTACHMENT -> parsedOptions.add(Pair.of(event.getOption(name, null, OptionMapping::getAsAttachment), Message.Attachment.class));
+            }
+        }
+        try {
+
+            // Reflection's starting :)
+            // Get the classes required, so we can get the signature of the method
+            final List<Class<?>> classes = new ArrayList<>();
+            for (final Pair<Object, Class<?>> parsedPair : parsedOptions)
+                classes.add(parsedPair.getRight());
+
+            final Method method = simpleCommand.getClass()
+                    .getDeclaredMethod("onCommand", classes.toArray(new Class[0]));
+            method.invoke(simpleCommand, parsedOptions.stream().map(Pair::getLeft).toArray());
+
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException exception) {
+            Common.throwError(exception, "The command " + this.getCommand() + " does not have an onCommand method with the required parameters!");
+        }
+    }
 
     // ----------------------------------------------------------------------
     // Temporary variables and safety
     // ----------------------------------------------------------------------
-
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public void addPermission(final Permission permission) {
-        this.permissionList.add(permission);
-    }
-
-    public void addPermission(final Permission... permissions) {
-        this.permissionList.addAll(Arrays.asList(permissions));
-    }
-
-    public List<Permission> getPermissions() {
-        return this.permissionList;
-    }
-
-    public void addSubcommandGroup(final SubcommandGroupData subcommandGroup) {
-        this.subcommandGroupDataList.add(subcommandGroup);
-    }
-
-    public void addSubCommandGroup(final SubcommandGroupData... subcommandGroups) {
-        this.subcommandGroupDataList.addAll(Arrays.asList(subcommandGroups));
-    }
-
-    public void addSubcommand(final SubcommandData subcommand) {
-        this.subcommandDataList.add(subcommand);
-    }
-
-    public void addSubCommand(final SubcommandData... subcommands) {
-        this.subcommandDataList.addAll(Arrays.asList(subcommands));
-    }
-
-    public void addOption(final OptionData option) {
-        this.optionDataList.add(option);
-    }
-
-    public void addOption(final OptionData... options) {
-        this.optionDataList.addAll(Arrays.asList(options));
-    }
-
-    public List<SubcommandGroupData> getSubcommandGroup() {
-        return this.subcommandGroupDataList;
-    }
-
-    public List<SubcommandData> getSubcommandGroupDataList() {
-        return this.subcommandDataList;
-    }
-
-    public List<OptionData> getOptions() {
-        return this.optionDataList;
-    }
 
     public GuildMessageChannel getChannel() {
         if (this.channel == null && this.threadChannel != null) {
@@ -486,6 +492,22 @@ public abstract class SimpleCommand {
         } else {
             return this.channel;
         }
+    }
+
+    /**
+     * Adds a new option data to the command
+     * @param optionData The option data to add
+     */
+    public void addOption(final OptionData optionData) {
+        this.optionDataList.add(optionData);
+    }
+
+    /**
+     * Adds a new sub command to the command
+     * @param subcommand The sub command to add
+     */
+    public void addSubcommand(final SimpleCommand subcommand) {
+        this.subcommandsList.add(subcommand);
     }
 
     /**
@@ -500,80 +522,12 @@ public abstract class SimpleCommand {
         this.cooldownSeconds = (int) unit.toSeconds(cooldown);
     }
 
-    protected final void setCooldownMessage(final String cooldownMessage) {
-        this.cooldownMessage = cooldownMessage;
-    }
-
-    protected final void sendCooldownMessageAsEmbed(final boolean cooldownMessageAsEmbed) {
-        this.cooldownMessageAsEmbed = cooldownMessageAsEmbed;
-    }
-
-    protected final void setCooldownBypassUsers(final List<User> cooldownBypassUsers) {
-        this.cooldownBypassUsers = cooldownBypassUsers;
-    }
-
-    protected final void setCooldownBypassPermission(final List<Permission> cooldownBypassPermission) {
-        this.cooldownBypassPermission = cooldownBypassPermission;
-    }
-
-    protected final void setMainGuildOnly(final boolean mainGuildOnly) {
-        this.mainGuildOnly = mainGuildOnly;
-    }
-
     protected final boolean isMainGuildOnly() {
         // Make sure that the bot has and is in the main guild
         if (SimpleBot.getMainGuild() == null)
             return false;
 
         return this.mainGuildOnly;
-    }
-
-    protected final void setDisabledUsers(final List<User> disabledUsers) {
-        this.disabledUsers = disabledUsers;
-    }
-
-    protected final List<User> getDisabledUsers() {
-        return this.disabledUsers;
-    }
-
-    protected final void setDisabledRoles(final List<Role> disabledRoles) {
-        this.disabledRoles = disabledRoles;
-    }
-
-    protected final List<Role> getDisabledRoles() {
-        return this.disabledRoles;
-    }
-
-    protected final void setDisabledChannels(final List<Channel> disabledChannels) {
-        this.disabledChannels = disabledChannels;
-    }
-
-    protected final List<Channel> getDisabledChannels() {
-        return this.disabledChannels;
-    }
-
-    protected final void setAllowedUsers(final List<User> allowedUsers) {
-        this.allowedUsers = allowedUsers;
-    }
-
-    protected final List<User> getAllowedUsers() {
-        return this.allowedUsers;
-    }
-
-    protected final void setAllowedRoles(final List<Role> allowedRoles) {
-        this.allowedRoles = allowedRoles;
-    }
-
-    protected final List<Role> getAllowedRoles() {
-        return this.allowedRoles;
-    }
-
-    protected final void setAllowedChannels(final List<Channel> allowedChannels) {
-        this.allowedChannels = allowedChannels;
-    }
-
-    protected final List<Channel> getAllowedChannels() {
-        return this.allowedChannels;
     }
 
     // ----------------------------------------------------------------------
@@ -613,7 +567,7 @@ public abstract class SimpleCommand {
 
             getEvent().reply(String.join("\n", messages)).setEphemeral(ephemeral).queue();
 
-        } finally {
+        } catch (Exception e) {
             getChannel().sendMessage(String.join("\n", messages)).queue();
         }
     }

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class SlashCommandHandler extends ListenerAdapter {
 
@@ -30,13 +31,33 @@ public class SlashCommandHandler extends ListenerAdapter {
         Common.log("Slash command interaction received: " + event.getName());
         final String commandName = event.getName();
         final SimpleCommand simpleCommand = commandList.get(commandName);
-        simpleCommand.execute(event, simpleCommand);
+
+        if (simpleCommand == null) {
+            Common.error("Command not found: " + commandName);
+            return;
+        }
+
+        if (simpleCommand.isCoreCommand()) {
+            simpleCommand.execute(event, simpleCommand);
+        } else {
+            final Optional<SimpleCommand> sub = simpleCommand
+                    .getSubcommandsList()
+                    .stream()
+                    .filter(subcommand -> subcommand.getCommand().equals(event.getSubcommandName()))
+                    .findFirst();
+
+            if (sub.isEmpty()) {
+                Common.error("Subcommand not found: " + event.getSubcommandName());
+                return;
+            }
+
+            sub.get().execute(event, sub.get());
+        }
+
     }
 
     public static void register(final SimpleCommand simpleCommand) {
-        final String commandName = simpleCommand.getCommandData().getName();
-
-        commandList.put(commandName, simpleCommand);
+        commandList.put(simpleCommand.getCommand(), simpleCommand);
     }
 
     /**
@@ -49,7 +70,7 @@ public class SlashCommandHandler extends ListenerAdapter {
         int publicOnly = 0;
 
         for (final SimpleCommand simpleCommand : commandList.values()) {
-            slashCommands.add(simpleCommand.getCommandData());
+            slashCommands.add(simpleCommand.buildSlashCommand());
             if (simpleCommand.isMainGuildOnly()) {
                 guildOnly++;
             } else {

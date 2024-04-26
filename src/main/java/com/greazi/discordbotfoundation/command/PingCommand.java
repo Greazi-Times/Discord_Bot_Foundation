@@ -18,10 +18,10 @@ public class PingCommand extends SimpleCommand {
     public PingCommand() {
         super("ping");
         setDescription("Get the latency of the bot - 1");
+        setMainGuildOnly(true);
     }
 
-    @Override
-    protected void onCommand() {
+    public void onCommand() {
         Common.warning("Ping command executed");
         replyEmbed("Bot latency",
                 "Gateway: " + event.getJDA().getGatewayPing(),
