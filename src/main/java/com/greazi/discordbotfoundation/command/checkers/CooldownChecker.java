@@ -101,15 +101,15 @@ public class CooldownChecker implements SlashCommandChecker {
         if (bypassedUsers.contains(user.getId()))
             return provider.success();
 
-        if (context.getMember() != null && bypassedRoles.stream().anyMatch(role -> context.getMember().getRoles().stream().anyMatch(r -> r.getId().equals(role))))
+        if (!bypassedRoles.isEmpty() && context.getMember() != null && bypassedRoles.stream().anyMatch(role -> context.getMember().getRoles().stream().anyMatch(r -> r.getId().equals(role))))
             return provider.success();
 
-        if (context.getMember() != null && bypassedPermissions.stream().anyMatch(permission -> context.getMember().hasPermission(permission)))
+        if (!bypassedPermissions.isEmpty() && context.getMember() != null && bypassedPermissions.stream().anyMatch(permission -> context.getMember().hasPermission(permission)))
             return provider.success();
 
         final long lastExecution = cooldownMap.getOrDefault(user, 0L);
-        if (lastExecution + cooldown > now) {
-            final long remaining = (lastExecution + cooldown - now) / 1000;
+        if (lastExecution + (cooldown * 1000L) > now) {
+            final long remaining = (lastExecution + (cooldown * 1000L) - now) / 1000;
             return provider.error("You are on cooldown! Please wait " + remaining + " seconds before using this command again.");
         }
 

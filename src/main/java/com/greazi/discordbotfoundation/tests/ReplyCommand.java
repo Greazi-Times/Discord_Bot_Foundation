@@ -1,6 +1,7 @@
 package com.greazi.discordbotfoundation.tests;
 
 import com.greazi.discordbotfoundation.command.SimpleCommand;
+import com.greazi.discordbotfoundation.command.checkers.CooldownChecker;
 import com.greazi.discordbotfoundation.command.checkers.RolesChecker;
 import com.greazi.discordbotfoundation.command.checkers.response.DefaultCommandProvider;
 import net.dv8tion.jda.api.entities.User;
@@ -19,7 +20,8 @@ public class ReplyCommand extends SimpleCommand {
         addOption(new OptionData(OptionType.STRING, "message", "The message to reply with.").setRequired(true));
         addOption(new OptionData(OptionType.USER, "user", "The user to reply to."));
 
-        addChecker(RolesChecker.createAllowed(List.of("938425015274180628")));
+        addChecker(CooldownChecker.create(15)
+                        .bypassRole("938425015274180628"));
 
         setMainGuildOnly(true);
     }
