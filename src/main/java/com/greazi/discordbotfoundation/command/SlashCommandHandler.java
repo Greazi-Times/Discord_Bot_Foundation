@@ -38,7 +38,7 @@ public class SlashCommandHandler extends ListenerAdapter {
         }
 
         if (simpleCommand.isCoreCommand()) {
-            simpleCommand.execute(event, simpleCommand);
+            simpleCommand.execute(event);
         } else {
             final Optional<SimpleCommand> sub = simpleCommand
                     .getSubcommandsList()
@@ -51,7 +51,7 @@ public class SlashCommandHandler extends ListenerAdapter {
                 return;
             }
 
-            sub.get().execute(event, sub.get());
+            sub.get().execute(event);
         }
 
     }

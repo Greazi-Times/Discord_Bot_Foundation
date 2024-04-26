@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -203,13 +204,13 @@ public abstract class SimpleCommand {
     protected Guild guild;
 
     /**
-     * The Channel where the command was run, only works if the channel is a TextChannel,
+     * The Channel where the command was run, only works if the channel is a {@link MessageChannel message channel},
      * otherwise it will be null
      * <p>
      * This variable is set dynamically when the command is run with the
      * last known channel
      */
-    protected TextChannel channel;
+    protected MessageChannel channel;
 
     /**
      * The Channel where the command was run, only works if the channel is a ThreadChannel,
@@ -290,7 +291,7 @@ public abstract class SimpleCommand {
     // Execution
     // ----------------------------------------------------------------------------------------
 
-    protected void execute(@NotNull final SlashCommandInteractionEvent event, final SimpleCommand simpleCommand) {
+    protected void execute(@NotNull final SlashCommandInteractionEvent event) {
         Common.log("Received command: " + this.getCommand() + " User: " + event.getUser().getName());
         // First we run the checkers
         for (final SlashCommandChecker checker : checkers) {
@@ -301,45 +302,38 @@ public abstract class SimpleCommand {
             }
         }
 
-        // Set the event variable
-        simpleCommand.event = event;
+        // Set the event stuff
 
-        // Set the guild where to command is used
-        simpleCommand.guild = simpleCommand.event.getGuild();
+        this.event = event;
+        guild = event.getGuild();
+        user = event.getUser();
+        member = event.getMember();
+        channel = event.getChannel();
+        threadChannel = event.getChannel() instanceof ThreadChannel ? event.getChannel().asThreadChannel() : null;
 
-        // Check if the guild is set and if its set to mainguild only
-        if (simpleCommand.guild == null || simpleCommand.guild != SimpleBot.getMainGuild()) {
-            // Return an error message
-            replyErrorEmbed("Command denied", "This command can only be used in the main guild");
+        // Check if the guild is set and if it's set to mainguild only
+        if (guild == null || guild != SimpleBot.getMainGuild()) {
+            responseProvider.error().respond(event);
             return;
         }
-
-        // Set the user and member
-        simpleCommand.user = simpleCommand.event.getUser();
-        simpleCommand.member = simpleCommand.event.getMember();
-
-        // Making sure that the channel is a text channel set to null if it's a thread channel
-        simpleCommand.channel = simpleCommand.event.getChannel() instanceof TextChannel ? simpleCommand.event.getChannel().asTextChannel() : null;
-        // Making sure that the channel is a thread channel set to null if it's a text channel
-        simpleCommand.threadChannel = simpleCommand.event.getChannel() instanceof ThreadChannel ? simpleCommand.event.getChannel().asThreadChannel() : null;
 
         // Check if the user can use the command
         boolean canExecute = true;
 
         // Check if the user is in the disabled users list
-        if (simpleCommand.disabledUsers != null && simpleCommand.disabledUsers.contains(simpleCommand.user)) {
+        if (disabledUsers != null && disabledUsers.contains(user)) {
             canExecute = false;
         }
 
         // Check if the user is in the allowed users list
-        if (simpleCommand.allowedUsers != null && !simpleCommand.allowedUsers.contains(simpleCommand.user)) {
+        if (allowedUsers != null && !allowedUsers.contains(user)) {
             canExecute = false;
         }
 
         // Check if the user has the permission to bypass the cooldown
-        if (simpleCommand.cooldownBypassPermission != null && simpleCommand.member != null) {
+        if (cooldownBypassPermission != null && member != null) {
             for (final Permission permission : this.cooldownBypassPermission) {
-                if (simpleCommand.member.hasPermission(permission)) {
+                if (member.hasPermission(permission)) {
                     canExecute = true;
                     break;
                 }
@@ -347,35 +341,35 @@ public abstract class SimpleCommand {
         }
 
         // Check if the user is in the cooldown bypass list
-        if (simpleCommand.cooldownBypassUsers != null && simpleCommand.cooldownBypassUsers.contains(simpleCommand.user)) {
+        if (cooldownBypassUsers != null && cooldownBypassUsers.contains(user)) {
             canExecute = true;
         }
 
         // Check if the user is in the cooldown map
-        if (simpleCommand.cooldownMap.containsKey(simpleCommand.user)) {
+        if (cooldownMap.containsKey(user)) {
             // Get the last execution time
-            final long lastExecution = simpleCommand.cooldownMap.get(simpleCommand.user);
+            final long lastExecution = cooldownMap.get(user);
 
             // Get the current time
             final long currentTime = System.currentTimeMillis();
 
             // Get the remaining time
-            final long remainingTime = (lastExecution + (simpleCommand.cooldownSeconds * 1000L)) - currentTime;
+            final long remainingTime = (lastExecution + (cooldownSeconds * 1000L)) - currentTime;
 
             // Check if the remaining time is greater than 0
             if (remainingTime > 0) {
                 // Check if we should send the cooldown message
-                if (simpleCommand.cooldownMessage != null && !simpleCommand.cooldownMessage.isEmpty()) {
+                if (cooldownMessage != null && !cooldownMessage.isEmpty()) {
                     // Replace the duration placeholder
-                    final String message = simpleCommand.cooldownMessage.replace("{duration}", String.valueOf(remainingTime / 1000));
+                    final String message = cooldownMessage.replace("{duration}", String.valueOf(remainingTime / 1000));
 
                     // Check if we should send the message as an embed
-                    if (simpleCommand.cooldownMessageAsEmbed) {
+                    if (cooldownMessageAsEmbed) {
                         // Send the message as an embed
-                        simpleCommand.replyErrorEmbed("Command denied", message);
+                        replyErrorEmbed("Command denied", message);
                     } else {
                         // Send the message as a normal message
-                        simpleCommand.reply(message);
+                        reply(message);
                     }
                 }
 
@@ -396,14 +390,14 @@ public abstract class SimpleCommand {
         // Check if the command is set to main guild only
         if (this.isMainGuildOnly()) {
             // Check if the guild is set
-            if (simpleCommand.guild == null) {
+            if (guild == null) {
                 // Return an error message
                 replyErrorEmbed("Command denied", "This command can only be used in the main guild");
                 return;
             }
 
             // Check if the guild is the main guild
-            if (simpleCommand.guild != SimpleBot.getMainGuild()) {
+            if (guild != SimpleBot.getMainGuild()) {
                 // Return an error message
                 replyErrorEmbed("Command denied", "This command can only be used in the main guild");
                 return;
@@ -411,15 +405,15 @@ public abstract class SimpleCommand {
         }
 
         // Check if the command is in cooldown
-        if (simpleCommand.cooldownSeconds > 0) {
+        if (cooldownSeconds > 0) {
             // Add the user to the cooldown map
-            simpleCommand.cooldownMap.put(simpleCommand.user, System.currentTimeMillis());
+            cooldownMap.put(user, System.currentTimeMillis());
         }
 
         // Try to run the dynamic method, given the options registered:
         // First, get all options to store them in a list of pair, containing the (possible null) parsed option and its class type
         final List<Pair<Object, Class<?>>> parsedOptions = new ArrayList<>();
-        for (final OptionData data : simpleCommand.getOptionDataList()) {
+        for (final OptionData data : getOptionDataList()) {
             final String name = data.getName();
 
             switch (data.getType()) {
@@ -442,9 +436,9 @@ public abstract class SimpleCommand {
             for (final Pair<Object, Class<?>> parsedPair : parsedOptions)
                 classes.add(parsedPair.getRight());
 
-            final Method method = simpleCommand.getClass()
+            final Method method = getClass()
                     .getDeclaredMethod("onCommand", classes.toArray(new Class[0]));
-            method.invoke(simpleCommand, parsedOptions.stream().map(Pair::getLeft).toArray());
+            method.invoke(this, parsedOptions.stream().map(Pair::getLeft).toArray());
 
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException exception) {
             Common.throwError(exception, "The command " + this.getCommand() + " does not have an onCommand method with the required parameters!");
@@ -459,7 +453,7 @@ public abstract class SimpleCommand {
         if (this.channel == null && this.threadChannel != null) {
             return this.threadChannel;
         } else {
-            return this.channel;
+            return (GuildMessageChannel) this.channel;
         }
     }
 
