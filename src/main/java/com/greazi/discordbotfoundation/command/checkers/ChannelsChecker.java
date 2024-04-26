@@ -31,8 +31,8 @@ public class ChannelsChecker implements SlashCommandChecker {
      * @param disallowedRolesIds The list of roles ids that are disallowed to execute the command.
      * @return The roles checker instance.
      */
-    public static ChannelsChecker createDisallowed(@NotNull List<String> disallowedRolesIds) {
-        return create(new ArrayList<>(), disallowedRolesIds);
+    public static ChannelsChecker createDisallowed(@NotNull List<String> disallowedChannelsIds) {
+        return create(new ArrayList<>(), disallowedChannelsIds);
     }
 
     /**
@@ -42,22 +42,23 @@ public class ChannelsChecker implements SlashCommandChecker {
      * @return The roles checker instance.
      */
     public static ChannelsChecker create(@NotNull List<String> allowedChannelsIds,
-                                      @NotNull List<String> disallowedRolesIds) {
-        Checks.notEmpty(allowedChannelsIds, "allowedChannelsIds");
+                                      @NotNull List<String> disallowedChannelsIds) {
         Checks.noneNull(allowedChannelsIds, "allowedChannelsIds");
-        Checks.notEmpty(disallowedRolesIds, "disallowedRolesIds");
-        Checks.noneNull(disallowedRolesIds, "disallowedRolesIds");
+        Checks.noneNull(disallowedChannelsIds, "disallowedChannelsIds");
 
-        return new ChannelsChecker(allowedChannelsIds, disallowedRolesIds);
+        if (allowedChannelsIds.isEmpty() && disallowedChannelsIds.isEmpty())
+            throw new IllegalArgumentException("You must specify at least one allowed or disallowed channel.");
+
+        return new ChannelsChecker(allowedChannelsIds, disallowedChannelsIds);
     }
 
     //endregion
 
     private final List<String> allowedChannelsIds;
-    private final List<String> disallowedRolesIds;
-    private ChannelsChecker(List<String> allowedChannelsIds, List<String> disallowedRolesIds) {
+    private final List<String> disallowedChannelsIds;
+    private ChannelsChecker(List<String> allowedChannelsIds, List<String> disallowedChannelsIds) {
         this.allowedChannelsIds = allowedChannelsIds;
-        this.disallowedRolesIds = disallowedRolesIds;
+        this.disallowedChannelsIds = disallowedChannelsIds;
     }
 
     @NotNull
@@ -69,14 +70,14 @@ public class ChannelsChecker implements SlashCommandChecker {
             return provider.error("You must be in a guild to use this command.");
         }
 
-        if (allowedChannelsIds.isEmpty() && disallowedRolesIds.isEmpty())
+        if (allowedChannelsIds.isEmpty() && disallowedChannelsIds.isEmpty())
             return provider.success();
 
         final var channelId = context.getChannel().getId();
         if (!allowedChannelsIds.isEmpty() && !allowedChannelsIds.contains(channelId))
             return provider.error("You are not in the allowed channel to use this command.");
 
-        if (!disallowedRolesIds.isEmpty() && disallowedRolesIds.contains(channelId))
+        if (!disallowedChannelsIds.isEmpty() && disallowedChannelsIds.contains(channelId))
             return provider.error("You are in a disallowed channel to use this command.");
 
         return provider.success();
