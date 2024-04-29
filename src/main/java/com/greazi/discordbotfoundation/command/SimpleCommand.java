@@ -486,7 +486,7 @@ public abstract class SimpleCommand {
 
         try {
             getEvent().replyEmbeds(embed.build()).setEphemeral(ephemeral).queue();
-        } finally {
+        } catch (final Exception ex) {
             getChannel().sendMessageEmbeds(embed.build()).queue();
         }
     }

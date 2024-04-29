@@ -30,6 +30,7 @@ public class SlashCommandHandler extends ListenerAdapter {
     public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
         Common.log("Slash command interaction received: " + event.getName());
         final String commandName = event.getName();
+
         final SimpleCommand simpleCommand = commandList.get(commandName);
 
         if (simpleCommand == null) {

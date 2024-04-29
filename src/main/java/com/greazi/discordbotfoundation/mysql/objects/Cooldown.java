@@ -1,4 +1,4 @@
-package com.greazi.discordbotfoundation.objects;
+package com.greazi.discordbotfoundation.mysql.objects;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;

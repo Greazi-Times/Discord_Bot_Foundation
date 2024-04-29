@@ -1,4 +1,4 @@
-package com.greazi.discordbotfoundation.objects;
+package com.greazi.discordbotfoundation.mysql.objects;
 
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
