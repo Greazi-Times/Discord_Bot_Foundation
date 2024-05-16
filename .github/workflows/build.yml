@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:   
+    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
@@ -32,28 +32,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-          node-version: '16'
 
       # Build the maven project
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
-      
-      # Check the commit and see what version needs to be changed
-      - name: conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v3.18.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version-file: './src/main/resources/version.yml'
-      
-      # Creat a release
-      - name: Create Release
-        id: create_release
-        uses: ncipollo/release-action@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag: ${{ steps.changelog.outputs.version }}
-          name: ${{ steps.changelog.outputs.version }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
